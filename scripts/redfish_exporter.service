@@ -1,0 +1,11 @@
+[Unit]
+Description=redfish exporter  service
+
+[Service]
+ExecStart=/usr/bin/redfish_exporter --config.file=/etc/prometheus/redfish_exporter.yml 
+Restart=always
+RestartSec=2s
+StartLimitInterval=0
+KillMode=process
+[Install]
+WantedBy=multi-user.target
