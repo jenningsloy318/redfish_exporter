@@ -1,29 +1,64 @@
 package main
 
 import (
+	"fmt"
 	"github.com/prometheus/common/log"
 	yaml "gopkg.in/yaml.v2"
 	"io/ioutil"
+	"sync"
 )
 
-type RedfishHost struct {
-	Host     string `yaml:"host"`
+type Config struct {
+	Credentials map[string]Credential `yaml:"credentials"`
+}
+
+type SafeConfig struct {
+	sync.RWMutex
+	C *Config
+}
+
+type Credential struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
 
-func loadFilerFromFile(fileName string) (c []*RedfishHost) {
-	var fb []RedfishHost
-	yamlFile, err := ioutil.ReadFile(fileName)
+func (sc *SafeConfig) ReloadConfig(configFile string) error {
+	var c = &Config{}
+
+	yamlFile, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		log.Fatal("[ERROR] ", err)
+		log.Errorf("Error reading config file: %s", err)
+		return err
 	}
-	err = yaml.Unmarshal(yamlFile, &fb)
-	if err != nil {
-		log.Fatal("[ERROR] ", err)
+	if err := yaml.Unmarshal(yamlFile, c); err != nil {
+		log.Errorf("Error parsing config file: %s", err)
+		return err
 	}
-	for _, b := range fb {
-		c = append(c, &b)
+
+	sc.Lock()
+	sc.C = c
+	sc.Unlock()
+
+	log.Infoln("Loaded config file")
+	return nil
+}
+
+
+
+func (sc *SafeConfig) CredentialsForTarget(target string) (*Credential, error) {
+	sc.Lock()
+	defer sc.Unlock()
+	if credential, ok := sc.C.Credentials[target]; ok {
+		return &Credential{
+			Username:     credential.Username,
+			Password: credential.Password,
+		}, nil
 	}
-	return
+	if credential, ok := sc.C.Credentials["default"]; ok {
+		return &Credential{
+			Username:     credential.Username,
+			Password: credential.Password,
+		}, nil
+	}
+	return &Credential{}, fmt.Errorf("no credentials found for target %s", target)
 }

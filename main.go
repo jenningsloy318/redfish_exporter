@@ -18,7 +18,9 @@ var (
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",
 	).Default(":9610").String()
-
+	sc         = &SafeConfig{
+		C: &Config{},
+	}
 	reloadCh chan chan error
 )
 
@@ -27,9 +29,20 @@ func metricsHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		registry := prometheus.NewRegistry()
 
-		redfishHosts := loadFilerFromFile(*configFile)
-		for _, redfishHost := range redfishHosts {
-			collector := collector.New(redfishHost.Host, redfishHost.Username, redfishHost.Password)
+		target := r.URL.Query().Get("target")
+		if target == "" {
+			http.Error(w, "'target' parameter must be specified", 400)
+			return
+		}
+		log.Debugf("Scraping target '%s'", target)
+
+		var targetCredential *Credential
+		var err error
+		if targetCredential, err = sc.CredentialsForTarget(target); err != nil {
+			log.Fatalf("Error getting credentialfor target %s file: %s", target, err)
+		}
+
+			collector := collector.NewRedfishCollector(target, targetCredential.Username, targetCredential.Password)
 			registry.MustRegister(collector)
 			gatherers := prometheus.Gatherers{
 				prometheus.DefaultGatherer,
@@ -38,7 +51,7 @@ func metricsHandler() http.HandlerFunc {
 			// Delegate http serving to Prometheus client library, which will call collector.Collect.
 			h := promhttp.HandlerFor(gatherers, promhttp.HandlerOpts{})
 			h.ServeHTTP(w, r)
-		}
+
 	}
 }
 
@@ -57,15 +70,25 @@ func main() {
 	kingpin.Parse()
 	log.Infoln("Starting redfish_exporter")
 
-	http.Handle("/metrics", metricsHandler()) // Regular metrics endpoint for local Redfish metrics.
+	if err := sc.ReloadConfig(*configFile); err != nil {
+		log.Fatalf("Error parsing config file: %s", err)
+	}
+
+	http.Handle("/redfish", metricsHandler()) // Regular metrics endpoint for local Redfish metrics.
+	http.Handle("/metrics", promhttp.Handler())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
             <head>
             <title>Redfish Exporter</title>
             </head>
-            <body>
-			<p><a href="/metrics">Local metrics</a></p>
+						<body>
+            <h1>redfish Exporter</h1>
+            <form action="/redfish">
+            <label>Target:</label> <input type="text" name="target" placeholder="X.X.X.X" value="1.2.3.4"><br>
+            <input type="submit" value="Submit">
+						</form>
+						<p><a href="/metrics">Local metrics</a></p>
             </body>
             </html>`))
 	})
