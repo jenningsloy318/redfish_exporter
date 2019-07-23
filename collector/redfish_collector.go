@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"crypto/tls"
 	"time"
+	"strings"
 	
 
 )
@@ -47,10 +48,11 @@ type RedfishCollector struct {
 func NewRedfishCollector(host string, username string, password string ) *RedfishCollector {	
 	BaseLabelValues[0]=host
 	redfishClient, redfishUpValue := newRedfishClient(host,username,password)
-	memoryCollector :=NewMemoryCollector(namespace,redfishClient)
+//	memoryCollector :=NewMemoryCollector(namespace,redfishClient)
+	chassisCollector := NewChassisCollector(namespace,redfishClient)
 	return &RedfishCollector{
 		redfishClient: redfishClient,
-		collectors:    map[string]prometheus.Collector{"Memory": memoryCollector},
+		collectors:    map[string]prometheus.Collector{"chassis": chassisCollector},
 		redfishUp:	prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: namespace,
@@ -130,3 +132,44 @@ func newRedfishClient(host string, username string, password string) (*gofish.Ap
 	 
 	return redfishClient,float64(1)
 }
+
+
+
+func pareCommonStatusHealth(status string) float64{
+if strings.EqualFold(status,"OK"){
+	return float64(0)
+} else if strings.EqualFold(status,"Warning") {
+	return float64(1)
+}else if strings.EqualFold(status,"Critical") {
+	return float64(2)
+}
+return float64(0)
+}
+
+
+func pareCommonStatusState(status string) float64{
+	if strings.EqualFold(status,"Enabled"){
+		return float64(0)
+	} else if strings.EqualFold(status,"Disabled") {
+		return float64(1)
+	}else if strings.EqualFold(status,"StandbyOffinline") {
+		return float64(2)
+	}	else if strings.EqualFold(status,"StandbySpare") {
+		return float64(3)
+	}else if strings.EqualFold(status,"InTest") {
+		return float64(4)
+	}else if strings.EqualFold(status,"Starting") {
+		return float64(5)
+	}else if strings.EqualFold(status,"Absent") {
+		return float64(6)
+	}else if strings.EqualFold(status,"UnavailableOffline") {
+		return float64(7)
+	}else if strings.EqualFold(status,"Deferring") {
+		return float64(8)
+	}else if strings.EqualFold(status,"Quiesced") {
+		return float64(9)
+	}else if strings.EqualFold(status,"Updating") {
+		return float64(10)
+	}
+	return float64(0)
+	}
