@@ -4,11 +4,13 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
+	gofishcommon "github.com/stmcginnis/gofish/school/common"
+	redfish "github.com/stmcginnis/gofish/school/redfish"
 	"fmt"
 	"net/http"
 	"crypto/tls"
 	"time"
-	"strings"
+	"bytes"
 	
 
 )
@@ -48,11 +50,12 @@ type RedfishCollector struct {
 func NewRedfishCollector(host string, username string, password string ) *RedfishCollector {	
 	BaseLabelValues[0]=host
 	redfishClient, redfishUpValue := newRedfishClient(host,username,password)
-//	memoryCollector :=NewMemoryCollector(namespace,redfishClient)
 	chassisCollector := NewChassisCollector(namespace,redfishClient)
+	systemCollector :=NewSystemCollector(namespace,redfishClient)
+
 	return &RedfishCollector{
 		redfishClient: redfishClient,
-		collectors:    map[string]prometheus.Collector{"chassis": chassisCollector},
+		collectors:    map[string]prometheus.Collector{"chassis": chassisCollector,"system":systemCollector},
 		redfishUp:	prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: namespace,
@@ -135,41 +138,58 @@ func newRedfishClient(host string, username string, password string) (*gofish.Ap
 
 
 
-func pareCommonStatusHealth(status string) float64{
-if strings.EqualFold(status,"OK"){
-	return float64(0)
-} else if strings.EqualFold(status,"Warning") {
-	return float64(1)
-}else if strings.EqualFold(status,"Critical") {
-	return float64(2)
-}
-return float64(0)
-}
-
-
-func pareCommonStatusState(status string) float64{
-	if strings.EqualFold(status,"Enabled"){
-		return float64(0)
-	} else if strings.EqualFold(status,"Disabled") {
+func parseCommonStatusHealth(status gofishcommon.Health) float64{
+	if bytes.Equal([]byte(status),[]byte("OK")){
 		return float64(1)
-	}else if strings.EqualFold(status,"StandbyOffinline") {
+	} else if bytes.Equal([]byte(status),[]byte("Warning")) {
 		return float64(2)
-	}	else if strings.EqualFold(status,"StandbySpare") {
+	}else if bytes.Equal([]byte(status),[]byte("Critical")) {
 		return float64(3)
-	}else if strings.EqualFold(status,"InTest") {
-		return float64(4)
-	}else if strings.EqualFold(status,"Starting") {
-		return float64(5)
-	}else if strings.EqualFold(status,"Absent") {
-		return float64(6)
-	}else if strings.EqualFold(status,"UnavailableOffline") {
-		return float64(7)
-	}else if strings.EqualFold(status,"Deferring") {
-		return float64(8)
-	}else if strings.EqualFold(status,"Quiesced") {
-		return float64(9)
-	}else if strings.EqualFold(status,"Updating") {
-		return float64(10)
 	}
 	return float64(0)
+}
+
+
+func parseCommonStatusState(status gofishcommon.State) float64{
+	if bytes.Equal([]byte(status), []byte("Enabled")){
+		return float64(1)
+	} else if bytes.Equal([]byte(status), []byte("Disabled")) {
+		return float64(2)
+	}else if bytes.Equal([]byte(status), []byte("StandbyOffinline")) {
+		return float64(3)
+	}	else if bytes.Equal([]byte(status), []byte("StandbySpare")) {
+		return float64(4)
+	}else if bytes.Equal([]byte(status), []byte("InTest")) {
+		return float64(5)
+	}else if bytes.Equal([]byte(status), []byte("Starting")) {
+		return float64(6)
+	}else if bytes.Equal([]byte(status), []byte("Absent")) {
+		return float64(7)
+	}else if bytes.Equal([]byte(status), []byte("UnavailableOffline")) {
+		return float64(8)
+	}else if bytes.Equal([]byte(status), []byte("Deferring")) {
+		return float64(9)
+	}else if bytes.Equal([]byte(status), []byte("Quiesced")) {
+		return float64(10)
+	}else if bytes.Equal([]byte(status), []byte("Updating")) {
+		return float64(11)
+	}
+	return float64(0)
+}
+
+
+
+
+
+	func parseSystemPowerState(status redfish.PowerState) float64{
+		if bytes.Equal([]byte(status),[]byte("On")){
+			return float64(1)
+		} else if bytes.Equal([]byte(status),[]byte("Off")) {
+			return float64(2)
+		}else if bytes.Equal([]byte(status),[]byte("PoweringOn")) {
+			return float64(3)
+		}else if bytes.Equal([]byte(status),[]byte("PoweringOff")) {
+			return float64(4)
+		}
+		return float64(0)
 	}
