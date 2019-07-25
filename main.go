@@ -18,7 +18,7 @@ var (
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",
 	).Default(":9610").String()
-	sc         = &SafeConfig{
+	sc = &SafeConfig{
 		C: &Config{},
 	}
 	reloadCh chan chan error
@@ -42,15 +42,15 @@ func metricsHandler() http.HandlerFunc {
 			log.Fatalf("Error getting credentialfor target %s file: %s", target, err)
 		}
 
-			collector := collector.NewRedfishCollector(target, targetCredential.Username, targetCredential.Password)
-			registry.MustRegister(collector)
-			gatherers := prometheus.Gatherers{
-				prometheus.DefaultGatherer,
-				registry,
-			}
-			// Delegate http serving to Prometheus client library, which will call collector.Collect.
-			h := promhttp.HandlerFor(gatherers, promhttp.HandlerOpts{})
-			h.ServeHTTP(w, r)
+		collector := collector.NewRedfishCollector(target, targetCredential.Username, targetCredential.Password)
+		registry.MustRegister(collector)
+		gatherers := prometheus.Gatherers{
+			prometheus.DefaultGatherer,
+			registry,
+		}
+		// Delegate http serving to Prometheus client library, which will call collector.Collect.
+		h := promhttp.HandlerFor(gatherers, promhttp.HandlerOpts{})
+		h.ServeHTTP(w, r)
 
 	}
 }
@@ -60,8 +60,9 @@ var BuildRevision string
 var BuildBranch string
 var BuildTime string
 var BuildHost string
+
 func init() {
-	log.Infof("redfish_exporter version %s, build reversion %s, build branch %s, build at %s on host %s",Vsersion,BuildRevision,BuildBranch,BuildTime,BuildHost)
+	log.Infof("redfish_exporter version %s, build reversion %s, build branch %s, build at %s on host %s", Vsersion, BuildRevision, BuildBranch, BuildTime, BuildHost)
 }
 
 func main() {

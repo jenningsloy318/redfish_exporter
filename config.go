@@ -43,20 +43,18 @@ func (sc *SafeConfig) ReloadConfig(configFile string) error {
 	return nil
 }
 
-
-
 func (sc *SafeConfig) CredentialsForTarget(target string) (*Credential, error) {
 	sc.Lock()
 	defer sc.Unlock()
 	if credential, ok := sc.C.Credentials[target]; ok {
 		return &Credential{
-			Username:     credential.Username,
+			Username: credential.Username,
 			Password: credential.Password,
 		}, nil
 	}
 	if credential, ok := sc.C.Credentials["default"]; ok {
 		return &Credential{
-			Username:     credential.Username,
+			Username: credential.Username,
 			Password: credential.Password,
 		}, nil
 	}
