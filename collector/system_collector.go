@@ -24,6 +24,7 @@ type systemMetric struct {
 var (
 	SystemLabelNames                  = append(BaseLabelNames, "name", "hostname")
 	SystemMemoryLabelNames            = append(BaseLabelNames, "name", "memory", "hostname")
+	SystemProcessorLabelNames					= append(BaseLabelNames, "name", "processor", "hostname")
 	SystemVolumeLabelNames            = append(BaseLabelNames, "name", "volume", "hostname")
 	SystemDriveLabelNames             = append(BaseLabelNames, "name", "drive", "hostname")
 	SystemStorageControllerLabelNames = append(BaseLabelNames, "name", "storagecontroller", "hostname")
@@ -133,6 +134,39 @@ func NewSystemCollector(namespace string, redfishClient *gofish.ApiClient) *Syst
 					nil,
 				),
 			},
+
+			"system_processor_state": {
+				desc: prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, subsystem, "processor_state"),
+					"system processor state",
+					SystemProcessorLabelNames,
+					nil,
+				),
+			},
+			"system_processor_health_state": {
+				desc: prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, subsystem, "processor_health_state"),
+					"system processor  health state",
+					SystemProcessorLabelNames,
+					nil,
+				),
+			},
+			"system_processor_total_threads": {
+				desc: prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, subsystem, "processor_total_threads"),
+					"system processor total threads",
+					SystemProcessorLabelNames,
+					nil,
+				),
+			},			
+			"system_processor_total_cores": {
+				desc: prometheus.NewDesc(
+					prometheus.BuildFQName(namespace, subsystem, "processor_total_cores"),
+					"system processor total cores",
+					SystemProcessorLabelNames,
+					nil,
+				),
+			},		
 			"system_storage_volume_state": {
 				desc: prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, subsystem, "storage_volume_state"),
@@ -317,9 +351,41 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 
 			// process processor metrics
 
-			//	processorsLink :=  fmt.Sprintf("%sMemory/",systemOdataID)
+				processorsLink :=  fmt.Sprintf("%sProcessors/",systemOdataID)
 
-			//process storage
+				if processors,err :=redfish.ListReferencedProcessors(s.redfishClient, processorsLink); err !=nil {
+					log.Infof("Errors Getting Processors from system: %s", err)
+				} else {
+
+					for _,processor := range processors {
+
+						processorName :=processor.Socket
+						processorTotalCores :=processor.TotalCores
+						processorTotalThreads :=processor.TotalThreads
+						processorState := processor.Status.State
+						processorHelathState:= processor.Status.Health
+
+						SystemProcessorLabelValues :=append(BaseLabelValues, "processor", processorName, systemHostName)
+
+						if  processorStateValue := parseCommonStatusState(processorState);processorStateValue !=float64(0){
+							ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_state"].desc, prometheus.GaugeValue, processorStateValue, SystemProcessorLabelValues...)
+	
+						}
+						if processorHelathStateValue:=parseCommonStatusHealth(processorHelathState);processorHelathStateValue !=float64(0){
+							ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_health_state"].desc, prometheus.GaugeValue,processorHelathStateValue , SystemProcessorLabelValues...)
+	
+						}
+						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_total_threads"].desc, prometheus.GaugeValue, float64(processorTotalThreads), SystemProcessorLabelValues...)
+						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_total_cores"].desc, prometheus.GaugeValue, float64(processorTotalCores), SystemProcessorLabelValues...)
+
+
+					}
+
+				}
+			
+			
+			
+				//process storage
 			storagesLink := fmt.Sprintf("%sStorage/", systemOdataID)
 
 			if storages, err := redfish.ListReferencedStorages(s.redfishClient, storagesLink); err != nil {
