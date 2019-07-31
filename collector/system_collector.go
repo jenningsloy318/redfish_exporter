@@ -2,11 +2,12 @@ package collector
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
 	redfish "github.com/stmcginnis/gofish/school/redfish"
-	"strings"
 )
 
 // A SystemCollector implements the prometheus.Collector.
@@ -24,7 +25,7 @@ type systemMetric struct {
 var (
 	SystemLabelNames                  = append(BaseLabelNames, "name", "hostname")
 	SystemMemoryLabelNames            = append(BaseLabelNames, "name", "memory", "hostname")
-	SystemProcessorLabelNames					= append(BaseLabelNames, "name", "processor", "hostname")
+	SystemProcessorLabelNames         = append(BaseLabelNames, "name", "processor", "hostname")
 	SystemVolumeLabelNames            = append(BaseLabelNames, "name", "volume", "hostname")
 	SystemDriveLabelNames             = append(BaseLabelNames, "name", "drive", "hostname")
 	SystemStorageControllerLabelNames = append(BaseLabelNames, "name", "storagecontroller", "hostname")
@@ -158,7 +159,7 @@ func NewSystemCollector(namespace string, redfishClient *gofish.ApiClient) *Syst
 					SystemProcessorLabelNames,
 					nil,
 				),
-			},			
+			},
 			"system_processor_total_cores": {
 				desc: prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, subsystem, "processor_total_cores"),
@@ -166,7 +167,7 @@ func NewSystemCollector(namespace string, redfishClient *gofish.ApiClient) *Syst
 					SystemProcessorLabelNames,
 					nil,
 				),
-			},		
+			},
 			"system_storage_volume_state": {
 				desc: prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, subsystem, "storage_volume_state"),
@@ -268,7 +269,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	// get a list of systems from service
-	 if systems, err := service.Systems(); err != nil {
+	if systems, err := service.Systems(); err != nil {
 		log.Fatalf("Errors Getting systems from service : %s", err)
 	} else {
 
@@ -288,32 +289,32 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			systemTotalMemoryAmount := system.MemorySummary.TotalSystemMemoryGiB
 
 			SystemLabelValues := append(BaseLabelValues, systemName, systemHostName)
-			if systemHealthStateValue :=parseCommonStatusHealth(systemHealthState);systemHealthStateValue !=float64(0) {
-				ch <- prometheus.MustNewConstMetric(s.metrics["system_health_state"].desc, prometheus.GaugeValue,systemHealthStateValue, SystemLabelValues...)
+			if systemHealthStateValue := parseCommonStatusHealth(systemHealthState); systemHealthStateValue != float64(0) {
+				ch <- prometheus.MustNewConstMetric(s.metrics["system_health_state"].desc, prometheus.GaugeValue, systemHealthStateValue, SystemLabelValues...)
 			}
-			if systemStateValue:=parseCommonStatusState(systemState);systemStateValue!=float64(0) {
-				ch <- prometheus.MustNewConstMetric(s.metrics["system_state"].desc, prometheus.GaugeValue,systemStateValue, SystemLabelValues...)
+			if systemStateValue := parseCommonStatusState(systemState); systemStateValue != float64(0) {
+				ch <- prometheus.MustNewConstMetric(s.metrics["system_state"].desc, prometheus.GaugeValue, systemStateValue, SystemLabelValues...)
 			}
-			if systemPowerStateValue := parseSystemPowerState(systemPowerState);systemPowerStateValue != float64(0) {
-				ch <- prometheus.MustNewConstMetric(s.metrics["system_power_state"].desc, prometheus.GaugeValue,systemPowerStateValue , SystemLabelValues...)
+			if systemPowerStateValue := parseSystemPowerState(systemPowerState); systemPowerStateValue != float64(0) {
+				ch <- prometheus.MustNewConstMetric(s.metrics["system_power_state"].desc, prometheus.GaugeValue, systemPowerStateValue, SystemLabelValues...)
 
 			}
-			if systemTotalProcessorsStateValue :=parseCommonStatusState(systemTotalProcessorsState);systemTotalProcessorsStateValue !=float64(0) {
-				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_processor_state"].desc, prometheus.GaugeValue,systemTotalProcessorsStateValue , SystemLabelValues...)
+			if systemTotalProcessorsStateValue := parseCommonStatusState(systemTotalProcessorsState); systemTotalProcessorsStateValue != float64(0) {
+				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_processor_state"].desc, prometheus.GaugeValue, systemTotalProcessorsStateValue, SystemLabelValues...)
 
 			}
-			if systemTotalProcessorsHealthStateValue := parseCommonStatusHealth(systemTotalProcessorsHealthState);systemTotalProcessorsHealthStateValue !=float64(0){
-				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_processor_health_state"].desc, prometheus.GaugeValue,systemTotalProcessorsHealthStateValue , SystemLabelValues...)
+			if systemTotalProcessorsHealthStateValue := parseCommonStatusHealth(systemTotalProcessorsHealthState); systemTotalProcessorsHealthStateValue != float64(0) {
+				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_processor_health_state"].desc, prometheus.GaugeValue, systemTotalProcessorsHealthStateValue, SystemLabelValues...)
 
 			}
 			ch <- prometheus.MustNewConstMetric(s.metrics["system_total_processor_count"].desc, prometheus.GaugeValue, float64(systemTotalProcessorCount), SystemLabelValues...)
 
-			if systemTotalMemoryStateValue:=parseCommonStatusState(systemTotalMemoryState);systemTotalMemoryStateValue !=float64(0) {
+			if systemTotalMemoryStateValue := parseCommonStatusState(systemTotalMemoryState); systemTotalMemoryStateValue != float64(0) {
 				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_memory_state"].desc, prometheus.GaugeValue, systemTotalMemoryStateValue, SystemLabelValues...)
 
 			}
-			if systemTotalMemoryHealthStateValue:=parseCommonStatusHealth(systemTotalMemoryHealthState);systemTotalMemoryHealthStateValue !=float64(0) {
-				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_memory_health_state"].desc, prometheus.GaugeValue,systemTotalMemoryHealthStateValue , SystemLabelValues...)
+			if systemTotalMemoryHealthStateValue := parseCommonStatusHealth(systemTotalMemoryHealthState); systemTotalMemoryHealthStateValue != float64(0) {
+				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_memory_health_state"].desc, prometheus.GaugeValue, systemTotalMemoryHealthStateValue, SystemLabelValues...)
 
 			}
 			ch <- prometheus.MustNewConstMetric(s.metrics["system_total_memory_size"].desc, prometheus.GaugeValue, float64(systemTotalMemoryAmount), SystemLabelValues...)
@@ -327,7 +328,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 
 			if memories, err := redfish.ListReferencedMemorys(s.redfishClient, memoriesLink); err != nil {
 				log.Infof("Errors Getting memory from computer system : %s", err)
-			}else {
+			} else {
 				for _, memory := range memories {
 					memoryName := memory.DeviceLocator
 					//memoryDeviceLocator := memory.DeviceLocator
@@ -336,133 +337,131 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 					memoryHealthState := memory.Status.Health
 
 					SystemMemoryLabelValues := append(BaseLabelValues, "memory", memoryName, systemHostName)
-					if  memoryStateValue := parseCommonStatusState(memoryState);memoryStateValue !=float64(0){
+					if memoryStateValue := parseCommonStatusState(memoryState); memoryStateValue != float64(0) {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_memory_state"].desc, prometheus.GaugeValue, memoryStateValue, SystemMemoryLabelValues...)
 
 					}
-					if memoryHealthStateValue:=parseCommonStatusHealth(memoryHealthState);memoryHealthStateValue !=float64(0){
-						ch <- prometheus.MustNewConstMetric(s.metrics["system_memory_health_state"].desc, prometheus.GaugeValue,memoryHealthStateValue , SystemMemoryLabelValues...)
+					if memoryHealthStateValue := parseCommonStatusHealth(memoryHealthState); memoryHealthStateValue != float64(0) {
+						ch <- prometheus.MustNewConstMetric(s.metrics["system_memory_health_state"].desc, prometheus.GaugeValue, memoryHealthStateValue, SystemMemoryLabelValues...)
 
 					}
 					ch <- prometheus.MustNewConstMetric(s.metrics["system_memory_capacity"].desc, prometheus.GaugeValue, float64(memoryCapacityMiB), SystemMemoryLabelValues...)
 
 				}
-		}
+			}
 
 			// process processor metrics
 
-				processorsLink :=  fmt.Sprintf("%sProcessors/",systemOdataID)
+			processorsLink := fmt.Sprintf("%sProcessors/", systemOdataID)
 
-				if processors,err :=redfish.ListReferencedProcessors(s.redfishClient, processorsLink); err !=nil {
-					log.Infof("Errors Getting Processors from system: %s", err)
-				} else {
+			if processors, err := redfish.ListReferencedProcessors(s.redfishClient, processorsLink); err != nil {
+				log.Infof("Errors Getting Processors from system: %s", err)
+			} else {
 
-					for _,processor := range processors {
+				for _, processor := range processors {
 
-						processorName :=processor.Socket
-						processorTotalCores :=processor.TotalCores
-						processorTotalThreads :=processor.TotalThreads
-						processorState := processor.Status.State
-						processorHelathState:= processor.Status.Health
+					processorName := processor.Socket
+					processorTotalCores := processor.TotalCores
+					processorTotalThreads := processor.TotalThreads
+					processorState := processor.Status.State
+					processorHelathState := processor.Status.Health
 
-						SystemProcessorLabelValues :=append(BaseLabelValues, "processor", processorName, systemHostName)
+					SystemProcessorLabelValues := append(BaseLabelValues, "processor", processorName, systemHostName)
 
-						if  processorStateValue := parseCommonStatusState(processorState);processorStateValue !=float64(0){
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_state"].desc, prometheus.GaugeValue, processorStateValue, SystemProcessorLabelValues...)
-	
-						}
-						if processorHelathStateValue:=parseCommonStatusHealth(processorHelathState);processorHelathStateValue !=float64(0){
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_health_state"].desc, prometheus.GaugeValue,processorHelathStateValue , SystemProcessorLabelValues...)
-	
-						}
-						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_total_threads"].desc, prometheus.GaugeValue, float64(processorTotalThreads), SystemProcessorLabelValues...)
-						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_total_cores"].desc, prometheus.GaugeValue, float64(processorTotalCores), SystemProcessorLabelValues...)
-
+					if processorStateValue := parseCommonStatusState(processorState); processorStateValue != float64(0) {
+						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_state"].desc, prometheus.GaugeValue, processorStateValue, SystemProcessorLabelValues...)
 
 					}
+					if processorHelathStateValue := parseCommonStatusHealth(processorHelathState); processorHelathStateValue != float64(0) {
+						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_health_state"].desc, prometheus.GaugeValue, processorHelathStateValue, SystemProcessorLabelValues...)
+
+					}
+					ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_total_threads"].desc, prometheus.GaugeValue, float64(processorTotalThreads), SystemProcessorLabelValues...)
+					ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_total_cores"].desc, prometheus.GaugeValue, float64(processorTotalCores), SystemProcessorLabelValues...)
 
 				}
-			
-			
-			
-				//process storage
+
+			}
+
+			//process storage
 			storagesLink := fmt.Sprintf("%sStorage/", systemOdataID)
 
 			if storages, err := redfish.ListReferencedStorages(s.redfishClient, storagesLink); err != nil {
 				log.Infof("Errors Getting storages from system: %s", err)
 			} else {
-			for _, storage := range storages {
+				for _, storage := range storages {
 
-				if volumes, err := storage.Volumes();err != nil {
-					log.Infof("Errors Getting volumes  from system storage : %s", err)
-				} else {
-					for _, volume := range volumes {
-						volumeODataIDslice := strings.Split(volume.ODataID, "/")
-						volumeName := volumeODataIDslice[len(volumeODataIDslice)-1]
-						volumeCapacityBytes := volume.CapacityBytes
-						volumeState := volume.Status.State
-						volumeHealthState := volume.Status.Health
-						SystemVolumeLabelValues := append(BaseLabelValues, "volume", volumeName, systemHostName)
-						if volumeStateValue :=parseCommonStatusState(volumeState);volumeStateValue !=float64(0){
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_state"].desc, prometheus.GaugeValue, volumeStateValue, SystemVolumeLabelValues...)
+					if volumes, err := storage.Volumes(); err != nil {
+						log.Infof("Errors Getting volumes  from system storage : %s", err)
+					} else {
+						for _, volume := range volumes {
+							volumeODataIDslice := strings.Split(volume.ODataID, "/")
+							volumeName := volumeODataIDslice[len(volumeODataIDslice)-1]
+							volumeCapacityBytes := volume.CapacityBytes
+							volumeState := volume.Status.State
+							volumeHealthState := volume.Status.Health
+							SystemVolumeLabelValues := append(BaseLabelValues, "volume", volumeName, systemHostName)
+							if volumeStateValue := parseCommonStatusState(volumeState); volumeStateValue != float64(0) {
+								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_state"].desc, prometheus.GaugeValue, volumeStateValue, SystemVolumeLabelValues...)
+
+							}
+							if volumeHealthStateValue := parseCommonStatusHealth(volumeHealthState); volumeHealthStateValue != float64(0) {
+								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_health_state"].desc, prometheus.GaugeValue, volumeHealthStateValue, SystemVolumeLabelValues...)
+
+							}
+							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_capacity"].desc, prometheus.GaugeValue, float64(volumeCapacityBytes), SystemVolumeLabelValues...)
 
 						}
-						if volumeHealthStateValue :=parseCommonStatusHealth(volumeHealthState);volumeHealthStateValue !=float64(0) {
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_health_state"].desc, prometheus.GaugeValue,volumeHealthStateValue , SystemVolumeLabelValues...)
+					}
+
+					if drives, err := storage.Drives(); err != nil {
+						log.Infof("Errors Getting volumes  from system storage : %s", err)
+					} else {
+						for _, drive := range drives {
+							driveODataIDslice := strings.Split(drive.ODataID, "/")
+							driveName := driveODataIDslice[len(driveODataIDslice)-1]
+							driveCapacityBytes := drive.CapacityBytes
+							driveState := drive.Status.State
+							driveHealthState := drive.Status.Health
+							SystemdriveLabelValues := append(BaseLabelValues, "drive", driveName, systemHostName)
+							if driveStateValue := parseCommonStatusState(driveState); driveStateValue != float64(0) {
+								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_state"].desc, prometheus.GaugeValue, driveStateValue, SystemdriveLabelValues...)
+
+							}
+							if driveHealthStateValue := parseCommonStatusHealth(driveHealthState); driveHealthStateValue != float64(0) {
+								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_health_state"].desc, prometheus.GaugeValue, driveHealthStateValue, SystemdriveLabelValues...)
+
+							}
+							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_capacity"].desc, prometheus.GaugeValue, float64(driveCapacityBytes), SystemdriveLabelValues...)
+						}
+					}
+
+					if storagecontrollers, err := storage.StorageControllers(); err != nil {
+						log.Fatalf("Errors Getting storagecontrollers from system storage : %s", err)
+					} else {
+						for _, controller := range storagecontrollers {
+							controllerODataIDslice := strings.Split(controller.ODataID, "/")
+							controllerName := controllerODataIDslice[len(controllerODataIDslice)-1]
+							controllerState := controller.Status.State
+							controllerHealthState := controller.Status.Health
+							controllerLabelValues := append(BaseLabelValues, "storagecontroller", controllerName, systemHostName)
+							if controllerStateValue := parseCommonStatusState(controllerState); controllerStateValue != float64(0) {
+								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_controller_state"].desc, prometheus.GaugeValue, controllerStateValue, controllerLabelValues...)
+
+							}
+							if controllerHealthStateValue := parseCommonStatusHealth(controllerHealthState); controllerHealthStateValue != float64(0) {
+								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_controller_health_state"].desc, prometheus.GaugeValue, controllerHealthStateValue, controllerLabelValues...)
+
+							}
 
 						}
-						ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_capacity"].desc, prometheus.GaugeValue, float64(volumeCapacityBytes), SystemVolumeLabelValues...)
 
 					}
+
 				}
-
-				if drives, err := storage.Drives(); err != nil {
-					log.Infof("Errors Getting volumes  from system storage : %s", err)
-				}else {
-					for _, drive := range drives {
-						driveODataIDslice := strings.Split(drive.ODataID, "/")
-						driveName := driveODataIDslice[len(driveODataIDslice)-1]
-						driveCapacityBytes := drive.CapacityBytes
-						driveState := drive.Status.State
-						driveHealthState := drive.Status.Health
-						SystemdriveLabelValues := append(BaseLabelValues, "drive", driveName, systemHostName)
-						if driveStateValue :=parseCommonStatusState(driveState);driveStateValue !=float64(0) {
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_state"].desc, prometheus.GaugeValue, driveStateValue, SystemdriveLabelValues...)
-
-						}
-						if driveHealthStateValue:=parseCommonStatusHealth(driveHealthState) ;driveHealthStateValue !=float64(0) {
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_health_state"].desc, prometheus.GaugeValue, driveHealthStateValue, SystemdriveLabelValues...)
-
-						}
-						ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_capacity"].desc, prometheus.GaugeValue, float64(driveCapacityBytes), SystemdriveLabelValues...)
-					}
-				}
-				
-				if storagecontrollers, err := storage.StorageControllers(); err != nil {
-					log.Fatalf("Errors Getting storagecontrollers from system storage : %s", err)
-				} else {
-					for _, controller := range storagecontrollers {
-						controllerODataIDslice := strings.Split(controller.ODataID, "/")
-						controllerName := controllerODataIDslice[len(controllerODataIDslice)-1]
-						controllerState := controller.Status.State
-						controllerHealthState := controller.Status.Health
-						controllerLabelValues := append(BaseLabelValues, "storagecontroller", controllerName, systemHostName)
-						if controllerStateValue:=parseCommonStatusState(controllerState);controllerStateValue !=float64(0) {
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_controller_state"].desc, prometheus.GaugeValue,controllerStateValue , controllerLabelValues...)
-
-						}
-						if controllerHealthStateValue:=parseCommonStatusHealth(controllerHealthState);controllerHealthStateValue !=float64(0) {
-							ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_controller_health_state"].desc, prometheus.GaugeValue, controllerHealthStateValue, controllerLabelValues...)
-
-						}
-
-					}
-
 			}
-
-			}
-			}
-
+			//process pci devices
+			//pciDevicesLink := fmt.Sprintf("%sPcidevice/", systemOdataID)
 		}
 	}
 	s.collectorScrapeStatus.WithLabelValues("system").Set(float64(1))
