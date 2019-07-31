@@ -102,20 +102,20 @@ func newRedfishClient(host string, username string, password string) (*gofish.Ap
 	// Create a new instance of gofish client
 	redfishClient, err := gofish.APIClient(url, httpClient)
 	if err != nil {
-		log.Fatalf("Errors occours when creating redfish client: %s", err)
+		log.Infof("Errors occours when creating redfish client: %s", err)
 		return redfishClient, float64(0)
 	}
 
 	service, err := gofish.ServiceRoot(redfishClient)
 	if err != nil {
-		log.Fatalf("Errors occours when Getting Services: %s", err)
+		log.Infof("Errors occours when Getting Services: %s", err)
 		return redfishClient, float64(0)
 	}
 
 	// Generates a authenticated session
 	auth, err := service.CreateSession(username, password)
 	if err != nil {
-		log.Fatalf("Errors occours when creating sessions: %s", err)
+		log.Infof("Errors occours when creating sessions: %s", err)
 		return redfishClient, float64(0)
 	}
 
