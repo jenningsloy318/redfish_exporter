@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"crypto/tls"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
 	gofishcommon "github.com/stmcginnis/gofish/school/common"
 	redfish "github.com/stmcginnis/gofish/school/redfish"
-	"net/http"
-	"time"
 )
 
 // Metric name parts.
@@ -39,7 +40,7 @@ type RedfishCollector struct {
 	redfishClient  *gofish.ApiClient
 	collectors     map[string]prometheus.Collector
 	redfishUp      prometheus.Gauge
-	redfishUpValue float64
+	redfishUpValue bool
 }
 
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
@@ -74,20 +75,20 @@ func (r *RedfishCollector) Describe(ch chan<- *prometheus.Desc) {
 // Collect implements prometheus.Collector.
 func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 	scrapeTime := time.Now()
-	if r.redfishUpValue == float64(1) {
-		r.redfishUp.Set(r.redfishUpValue)
+	if r.redfishUpValue {
+		r.redfishUp.Set(1)
 		ch <- r.redfishUp
 		for _, collector := range r.collectors {
 			collector.Collect(ch)
 		}
 	} else {
-		r.redfishUp.Set(r.redfishUpValue)
+		r.redfishUp.Set(0)
 		ch <- r.redfishUp
 	}
 	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), BaseLabelValues...)
 }
 
-func newRedfishClient(host string, username string, password string) (*gofish.ApiClient, float64) {
+func newRedfishClient(host string, username string, password string) (*gofish.ApiClient, bool) {
 
 	url := fmt.Sprintf("https://%s", host)
 
@@ -103,26 +104,26 @@ func newRedfishClient(host string, username string, password string) (*gofish.Ap
 	redfishClient, err := gofish.APIClient(url, httpClient)
 	if err != nil {
 		log.Infof("Errors occours when creating redfish client: %s", err)
-		return redfishClient, float64(0)
+		return redfishClient, false
 	}
 
 	service, err := gofish.ServiceRoot(redfishClient)
 	if err != nil {
 		log.Infof("Errors occours when Getting Services: %s", err)
-		return redfishClient, float64(0)
+		return redfishClient, false
 	}
 
 	// Generates a authenticated session
 	auth, err := service.CreateSession(username, password)
 	if err != nil {
 		log.Infof("Errors occours when creating sessions: %s", err)
-		return redfishClient, float64(0)
+		return redfishClient, false
 	}
 
 	// Assign the token back to our gofish client
 	redfishClient.Token = auth.Token
 
-	return redfishClient, float64(1)
+	return redfishClient, true
 }
 
 func parseCommonStatusHealth(status gofishcommon.Health) float64 {
