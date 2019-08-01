@@ -352,9 +352,10 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 
 			// process processor metrics
 
-			processorsLink := fmt.Sprintf("%sProcessors/", systemOdataID)
+			//processorsLink := fmt.Sprintf("%sProcessors/", systemOdataID)
 
-			if processors, err := redfish.ListReferencedProcessors(s.redfishClient, processorsLink); err != nil {
+			//if processors, err := redfish.ListReferencedProcessors(s.redfishClient, processorsLink); err != nil {
+			if processors, err := system.Processors(); err != nil {
 				log.Infof("Errors Getting Processors from system: %s", err)
 			} else {
 
