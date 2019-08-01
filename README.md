@@ -46,3 +46,8 @@ add hana-exporter job conif as following
       - target_label: __address__
         replacement: localhost:9610  ### the address of the redfish-exporter address
 ````
+
+
+## TODO
+- Implement `NetworkAdapters` under chassis 
+- impemented `NetworkInterfaces` under system
