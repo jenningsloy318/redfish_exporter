@@ -463,6 +463,16 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 			//process pci devices
 			//pciDevicesLink := fmt.Sprintf("%sPcidevice/", systemOdataID)
+			if pciDevices, err := system.PCIeDevice(); err != nil {
+				log.Infof("Errors Getting PCI-E devices from system: %s", err)
+			} else {
+
+				for _, pciDevice := range pciDevices {
+					pciDeviceName := pciDevice.Name
+					log.Infof("pci name: %s", pciDeviceName)
+
+				}
+			}
 		}
 	}
 	s.collectorScrapeStatus.WithLabelValues("system").Set(float64(1))
