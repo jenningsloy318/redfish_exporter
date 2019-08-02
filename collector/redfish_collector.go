@@ -120,57 +120,77 @@ func newRedfishClient(host string, username string, password string) (*gofish.Ap
 
 	// Assign the token back to our gofish client
 	redfishClient.Token = auth.Token
-	log.Infof("Scraping target %s",host)
+	log.Infof("Scraping target %s", host)
 	return redfishClient, true
 }
 
-func parseCommonStatusHealth(status gofishcommon.Health) (float64,bool) {
+func parseCommonStatusHealth(status gofishcommon.Health) (float64, bool) {
 	if bytes.Equal([]byte(status), []byte("OK")) {
-		return float64(1),true
+		return float64(1), true
 	} else if bytes.Equal([]byte(status), []byte("Warning")) {
-		return float64(2),true
+		return float64(2), true
 	} else if bytes.Equal([]byte(status), []byte("Critical")) {
-		return float64(3),true
+		return float64(3), true
 	}
-	return float64(0),false
+	return float64(0), false
 }
 
-func parseCommonStatusState(status gofishcommon.State) (float64,bool) {
+func parseCommonStatusState(status gofishcommon.State) (float64, bool) {
 	if bytes.Equal([]byte(status), []byte("Enabled")) {
-		return float64(1),true
+		return float64(1), true
 	} else if bytes.Equal([]byte(status), []byte("Disabled")) {
-		return float64(2),true
+		return float64(2), true
 	} else if bytes.Equal([]byte(status), []byte("StandbyOffinline")) {
-		return float64(3),true
+		return float64(3), true
 	} else if bytes.Equal([]byte(status), []byte("StandbySpare")) {
-		return float64(4),true
+		return float64(4), true
 	} else if bytes.Equal([]byte(status), []byte("InTest")) {
-		return float64(5),true
+		return float64(5), true
 	} else if bytes.Equal([]byte(status), []byte("Starting")) {
-		return float64(6),true
+		return float64(6), true
 	} else if bytes.Equal([]byte(status), []byte("Absent")) {
-		return float64(7),true
+		return float64(7), true
 	} else if bytes.Equal([]byte(status), []byte("UnavailableOffline")) {
-		return float64(8),true
+		return float64(8), true
 	} else if bytes.Equal([]byte(status), []byte("Deferring")) {
-		return float64(9),true
+		return float64(9), true
 	} else if bytes.Equal([]byte(status), []byte("Quiesced")) {
-		return float64(10),true
+		return float64(10), true
 	} else if bytes.Equal([]byte(status), []byte("Updating")) {
-		return float64(11),true
+		return float64(11), true
 	}
-	return float64(0),false
+	return float64(0), false
 }
 
-func parseSystemPowerState(status redfish.PowerState) (float64,bool) {
+func parseSystemPowerState(status redfish.PowerState) (float64, bool) {
 	if bytes.Equal([]byte(status), []byte("On")) {
-		return float64(1),true
+		return float64(1), true
 	} else if bytes.Equal([]byte(status), []byte("Off")) {
-		return float64(2),true
+		return float64(2), true
 	} else if bytes.Equal([]byte(status), []byte("PoweringOn")) {
-		return float64(3),true
+		return float64(3), true
 	} else if bytes.Equal([]byte(status), []byte("PoweringOff")) {
-		return float64(4),true
+		return float64(4), true
 	}
-	return float64(0),false
+	return float64(0), false
+}
+
+func parseLinkStatus(status redfish.LinkStatus) (float64, bool) {
+	if bytes.Equal([]byte(status), []byte("LinkUp")) {
+		return float64(1), true
+	} else if bytes.Equal([]byte(status), []byte("NoLink")) {
+		return float64(2), true
+	} else if bytes.Equal([]byte(status), []byte("LinkDown")) {
+		return float64(3), true
+	}
+	return float64(0), false
+}
+
+func boolToFloat64(data bool) float64 {
+
+	if data {
+		return float64(1)
+	} else {
+		return float64(0)
+	}
 }
