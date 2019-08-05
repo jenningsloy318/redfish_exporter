@@ -1,11 +1,9 @@
 package collector
 
 import (
-	"fmt"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
-	"strings"
 )
 
 // A SystemCollector implements the prometheus.Collector.
@@ -21,15 +19,15 @@ type systemMetric struct {
 }
 
 var (
-	SystemLabelNames                  = append(BaseLabelNames, "resource", "hostname")
-	SystemMemoryLabelNames            = append(BaseLabelNames, "resource", "memory", "hostname")
-	SystemProcessorLabelNames         = append(BaseLabelNames, "resource", "processor", "hostname")
-	SystemVolumeLabelNames            = append(BaseLabelNames, "resource", "volume", "hostname")
-	SystemDriveLabelNames             = append(BaseLabelNames, "resource", "drive", "hostname")
-	SystemStorageControllerLabelNames = append(BaseLabelNames, "resource", "storage_controller", "hostname")
-	SystemPCIeDeviceLabelNames        = append(BaseLabelNames, "resource", "pcie_device", "hostname")
-	SystemNetworkInterfaceLabelNames  = append(BaseLabelNames, "resource", "networ_kinterface", "hostname")
-	SystemEthernetInterfaceLabelNames = append(BaseLabelNames, "resource", "ethernet_interface", "hostname")
+	SystemLabelNames                  = append(BaseLabelNames, "hostname", "resource", "system_id")
+	SystemMemoryLabelNames            = append(BaseLabelNames, "hostname", "resource", "memory", "memory_id")
+	SystemProcessorLabelNames         = append(BaseLabelNames, "hostname", "resource", "processor", "processor_id")
+	SystemVolumeLabelNames            = append(BaseLabelNames, "hostname", "resource", "volume", "volume_id")
+	SystemDriveLabelNames             = append(BaseLabelNames, "hostname", "resource", "drive", "drive_id")
+	SystemStorageControllerLabelNames = append(BaseLabelNames, "hostname", "resource", "storage_controller", "storage_controller_id")
+	SystemPCIeDeviceLabelNames        = append(BaseLabelNames, "hostname", "resource", "pcie_device", "pcie_device_id")
+	SystemNetworkInterfaceLabelNames  = append(BaseLabelNames, "hostname", "resource", "network_interface", "network_interface_id")
+	SystemEthernetInterfaceLabelNames = append(BaseLabelNames, "hostname", "resource", "ethernet_interface", "ethernet_interface_id")
 )
 
 // NewSystemCollector returns a collector that collecting memory statistics
@@ -341,7 +339,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 		for _, system := range systems {
 			// overall system metrics
 
-			systemName := system.Name
+			SystemID := system.ID
 			systemHostName := system.HostName
 			systemPowerState := system.PowerState
 			systemState := system.Status.State
@@ -353,7 +351,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			systemTotalMemoryHealthState := system.MemorySummary.Status.Health
 			systemTotalMemoryAmount := system.MemorySummary.TotalSystemMemoryGiB
 
-			systemLabelValues := append(BaseLabelValues, systemName, systemHostName)
+			systemLabelValues := append(BaseLabelValues, systemHostName, "system", SystemID)
 			if systemHealthStateValue, ok := parseCommonStatusHealth(systemHealthState); ok {
 				ch <- prometheus.MustNewConstMetric(s.metrics["system_health_state"].desc, prometheus.GaugeValue, systemHealthStateValue, systemLabelValues...)
 			}
@@ -396,13 +394,14 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 				log.Infof("Errors Getting memory from computer system : %s", err)
 			} else {
 				for _, memory := range memories {
-					memoryName := memory.DeviceLocator
+					memoryName := memory.Name
+					memoryId := memory.ID
 					//memoryDeviceLocator := memory.DeviceLocator
 					memoryCapacityMiB := memory.CapacityMiB
 					memoryState := memory.Status.State
 					memoryHealthState := memory.Status.Health
 
-					systemMemoryLabelValues := append(BaseLabelValues, "memory", memoryName, systemHostName)
+					systemMemoryLabelValues := append(BaseLabelValues, systemHostName, "memory", memoryName, memoryId)
 					if memoryStateValue, ok := parseCommonStatusState(memoryState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_memory_state"].desc, prometheus.GaugeValue, memoryStateValue, systemMemoryLabelValues...)
 
@@ -427,13 +426,14 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 
 				for _, processor := range processors {
 
-					processorName := processor.Socket
+					processorName := processor.Name
+					processorID := processor.ID
 					processorTotalCores := processor.TotalCores
 					processorTotalThreads := processor.TotalThreads
 					processorState := processor.Status.State
 					processorHelathState := processor.Status.Health
 
-					systemProcessorLabelValues := append(BaseLabelValues, "processor", processorName, systemHostName)
+					systemProcessorLabelValues := append(BaseLabelValues, systemHostName, "processor", processorName, processorID)
 
 					if processorStateValue, ok := parseCommonStatusState(processorState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_processor_state"].desc, prometheus.GaugeValue, processorStateValue, systemProcessorLabelValues...)
@@ -463,12 +463,12 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 						log.Infof("Errors Getting volumes  from system storage : %s", err)
 					} else {
 						for _, volume := range volumes {
-							volumeODataIDslice := strings.Split(volume.ODataID, "/")
-							volumeName := volumeODataIDslice[len(volumeODataIDslice)-1]
+							volumeName := volume.Name
+							volumeID := volume.ID
 							volumeCapacityBytes := volume.CapacityBytes
 							volumeState := volume.Status.State
 							volumeHealthState := volume.Status.Health
-							systemVolumeLabelValues := append(BaseLabelValues, "volume", volumeName, systemHostName)
+							systemVolumeLabelValues := append(BaseLabelValues, systemHostName, "volume", volumeName, volumeID)
 							if volumeStateValue, ok := parseCommonStatusState(volumeState); ok {
 								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_volume_state"].desc, prometheus.GaugeValue, volumeStateValue, systemVolumeLabelValues...)
 
@@ -486,12 +486,12 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 						log.Infof("Errors Getting volumes  from system storage : %s", err)
 					} else {
 						for _, drive := range drives {
-							driveODataIDslice := strings.Split(drive.ODataID, "/")
-							driveName := driveODataIDslice[len(driveODataIDslice)-1]
+							driveName := drive.Name
+							driveID := drive.ID
 							driveCapacityBytes := drive.CapacityBytes
 							driveState := drive.Status.State
 							driveHealthState := drive.Status.Health
-							systemdriveLabelValues := append(BaseLabelValues, "drive", driveName, systemHostName)
+							systemdriveLabelValues := append(BaseLabelValues, systemHostName, "drive", driveName, driveID)
 							if driveStateValue, ok := parseCommonStatusState(driveState); ok {
 								ch <- prometheus.MustNewConstMetric(s.metrics["system_storage_drive_state"].desc, prometheus.GaugeValue, driveStateValue, systemdriveLabelValues...)
 
@@ -536,11 +536,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 				log.Infof("Errors Getting PCI-E devices from system: %s", err)
 			} else {
 				for _, pcieDevice := range pcieDevices {
-					pcieDeviceODataIDslice := strings.Split(pcieDevice.ODataID, "/")
-					pcieDeviceID := pcieDeviceODataIDslice[len(pcieDeviceODataIDslice)-1]
+					pcieDeviceName := pcieDevice.Name
+					pcieDeviceID := pcieDevice.ID
 					pcieDeviceState := pcieDevice.Status.State
 					pcieDeviceHealthState := pcieDevice.Status.Health
-					systemPCIeDeviceLabelValues := append(BaseLabelValues, "pcie_device", pcieDeviceID, systemHostName)
+					systemPCIeDeviceLabelValues := append(BaseLabelValues, systemHostName, "pcie_device", pcieDeviceName, pcieDeviceID)
 
 					if pcieStateVaule, ok := parseCommonStatusState(pcieDeviceState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_pcie_device_state"].desc, prometheus.GaugeValue, pcieStateVaule, systemPCIeDeviceLabelValues...)
@@ -558,19 +558,17 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 				log.Infof("Errors Getting network Interfaces from system: %s", err)
 			} else {
 				for _, networkInterface := range networkInterfaces {
+					networkInterfaceName := networkInterface.Name
+					networkInterfaceID := networkInterface.ID
+					networkInterfaceState := networkInterface.Status.State
+					networkInterfaceHealthState := networkInterface.Status.Health
+					systemNetworkInterfaceLabelValues := append(BaseLabelValues, systemHostName, "network_interface", networkInterfaceName, networkInterfaceID)
 
-					networkInterfaceODataIDslice := strings.Split(networkInterface.ODataID, "/")
-					networkInterfaceID := networkInterfaceODataIDslice[len(networkInterfaceODataIDslice)-1]
-					networknetworkInterfaceName := fmt.Sprintf("Network Interface %s", networkInterfaceID)
-					networknetworkInterfaceState := networkInterface.Status.State
-					networknetworkInterfaceHealthState := networkInterface.Status.Health
-					systemNetworkInterfaceLabelValues := append(BaseLabelValues, "network_interface", networknetworkInterfaceName, systemHostName)
-
-					if networknetworkInterfaceStateVaule, ok := parseCommonStatusState(networknetworkInterfaceState); ok {
+					if networknetworkInterfaceStateVaule, ok := parseCommonStatusState(networkInterfaceState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_network_interface_state"].desc, prometheus.GaugeValue, networknetworkInterfaceStateVaule, systemNetworkInterfaceLabelValues...)
 
 					}
-					if networknetworkInterfaceHealthStateVaule, ok := parseCommonStatusHealth(networknetworkInterfaceHealthState); ok {
+					if networknetworkInterfaceHealthStateVaule, ok := parseCommonStatusHealth(networkInterfaceHealthState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_network_interface_health_state"].desc, prometheus.GaugeValue, networknetworkInterfaceHealthStateVaule, systemNetworkInterfaceLabelValues...)
 
 					}
@@ -585,13 +583,15 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			} else {
 
 				for _, ethernetInterface := range ethernetInterfaces {
-					ethernetInterfaceODataIDslice := strings.Split(ethernetInterface.ODataID, "/")
-					ethernetInterfaceName := ethernetInterfaceODataIDslice[len(ethernetInterfaceODataIDslice)-1]
+					//ethernetInterfaceODataIDslice := strings.Split(ethernetInterface.ODataID, "/")
+					//ethernetInterfaceName := ethernetInterfaceODataIDslice[len(ethernetInterfaceODataIDslice)-1]
+					ethernetInterfaceName := ethernetInterface.Name
+					ethernetInterfaceID := ethernetInterface.ID
 					ethernetInterfaceLinkStatus := ethernetInterface.LinkStatus
 					ethernetInterfaceEnabled := ethernetInterface.InterfaceEnabled
 					ethernetInterfaceState := ethernetInterface.Status.State
 					ethernetInterfaceHealthState := ethernetInterface.Status.Health
-					systemEthernetInterfaceLabelValues := append(BaseLabelValues, "ethernet_interface", ethernetInterfaceName, systemHostName)
+					systemEthernetInterfaceLabelValues := append(BaseLabelValues, systemHostName, "ethernet_interface", ethernetInterfaceName, ethernetInterfaceID)
 					if ethernetInterfaceStateValue, ok := parseCommonStatusState(ethernetInterfaceState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_etherenet_interface_state"].desc, prometheus.GaugeValue, ethernetInterfaceStateValue, systemEthernetInterfaceLabelValues...)
 
