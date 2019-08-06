@@ -49,5 +49,3 @@ add hana-exporter job conif as following
 
 
 ## TODO
-- Implement `NetworkAdapters` under chassis 
-- impemented `NetworkInterfaces` under system
