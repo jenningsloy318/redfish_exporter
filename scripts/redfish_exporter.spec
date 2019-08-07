@@ -1,5 +1,10 @@
 %define debug_package %{nil}
 
+# distribution specific definitions
+%if 0%{?sle_version} 
+%define dist .sle%{sle_version} 
+%endif 
+
 Name:    redfish_exporter
 Version: 0.10.0
 Release: 1%{?dist}
@@ -12,15 +17,13 @@ Source1: %{name}.service
 Source2: %{name}.yml
 
 
-# distribution specific definitions
-%define use_systemd ((0%{?rhel} && 0%{?rhel} >= 7) || (0%{?suse_version} == 1315)
 
 
-%if 0%{?rhel} == 7
+%if 0%{?rhel}
 Requires(pre): shadow-utils
 %endif
 
-%if 0%{?suse_version} == 1315
+%if 0%{?sle_version} 
 Requires(pre): shadow
 %endif
 
