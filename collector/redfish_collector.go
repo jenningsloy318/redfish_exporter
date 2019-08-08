@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 	"time"
-
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
@@ -26,12 +25,10 @@ const (
 
 // Metric descriptors.
 var (
-	BaseLabelNames          = []string{"host"}
-	BaseLabelValues         = make([]string, 1, 1)
 	totalScrapeDurationDesc = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, exporter, "collector_duration_seconds"),
 		"Collector time duration.",
-		BaseLabelNames, nil,
+		nil, nil,
 	)
 )
 
@@ -44,7 +41,6 @@ type RedfishCollector struct {
 }
 
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
-	BaseLabelValues[0] = host
 	redfishClient, redfishUpValue := newRedfishClient(host, username, password)
 	chassisCollector := NewChassisCollector(namespace, redfishClient)
 	systemCollector := NewSystemCollector(namespace, redfishClient)
@@ -85,7 +81,7 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 		r.redfishUp.Set(0)
 		ch <- r.redfishUp
 	}
-	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), BaseLabelValues...)
+	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), )
 }
 
 func newRedfishClient(host string, username string, password string) (*gofish.ApiClient, bool) {

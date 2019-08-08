@@ -1,0 +1,25 @@
+{
+  "Id": "1",
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK"
+  },
+  "Links": {
+    "Drives": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.0"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.1"
+      }
+    ]
+  },
+  "Name": "",
+  "@odata.context": "/redfish/v1/$metadata#Volume.Volume",
+  "CapacityBytes": 598999040000,
+  "@odata.type": "#Volume.v1_0_3.Volume",
+  "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Volumes/1",
+  "@odata.etag": "W/\"74d483e168d2ac06484716bb2a643a3d\"",
+  "BlockSizeBytes": 512,
+  "Description": "This resource is used to represent a volume for a Redfish implementation."
+}

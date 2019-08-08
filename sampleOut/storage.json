@@ -1,0 +1,15 @@
+{
+  "@odata.id": "/redfish/v1/Systems/1/Storage/",
+  "Members@odata.navigationLink": "/redfish/v1/Systems/1/Storage/Members",
+  "@odata.context": "/redfish/v1/$metadata#StorageCollection.StorageCollection",
+  "Members": [
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/"
+    }
+  ],
+  "@odata.type": "#StorageCollection.StorageCollection",
+  "Members@odata.count": 1,
+  "@odata.etag": "W/\"9ff513824283b6bcb4aad5cf8ad510ab\"",
+  "Name": "StorageCollection",
+  "Description": "A Collection of Storage resource instances."
+}

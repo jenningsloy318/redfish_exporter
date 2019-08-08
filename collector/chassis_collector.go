@@ -20,14 +20,14 @@ type chassisMetric struct {
 }
 
 var (
-	ChassisLabelNames = append(BaseLabelNames, "resource", "chassis_id")
+	ChassisLabelNames = []string{"resource", "chassis_id"}
 
-	ChassisTemperatureLabelNames    = append(BaseLabelNames, "resource", "chassis_id", "sensor", "sensor_id")
-	ChassisFanLabelNames            = append(BaseLabelNames, "resource", "chassis_id", "fan", "fan_id")
-	ChassisPowerVotageLabelNames    = append(BaseLabelNames, "resource", "chassis_id", "power_votage", "power_votage_id")
-	ChassisPowerSupplyLabelNames    = append(BaseLabelNames, "resource", "chassis_id", "power_supply", "power_supply_id")
-	ChassisNetworkAdapterLabelNames = append(BaseLabelNames, "resource", "chassis_id", "network_adapter", "network_adapter_id")
-	ChassisNetworkPortLabelNames    = append(BaseLabelNames, "resource", "chassis_id", "network_adapter", "network_port", "network_port_id")
+	ChassisTemperatureLabelNames    = []string{ "resource", "chassis_id", "sensor", "sensor_id"}
+	ChassisFanLabelNames            = []string{ "resource", "chassis_id", "fan", "fan_id"}
+	ChassisPowerVotageLabelNames    = []string{ "resource", "chassis_id", "power_votage", "power_votage_id"}
+	ChassisPowerSupplyLabelNames    = []string{ "resource", "chassis_id", "power_supply", "power_supply_id"}
+	ChassisNetworkAdapterLabelNames = []string{ "resource", "chassis_id", "network_adapter", "network_adapter_id"}
+	ChassisNetworkPortLabelNames    = []string{ "resource", "chassis_id", "network_adapter", "network_port", "network_port_id"}
 )
 
 // NewChassisCollector returns a collector that collecting chassis statistics
@@ -230,7 +230,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 			chassisStatus := chassis.Status
 			chassisStatusState := chassisStatus.State
 			chassisStatusHealth := chassisStatus.Health
-			ChassisLabelValues := append(BaseLabelValues, "chassis", chassisID)
+			ChassisLabelValues := []string{ "chassis", chassisID}
 			if chassisStatusHealthValue, ok := parseCommonStatusHealth(chassisStatusHealth); ok {
 				ch <- prometheus.MustNewConstMetric(c.metrics["chassis_health"].desc, prometheus.GaugeValue, chassisStatusHealthValue, ChassisLabelValues...)
 			}
@@ -248,8 +248,8 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					chassisTemperatureStatus := chassisTemperature.Status
 					//			chassisTemperatureStatusHealth :=chassisTemperatureStatus.Health
 					chassisTemperatureStatusState := chassisTemperatureStatus.State
-					//			chassisTemperatureStatusLabelNames :=append(BaseLabelNames,"temperature_sensor_name","temperature_sensor_member_id")
-					chassisTemperatureLabelvalues := append(BaseLabelValues, "temperature", chassisID, chassisTemperatureSensorName, chassisTemperatureSensorMemberID)
+					//			chassisTemperatureStatusLabelNames :=[]string{BaseLabelNames,"temperature_sensor_name","temperature_sensor_member_id")
+					chassisTemperatureLabelvalues := []string{ "temperature", chassisID, chassisTemperatureSensorName, chassisTemperatureSensorMemberID}
 
 					//		ch <- prometheus.MustNewConstMetric(c.metrics["chassis_temperature_status_health"].desc, prometheus.GaugeValue, parseCommonStatusHealth(chassisTemperatureStatusHealth), chassisTemperatureLabelvalues...)
 					if chassisTemperatureStatusStateValue, ok := parseCommonStatusState(chassisTemperatureStatusState); ok {
@@ -271,8 +271,8 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					chassisFanStausState := chassisFanStaus.State
 					chassisFanRPM := chassisFan.ReadingRPM
 
-					//			chassisFanStatusLabelNames :=append(BaseLabelNames,"fan_name","fan_member_id")
-					chassisFanLabelvalues := append(BaseLabelValues, "fan", chassisID, chassisFanName, chassisFanMemberID)
+					//			chassisFanStatusLabelNames :=[]string{BaseLabelNames,"fan_name","fan_member_id")
+					chassisFanLabelvalues := []string{ "fan", chassisID, chassisFanName, chassisFanMemberID}
 
 					if chassisFanStausHealthValue, ok := parseCommonStatusHealth(chassisFanStausHealth); ok {
 						ch <- prometheus.MustNewConstMetric(c.metrics["chassis_fan_health"].desc, prometheus.GaugeValue, chassisFanStausHealthValue, chassisFanLabelvalues...)
@@ -295,7 +295,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					chassisPowerInfoVoltageID := chassisPowerInfoVoltage.MemberID
 					chassisPowerInfoVoltageNameReadingVolts := chassisPowerInfoVoltage.ReadingVolts
 					chassisPowerInfoVoltageState := chassisPowerInfoVoltage.Status.State
-					chassisPowerVotageLabelvalues := append(BaseLabelValues, "power_votage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID)
+					chassisPowerVotageLabelvalues := []string{ "power_votage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID}
 					if chassisPowerInfoVoltageStateValue, ok := parseCommonStatusState(chassisPowerInfoVoltageState); ok {
 						ch <- prometheus.MustNewConstMetric(c.metrics["chassis_power_voltage_state"].desc, prometheus.GaugeValue, chassisPowerInfoVoltageStateValue, chassisPowerVotageLabelvalues...)
 					}
@@ -312,7 +312,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					chassisPowerInfoPowerSupplyLastPowerOutputWatts := chassisPowerInfoPowerSupply.LastPowerOutputWatts
 					chassisPowerInfoPowerSupplyState := chassisPowerInfoPowerSupply.Status.State
 					chassisPowerInfoPowerSupplyHealth := chassisPowerInfoPowerSupply.Status.Health
-					chassisPowerSupplyLabelvalues := append(BaseLabelValues, "power_supply", chassisID, chassisPowerInfoPowerSupplyName, chassisPowerInfoPowerSupplyNameID)
+					chassisPowerSupplyLabelvalues := []string{ "power_supply", chassisID, chassisPowerInfoPowerSupplyName, chassisPowerInfoPowerSupplyNameID}
 					if chassisPowerInfoPowerSupplyStateValue, ok := parseCommonStatusState(chassisPowerInfoPowerSupplyState); ok {
 						ch <- prometheus.MustNewConstMetric(c.metrics["chassis_power_powersupply_state"].desc, prometheus.GaugeValue, chassisPowerInfoPowerSupplyStateValue, chassisPowerSupplyLabelvalues...)
 					}
@@ -336,7 +336,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					networkAdapterID := networkAdapter.ID
 					networkAdapterState := networkAdapter.Status.State
 					networkAdapterHealthState := networkAdapter.Status.Health
-					chassisNetworkAdapterLabelValues := append(BaseLabelValues, chassisID, "network_adapter", networkAdapterName, networkAdapterID)
+					chassisNetworkAdapterLabelValues := []string{ chassisID, "network_adapter", networkAdapterName, networkAdapterID}
 					if networkAdapterStateValue, ok := parseCommonStatusState(networkAdapterState); ok {
 						ch <- prometheus.MustNewConstMetric(c.metrics["chassis_network_adapter_state"].desc, prometheus.GaugeValue, networkAdapterStateValue, chassisNetworkAdapterLabelValues...)
 					}

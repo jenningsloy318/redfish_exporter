@@ -1,0 +1,240 @@
+{
+  "SerialNumber": "J300Z21M",
+  "Id": "1",
+  "IndicatorLED": "Off",
+  "PowerState": "On",
+  "ProcessorSummary": {
+    "Status": {
+      "State": "Enabled",
+      "Health": "OK",
+      "HealthRollup": "OK"
+    },
+    "Count": 4,
+    "Model": "Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz"
+  },
+  "NetworkInterfaces": {
+    "@odata.id": "/redfish/v1/Systems/1/NetworkInterfaces/"
+  },
+  "Storage": {
+    "@odata.id": "/redfish/v1/Systems/1/Storage/"
+  },
+  "PartNumber": null,
+  "Bios": {
+    "@odata.id": "/redfish/v1/Systems/1/Bios/"
+  },
+  "UUID": "f9753d74-6e44-11e9-81ba-0a94ef7a633b",
+  "Name": "ComputerSystem",
+  "Oem": {
+    "Lenovo": {
+      "ScheduledPowerActions": {
+        "@odata.id": "/redfish/v1/Systems/1/Oem/Lenovo/ScheduledPowerActions/"
+      },
+      "FrontPanelUSB": {
+        "IDButton": "On",
+        "PortSwitchingTo": "Server",
+        "InactivityTimeoutMins": 5,
+        "FPMode": "Shared"
+      },
+      "Metrics": {
+        "@odata.id": "/redfish/v1/Systems/1/Oem/Lenovo/Metrics/"
+      },
+      "SystemStatus": "BootingOSOrInUndetectedOS",
+      "NumberOfReboots": 52,
+      "HistorySysPerf": {
+        "@odata.id": "/redfish/v1/Systems/1/Oem/Lenovo/HistorySysPerf"
+      },
+      "BootSettings": {
+        "@odata.id": "/redfish/v1/Systems/1/Oem/Lenovo/BootSettings/"
+      },
+      "TPMSettings": {
+        "EnableRPP": true,
+        "AssertRPP": false,
+        "AssertDurationMins": 30
+      },
+      "TotalPowerOnHours": 1492,
+      "Sensors": "/redfish/v1/Chassis/1/Oem/Lenovo/Sensors/"
+    }
+  },
+  "@odata.type": "#ComputerSystem.v1_4_0.ComputerSystem",
+  "Manufacturer": "Lenovo",
+  "@odata.etag": "W/\"24110875f9b6f083f35ac1ed99ce590e\"",
+  "Actions": {
+    "#ComputerSystem.Reset": {
+      "target": "/redfish/v1/Systems/1/Actions/ComputerSystem.Reset",
+      "title": "Reset",
+      "ResetType@Redfish.AllowableValues": [
+        "On",
+        "Nmi",
+        "GracefulShutdown",
+        "GracefulRestart",
+        "ForceOn",
+        "ForceOff",
+        "ForceRestart"
+      ]
+    },
+    "Oem": {
+      "Lenovo": {
+        "#ComputerSystem.CustomizedReset": {
+          "target": "/redfish/v1/Systems/1/Actions/Oem/Lenovo/ComputerSystem.CustomizedReset",
+          "title": "CustomizedReset",
+          "ResetType@Redfish.AllowableValues": [
+            "On"
+          ]
+        },
+        "#ComputerSystem.BootToBIOSSetup": {
+          "target": "/redfish/v1/Systems/1/Actions/Oem/Lenovo/ComputerSystem.BootToBIOSSetup",
+          "title": "BootToBIOSSetup"
+        }
+      }
+    }
+  },
+  "EthernetInterfaces": {
+    "@odata.id": "/redfish/v1/Systems/1/EthernetInterfaces/"
+  },
+  "Boot": {
+    "BootSourceOverrideEnabled": "Disabled",
+    "BootSourceOverrideMode": "Legacy",
+    "BootSourceOverrideTarget": "None",
+    "BootSourceOverrideTarget@Redfish.AllowableValues": [
+      "None",
+      "Pxe",
+      "Cd",
+      "Usb",
+      "Hdd",
+      "BiosSetup",
+      "Diags",
+      "UefiTarget"
+    ],
+    "UefiTargetBootSourceOverride": null
+  },
+  "@odata.id": "/redfish/v1/Systems/1/",
+  "AssetTag": "",
+  "PCIeFunctions": [
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/ob_1.00"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_2.00"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_2.01"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_7.00"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_7.01"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_8.00"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_8.01"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_9.00"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_9.01"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_10.00"
+    }
+  ],
+  "SystemType": "Physical",
+  "BiosVersion": "TEE128P",
+  "HostName": "dc1-bm-esx-inb-prod05-console",
+  "MemorySummary": {
+    "Status": {
+      "State": "Enabled",
+      "Health": "OK",
+      "HealthRollup": "OK"
+    },
+    "TotalSystemMemoryGiB": 3072
+  },
+  "Processors": {
+    "@odata.id": "/redfish/v1/Systems/1/Processors/"
+  },
+  "PCIeFunctions@odata.count": 10,
+  "SecureBoot": {
+    "@odata.id": "/redfish/v1/Systems/1/SecureBoot"
+  },
+  "PCIeDevices": [
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/ob_1"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_2"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_7"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_8"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_9"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_10"
+    }
+  ],
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK",
+    "HealthRollup": "OK"
+  },
+  "PCIeDevices@odata.navigationLink": "/redfish/v1/Systems/1/PCIeDevices",
+  "PCIeDevices@odata.count": 6,
+  "PCIeFunctions@odata.navigationLink": "/redfish/v1/Systems/1/PCIeFunctions",
+  "SKU": "7X19CTO1WW",
+  "@odata.context": "/redfish/v1/$metadata#ComputerSystem.ComputerSystem",
+  "LogServices": {
+    "@odata.id": "/redfish/v1/Systems/1/LogServices/"
+  },
+  "Links": {
+    "Chassis": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/"
+      }
+    ],
+    "CooledBy": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/0"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/1"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/2"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/3"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/4"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/5"
+      }
+    ],
+    "PoweredBy": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Power/#/PowerSupplies/0"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Power/#/PowerSupplies/1"
+      }
+    ],
+    "ManagedBy": [
+      {
+        "@odata.id": "/redfish/v1/Managers/1/"
+      }
+    ]
+  },
+  "Description": "This resource is used to represent a computing system for a Redfish implementation.",
+  "Model": "ThinkSystem SR850",
+  "Memory": {
+    "@odata.id": "/redfish/v1/Systems/1/Memory/"
+  }
+}

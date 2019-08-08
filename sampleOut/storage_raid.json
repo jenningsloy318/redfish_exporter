@@ -1,0 +1,65 @@
+{
+  "Drives": [
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.0"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.1"
+    }
+  ],
+  "Volumes": {
+    "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Volumes/"
+  },
+  "Drives@odata.count": 2,
+  "Id": "RAID_Slot10",
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK",
+    "HealthRollup": "OK"
+  },
+  "Links": {
+    "Enclosures": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/"
+      }
+    ]
+  },
+  "Name": "RAID Storage",
+  "@odata.context": "/redfish/v1/$metadata#Storage.Storage",
+  "Drives@odata.navigationLink": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives",
+  "StorageControllers@odata.count": 1,
+  "@odata.type": "#Storage.v1_2_0.Storage",
+  "StorageControllers@odata.navigationLink": "/redfish/v1/Systems/1/Storage/RAID_Slot10/StorageControllers",
+  "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/",
+  "@odata.etag": "W/\"1f509c780761990768838f8414e57bce\"",
+  "StorageControllers": [
+    {
+      "SerialNumber": "SP83707812",
+      "FirmwareVersion": "50.7.0-2054",
+      "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/#/StorageControllers/0",
+      "Status": {
+        "State": "Enabled",
+        "Health": "OK"
+      },
+      "Identifiers": [
+        {
+          "DurableName": "0000000000000000500605B00E79A2A0",
+          "DurableNameFormat": "UUID"
+        }
+      ],
+      "@odata.type": "#Storage.v1_2_0.StorageController",
+      "PartNumber": "SR17A04503",
+      "Manufacturer": "Lenovo",
+      "Model": "SAS3408",
+      "Oem": {
+        "Lenovo": {
+          "Location": {
+            "InfoFormat": "Slot X",
+            "Info": "Slot 10"
+          }
+        }
+      }
+    }
+  ],
+  "Description": "This resource is used to represent a storage for a Redfish implementation."
+}

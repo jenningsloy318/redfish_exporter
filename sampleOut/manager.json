@@ -1,0 +1,124 @@
+{
+  "DateTimeLocalOffset": "+08:00",
+  "Id": "1",
+  "NetworkProtocol": {
+    "@odata.id": "/redfish/v1/Managers/1/NetworkProtocol/"
+  },
+  "PowerState": "On",
+  "@odata.context": "/redfish/v1/$metadata#Manager.Manager",
+  "@odata.etag": "W/\"1bd53f68d16d4510910df94943c16a52\"",
+  "@odata.id": "/redfish/v1/Managers/1/",
+  "LogServices": {
+    "@odata.id": "/redfish/v1/Systems/1/LogServices/"
+  },
+  "ManagerType": "BMC",
+  "Description": "This resource is used to represent a management subsystem for a Redfish implementation.",
+  "VirtualMedia": {
+    "@odata.id": "/redfish/v1/Managers/1/VirtualMedia/"
+  },
+  "SerialInterfaces": {
+    "@odata.id": "/redfish/v1/Managers/1/SerialInterfaces/"
+  },
+  "Links": {
+    "ManagerForChassis": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/"
+      }
+    ],
+    "ManagerForServers": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/"
+      }
+    ]
+  },
+  "Model": "Lenovo XClarity Controller",
+  "CommandShell": {
+    "MaxConcurrentSessions": 4,
+    "ConnectTypesSupported": [
+      "SSH"
+    ],
+    "ServiceEnabled": true
+  },
+  "UUID": "F9753D74-6E44-11E9-81BA-0A94EF7A633B",
+  "Status": {
+    "State": "Enabled"
+  },
+  "HostInterfaces": {
+    "@odata.id": "/redfish/v1/Managers/1/HostInterfaces/"
+  },
+  "Name": "Manager",
+  "FirmwareVersion": "TEI334L 2.10 2018-09-12",
+  "ServiceEntryPointUUID": "F9753D74-6E44-11E9-81BA-0A94EF7A633B",
+  "Oem": {
+    "Lenovo": {
+      "Configuration": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/Configuration"
+      },
+      "FoD": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/FoD/"
+      },
+      "ServiceData": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/ServiceData"
+      },
+      "DateTimeService": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/DateTimeService"
+      },
+      "Watchdogs": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/Watchdogs/"
+      },
+      "RemoteControl": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/RemoteControl/"
+      },
+      "ServerProfile": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/ServerProfile"
+      },
+      "Security": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/Security"
+      },
+      "RemoteMap": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/RemoteMap/"
+      },
+      "Recipients": {
+        "@odata.id": "/redfish/v1/Managers/1/Oem/Lenovo/Recipients/"
+      }
+    }
+  },
+  "@odata.type": "#Manager.v1_3_1.Manager",
+  "GraphicalConsole": {
+    "MaxConcurrentSessions": 6,
+    "ConnectTypesSupported": [
+      "KVMIP"
+    ],
+    "ServiceEnabled": true
+  },
+  "DateTime": "2019-07-25 11:00:03+08:00",
+  "SerialConsole": {
+    "MaxConcurrentSessions": 2,
+    "ConnectTypesSupported": [
+      "IPMI",
+      "SSH"
+    ],
+    "ServiceEnabled": true
+  },
+  "Actions": {
+    "Oem": {
+      "Lenovo": {
+        "#LenovoManagerActions.GetIPMIProperty": {
+          "title": "GetIPMIProperty",
+          "target": "/redfish/v1/Managers/1/Actions/Oem/Lenovo/LenovoManagerActions.GetIPMIProperty"
+        }
+      }
+    },
+    "#Manager.Reset": {
+      "target": "/redfish/v1/Managers/1/Actions/Manager.Reset",
+      "title": "Reset",
+      "ResetType@Redfish.AllowableValues": [
+        "GracefulRestart",
+        "ForceRestart"
+      ]
+    }
+  },
+  "EthernetInterfaces": {
+    "@odata.id": "/redfish/v1/Managers/1/EthernetInterfaces/"
+  }
+}

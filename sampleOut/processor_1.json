@@ -1,0 +1,60 @@
+{
+  "ProcessorArchitecture": "x86",
+  "Links": {
+    "Chassis": {
+      "@odata.id": "/redfish/v1/Chassis/1/"
+    }
+  },
+  "TotalThreads": 40,
+  "InstructionSet": "x86-64",
+  "Description": "This resource is used to represent a processor for a Redfish implementation.",
+  "@odata.etag": "W/\"d6e8c232cb9e965c716b47dd5c20a656\"",
+  "@odata.context": "/redfish/v1/$metadata#Processor.Processor",
+  "@odata.id": "/redfish/v1/Systems/1/Processors/1",
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK"
+  },
+  "ProcessorType": "CPU",
+  "Name": "Processor 1",
+  "ProcessorId": {
+    "Step": "0x04",
+    "VendorId": "GenuineIntel",
+    "EffectiveModel": "0x55",
+    "EffectiveFamily": "0x06",
+    "IdentificationRegisters": "0x00050654bfebfbff",
+    "MicrocodeInfo": null
+  },
+  "Id": "1",
+  "Oem": {
+    "Lenovo": {
+      "ProcessorFamily": 179,
+      "CacheInfo": [
+        {
+          "MaxCacheSizeKByte": 1280,
+          "InstalledSizeKByte": 1280,
+          "CacheLevel": "L1"
+        },
+        {
+          "MaxCacheSizeKByte": 20480,
+          "InstalledSizeKByte": 20480,
+          "CacheLevel": "L2"
+        },
+        {
+          "MaxCacheSizeKByte": 28160,
+          "InstalledSizeKByte": 28160,
+          "CacheLevel": "L3"
+        }
+      ],
+      "NumberOfEnabledCores": 20,
+      "ExternalBusClockSpeedMHz": 100,
+      "CurrentClockSpeedMHz": 2000
+    }
+  },
+  "@odata.type": "#Processor.v1_1_0.Processor",
+  "TotalCores": 20,
+  "Manufacturer": "Intel(R) Corporation",
+  "MaxSpeedMHz": 3700,
+  "Model": "Intel(R) Xeon(R) Gold 6138 CPU @ 2.00GHz",
+  "Socket": "CPU 1"
+}

@@ -1,0 +1,47 @@
+{
+  "SerialNumber": "WFJ1MERK",
+  "Id": "Disk.0",
+  "Links": {
+    "Volumes": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Volumes/1"
+      }
+    ],
+    "Chassis": {
+      "@odata.id": "/redfish/v1/Chassis/1/"
+    }
+  },
+  "@odata.context": "/redfish/v1/$metadata#Drive.Drive",
+  "CapableSpeedGbs": 12,
+  "PartNumber": "D7A01863",
+  "MediaType": "HDD",
+  "Description": "This resource is used to represent a drive for a Redfish implementation.",
+  "RotationSpeedRPM": 10500,
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK"
+  },
+  "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.0",
+  "FailurePredicted": false,
+  "BlockSizeBytes": 512,
+  "Name": "ST600MM0009",
+  "@odata.type": "#Drive.v1_2_0.Drive",
+  "Protocol": "SAS",
+  "Identifiers": [
+    {
+      "DurableName": "",
+      "DurableNameFormat": "UUID"
+    }
+  ],
+  "CapacityBytes": 600127266816,
+  "Location": [
+    {
+      "InfoFormat": "Slot Number",
+      "Info": "Slot 0"
+    }
+  ],
+  "Manufacturer": "LENOVO",
+  "@odata.etag": "W/\"9fa5cebe671080800d6cf9644fa39e13\"",
+  "Model": "",
+  "Revision": "L1B6"
+}

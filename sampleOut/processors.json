@@ -1,0 +1,31 @@
+{
+  "@odata.id": "/redfish/v1/Systems/1/Processors/",
+  "Members@odata.count": 4,
+  "@odata.context": "/redfish/v1/$metadata#ProcessorCollection.ProcessorCollection",
+  "Members": [
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Processors/1"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Processors/2"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Processors/3"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Processors/4"
+    }
+  ],
+  "Oem": {
+    "Lenovo": {
+      "HistoryCPUMetric": {
+        "@odata.id": "/redfish/v1/Systems/1/Processors/Oem/Lenovo/HistoryCPUMetric"
+      }
+    }
+  },
+  "@odata.type": "#ProcessorCollection.ProcessorCollection",
+  "Members@odata.navigationLink": "/redfish/v1/Systems/1/Processors/Members",
+  "@odata.etag": "W/\"fef1e69e0075244bc90fce8da8e4c87f\"",
+  "Name": "ProcessorCollection",
+  "Description": "A Collection of Processor resource instances."
+}

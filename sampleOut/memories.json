@@ -1,0 +1,163 @@
+{
+  "@odata.id": "/redfish/v1/Systems/1/Memory/",
+  "Members@odata.count": 48,
+  "@odata.context": "/redfish/v1/$metadata#MemoryCollection.MemoryCollection",
+  "Members": [
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/1"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/2"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/3"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/4"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/5"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/6"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/7"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/8"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/9"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/10"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/11"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/12"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/13"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/14"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/15"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/16"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/17"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/18"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/19"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/20"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/21"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/22"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/23"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/24"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/25"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/26"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/27"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/28"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/29"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/30"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/31"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/32"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/33"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/34"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/35"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/36"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/37"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/38"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/39"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/40"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/41"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/42"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/43"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/44"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/45"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/46"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/47"
+    },
+    {
+      "@odata.id": "/redfish/v1/Systems/1/Memory/48"
+    }
+  ],
+  "Oem": {
+    "Lenovo": {
+      "HistoryMemMetric": {
+        "@odata.id": "/redfish/v1/Systems/1/Memory/Oem/Lenovo/HistoryMemMetric"
+      }
+    }
+  },
+  "@odata.type": "#MemoryCollection.MemoryCollection",
+  "Members@odata.navigationLink": "/redfish/v1/Systems/1/Memory/Members",
+  "@odata.etag": "W/\"306ef20aa78dc43daed1a41109134714\"",
+  "Name": "Memory Collection",
+  "Description": "A Collection of memory resource instances."
+}

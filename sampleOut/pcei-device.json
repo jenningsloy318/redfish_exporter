@@ -1,0 +1,40 @@
+{
+  "SerialNumber": "SP83707812",
+  "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_10",
+  "Links": {
+    "Chassis": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/"
+      }
+    ],
+    "PCIeFunctions": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeFunctions/slot_10.00"
+      }
+    ]
+  },
+  "@odata.context": "/redfish/v1/$metadata#PCIeDevice.PCIeDevice",
+  "PartNumber": "SR17A04503",
+  "Description": "This resource represents the properties of a PCIeDevice attached to a System.",
+  "FirmwareVersion": "50.7.0-2054",
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK"
+  },
+  "Name": "ThinkSystem RAID 530-8i PCIe 12Gb Adapter",
+  "Oem": {
+    "Lenovo": {
+      "Location": {
+        "InfoFormat": "Slot X",
+        "Info": "Slot 10"
+      }
+    }
+  },
+  "SKU": "01KN505",
+  "@odata.type": "#PCIeDevice.v1_1_0.PCIeDevice",
+  "DeviceType": "SingleFunction",
+  "Manufacturer": "Lenovo",
+  "@odata.etag": "W/\"d2d3ce3fbe6c9894ed0a4895aaae61a7\"",
+  "Model": "SAS3408",
+  "Id": "slot_10"
+}

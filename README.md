@@ -25,7 +25,7 @@ curl http://<redfish_exporter host>:9610/redfish?target=10.36.48.24
 ```
 
 ## prometheus job conf
-add hana-exporter job conif as following
+add redfish-exporter job conif as following
 ```yaml
   - job_name: 'redfish-exporter'
 

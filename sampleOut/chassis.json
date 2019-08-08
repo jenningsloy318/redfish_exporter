@@ -1,0 +1,136 @@
+{
+  "SerialNumber": "J300Z21M",
+  "Id": "1",
+  "Links": {
+    "Drives": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.0"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/Drives/Disk.1"
+      }
+    ],
+    "CooledBy": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/0"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/1"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/2"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/3"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/4"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Thermal/#/Fans/5"
+      }
+    ],
+    "ComputerSystems": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/"
+      }
+    ],
+    "PCIeDevices": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/ob_1"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_2"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_7"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_8"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_9"
+      },
+      {
+        "@odata.id": "/redfish/v1/Systems/1/PCIeDevices/slot_10"
+      }
+    ],
+    "PoweredBy": [
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Power/#/PowerSupplies/0"
+      },
+      {
+        "@odata.id": "/redfish/v1/Chassis/1/Power/#/PowerSupplies/1"
+      }
+    ],
+    "Storage": [
+      {
+        "@odata.id": "/redfish/v1/Systems/1/Storage/RAID_Slot10/"
+      }
+    ],
+    "ManagedBy": [
+      {
+        "@odata.id": "/redfish/v1/Managers/1/"
+      }
+    ],
+    "ManagersInChassis": [
+      {
+        "@odata.id": "/redfish/v1/Managers/1/"
+      }
+    ]
+  },
+  "PowerState": "On",
+  "@odata.context": "/redfish/v1/$metadata#Chassis.Chassis",
+  "ChassisType": "RackMount",
+  "PartNumber": "SB27A41378",
+  "Description": "This resource is used to represent a chassis or other physical enclosure for a Redfish implementation.",
+  "Thermal": {
+    "@odata.id": "/redfish/v1/Chassis/1/Thermal/"
+  },
+  "Model": "7X19CTO1WW",
+  "@odata.id": "/redfish/v1/Chassis/1/",
+  "@odata.type": "#Chassis.v1_5_0.Chassis",
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK"
+  },
+  "IndicatorLED": "Off",
+  "Name": "Chassis",
+  "HeightMm": 88.9,
+  "Power": {
+    "@odata.id": "/redfish/v1/Chassis/1/Power/"
+  },
+  "Oem": {
+    "Lenovo": {
+      "LocatedIn": {
+        "ContactPerson": "jennings.liu@sap.com",
+        "FullPostalAddress": "Beijing City",
+        "Rack": "",
+        "DescriptiveName": "dc1-bm-esx-inb-prod05-console",
+        "Room": "room 207",
+        "Height": 2,
+        "Location": "Jiuxianqiao Chaoyang Beijing"
+      },
+      "Sensors": {
+        "@odata.id": "/redfish/v1/Chassis/1/Oem/Lenovo/Sensors/"
+      },
+      "ProductName": "ThinkSystem SR850",
+      "Slots": {
+        "@odata.id": "/redfish/v1/Chassis/1/Oem/Lenovo/Slots/"
+      },
+      "LEDs": {
+        "@odata.id": "/redfish/v1/Chassis/1/Oem/Lenovo/LEDs/"
+      }
+    }
+  },
+  "NetworkAdapters": {
+    "@odata.id": "/redfish/v1/Chassis/1/NetworkAdapters/"
+  },
+  "AssetTag": "",
+  "Manufacturer": "Lenovo",
+  "@odata.etag": "W/\"b631e80644af53cf1bd85de5c7375234\"",
+  "LogServices": {
+    "@odata.id": "/redfish/v1/Systems/1/LogServices/"
+  },
+  "SKU": "7X19CTO1WW"
+}

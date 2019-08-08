@@ -1,0 +1,57 @@
+{
+  "SerialNumber": "3144A7CC",
+  "@odata.etag": "W/\"f6f6de5d1655b67c9ad45014cd9070e9\"",
+  "BusWidthBits": 72,
+  "Id": "1",
+  "@odata.id": "/redfish/v1/Systems/1/Memory/1",
+  "Links": {
+    "Chassis": {
+      "@odata.id": "/redfish/v1/Chassis/1/"
+    }
+  },
+  "MemoryMedia": [
+    "DRAM"
+  ],
+  "@odata.context": "/redfish/v1/$metadata#Memory.Memory",
+  "BaseModuleType": "LRDIMM",
+  "Name": "DIMM 1",
+  "OperatingSpeedMhz": 2666,
+  "PartNumber": "M386A8K40CM2-CTD",
+  "MemoryDeviceType": "DDR4",
+  "CapacityMiB": 65536,
+  "MemoryLocation": {
+    "Channel": 5,
+    "MemoryController": 1,
+    "Slot": 1,
+    "Socket": 1
+  },
+  "Description": "This resource is used to represent a memory for a Redfish implementation.",
+  "MemoryType": "DRAM",
+  "SubsystemDeviceID": "0x0000",
+  "OperatingMemoryModes": [
+    "Volatile"
+  ],
+  "Status": {
+    "State": "Enabled",
+    "Health": "OK"
+  },
+  "Oem": {
+    "Lenovo": {
+      "PN": "01DE975"
+    }
+  },
+  "DataWidthBits": 64,
+  "AllowedSpeedsMHz": [
+    2666
+  ],
+  "FunctionClasses": [
+    "Volatile"
+  ],
+  "SubsystemVendorID": "0x0000",
+  "@odata.type": "#Memory.v1_2_0.Memory",
+  "RankCount": 3,
+  "Manufacturer": "Samsung",
+  "DeviceID": "DIMM_1",
+  "DeviceLocator": "DIMM 1",
+  "VendorID": "Samsung"
+}
