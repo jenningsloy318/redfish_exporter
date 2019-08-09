@@ -4,6 +4,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
+	"fmt"
 )
 
 // A SystemCollector implements the prometheus.Collector.
@@ -27,7 +28,7 @@ var (
 	SystemStorageControllerLabelNames = []string{"hostname", "resource", "storage_controller", "storage_controller_id"}
 	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id"}
 	SystemNetworkInterfaceLabelNames  = []string{"hostname", "resource", "network_interface", "network_interface_id"}
-	SystemEthernetInterfaceLabelNames = []string{"hostname", "resource", "ethernet_interface", "ethernet_interface_id"}
+	SystemEthernetInterfaceLabelNames = []string{"hostname", "resource", "ethernet_interface", "ethernet_interface_id","ethernet_interface_speed"}
 )
 
 // NewSystemCollector returns a collector that collecting memory statistics
@@ -589,9 +590,10 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 					ethernetInterfaceID := ethernetInterface.ID
 					ethernetInterfaceLinkStatus := ethernetInterface.LinkStatus
 					ethernetInterfaceEnabled := ethernetInterface.InterfaceEnabled
+					ethernetInterfaceSpeed := fmt.Sprintf("%d Mbps",ethernetInterface.SpeedMbps)
 					ethernetInterfaceState := ethernetInterface.Status.State
 					ethernetInterfaceHealthState := ethernetInterface.Status.Health
-					systemEthernetInterfaceLabelValues := []string{ systemHostName, "ethernet_interface", ethernetInterfaceName, ethernetInterfaceID}
+					systemEthernetInterfaceLabelValues := []string{ systemHostName, "ethernet_interface", ethernetInterfaceName, ethernetInterfaceID,ethernetInterfaceSpeed}
 					if ethernetInterfaceStateValue, ok := parseCommonStatusState(ethernetInterfaceState); ok {
 						ch <- prometheus.MustNewConstMetric(s.metrics["system_etherenet_interface_state"].desc, prometheus.GaugeValue, ethernetInterfaceStateValue, systemEthernetInterfaceLabelValues...)
 

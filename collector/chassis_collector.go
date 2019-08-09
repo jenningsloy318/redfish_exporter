@@ -5,6 +5,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish/school"
+	"fmt"
 )
 
 // A ChassisCollector implements the prometheus.Collector.
@@ -27,7 +28,7 @@ var (
 	ChassisPowerVotageLabelNames    = []string{ "resource", "chassis_id", "power_votage", "power_votage_id"}
 	ChassisPowerSupplyLabelNames    = []string{ "resource", "chassis_id", "power_supply", "power_supply_id"}
 	ChassisNetworkAdapterLabelNames = []string{ "resource", "chassis_id", "network_adapter", "network_adapter_id"}
-	ChassisNetworkPortLabelNames    = []string{ "resource", "chassis_id", "network_adapter", "network_port", "network_port_id"}
+	ChassisNetworkPortLabelNames    = []string{ "resource", "chassis_id", "network_adapter", "network_adapter_id","network_port", "network_port_id","network_port_type","network_port_speed"}
 )
 
 // NewChassisCollector returns a collector that collecting chassis statistics
@@ -336,7 +337,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					networkAdapterID := networkAdapter.ID
 					networkAdapterState := networkAdapter.Status.State
 					networkAdapterHealthState := networkAdapter.Status.Health
-					chassisNetworkAdapterLabelValues := []string{ chassisID, "network_adapter", networkAdapterName, networkAdapterID}
+					chassisNetworkAdapterLabelValues := []string{ "network_adapter",chassisID,  networkAdapterName, networkAdapterID}
 					if networkAdapterStateValue, ok := parseCommonStatusState(networkAdapterState); ok {
 						ch <- prometheus.MustNewConstMetric(c.metrics["chassis_network_adapter_state"].desc, prometheus.GaugeValue, networkAdapterStateValue, chassisNetworkAdapterLabelValues...)
 					}
@@ -351,8 +352,10 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 							networkPortName := networkPort.Name
 							networkPortID := networkPort.ID
 							networkPortState := networkPort.Status.State
+							networkPortLinkType :=networkPort.ActiveLinkTechnology
+							networkPortLinkSpeed := fmt.Sprintf("%d Mbps",networkPort.CurrentLinkSpeedMbps)
 							networkPortHealthState := networkPort.Status.Health
-							chassisNetworkPortLabelValues := append(chassisNetworkAdapterLabelValues, networkPortName, networkPortID)
+							chassisNetworkPortLabelValues := []string{ "network_port",chassisID, networkAdapterName, networkAdapterID,networkPortName, networkPortID,string(networkPortLinkType),networkPortLinkSpeed}
 							if networkPortStateValue, ok := parseCommonStatusState(networkPortState); ok {
 								ch <- prometheus.MustNewConstMetric(c.metrics["chassis_network_port_state"].desc, prometheus.GaugeValue, networkPortStateValue, chassisNetworkPortLabelValues...)
 							}
