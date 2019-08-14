@@ -99,8 +99,8 @@ func NewChassisCollector(namespace string, redfishClient *gofish.ApiClient) *Cha
 			},
 			"chassis_fan_rpm": {
 				desc: prometheus.NewDesc(
-					prometheus.BuildFQName(namespace, subsystem, "fan_rpm"),
-					"fan rpm on this chassis component",
+					prometheus.BuildFQName(namespace, subsystem, "fan_rpm_percentage"),
+					"fan rpm percentage on this chassis component",
 					ChassisFanLabelNames,
 					nil,
 				),
@@ -244,7 +244,8 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				// process temperature
 				chassisTemperatures := chassisThermal.Temperatures
 				for _, chassisTemperature := range chassisTemperatures {
-					chassisTemperatureSensorName := chassisTemperature.Name
+					//chassisTemperatureSensorName := chassisTemperature.Name
+					chassisTemperatureSensorName := chassisTemperature.MemberID
 					chassisTemperatureSensorMemberID := chassisTemperature.MemberID
 					chassisTemperatureStatus := chassisTemperature.Status
 					//			chassisTemperatureStatusHealth :=chassisTemperatureStatus.Health
@@ -266,11 +267,12 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				chassisFans := chassisThermal.Fans
 				for _, chassisFan := range chassisFans {
 					chassisFanMemberID := chassisFan.MemberID
-					chassisFanName := chassisFan.FanName
+					//chassisFanName := chassisFan.FanName
+					chassisFanName := chassisFan.MemberID
 					chassisFanStaus := chassisFan.Status
 					chassisFanStausHealth := chassisFanStaus.Health
 					chassisFanStausState := chassisFanStaus.State
-					chassisFanRPM := chassisFan.ReadingRPM
+					chassisFanRPM := chassisFan.Reading
 
 					//			chassisFanStatusLabelNames :=[]string{BaseLabelNames,"fan_name","fan_member_id")
 					chassisFanLabelvalues := []string{ "fan", chassisID, chassisFanName, chassisFanMemberID}
@@ -292,7 +294,8 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				// power votages
 				chassisPowerInfoVoltages := chassisPowerInfo.Voltages
 				for _, chassisPowerInfoVoltage := range chassisPowerInfoVoltages {
-					chassisPowerInfoVoltageName := chassisPowerInfoVoltage.Name
+					//chassisPowerInfoVoltageName := chassisPowerInfoVoltage.Name
+					chassisPowerInfoVoltageName := chassisPowerInfoVoltage.MemberID
 					chassisPowerInfoVoltageID := chassisPowerInfoVoltage.MemberID
 					chassisPowerInfoVoltageNameReadingVolts := chassisPowerInfoVoltage.ReadingVolts
 					chassisPowerInfoVoltageState := chassisPowerInfoVoltage.Status.State
@@ -307,7 +310,8 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				// powerSupply
 				chassisPowerInfoPowerSupplies := chassisPowerInfo.PowerSupplies
 				for _, chassisPowerInfoPowerSupply := range chassisPowerInfoPowerSupplies {
-					chassisPowerInfoPowerSupplyName := chassisPowerInfoPowerSupply.Name
+					//chassisPowerInfoPowerSupplyName := chassisPowerInfoPowerSupply.Name
+					chassisPowerInfoPowerSupplyName := chassisPowerInfoPowerSupply.MemberID
 					chassisPowerInfoPowerSupplyNameID := chassisPowerInfoPowerSupply.MemberID
 					chassisPowerInfoPowerSupplyPowerCapacityWatts := chassisPowerInfoPowerSupply.PowerCapacityWatts
 					chassisPowerInfoPowerSupplyLastPowerOutputWatts := chassisPowerInfoPowerSupply.LastPowerOutputWatts
