@@ -11,6 +11,7 @@ import (
 	gofish "github.com/stmcginnis/gofish/school"
 	gofishcommon "github.com/stmcginnis/gofish/school/common"
 	redfish "github.com/stmcginnis/gofish/school/redfish"
+	"sync"
 )
 
 // Metric name parts.
@@ -74,8 +75,14 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 	if r.redfishUpValue {
 		r.redfishUp.Set(1)
 		ch <- r.redfishUp
+		wg := &sync.WaitGroup{}
+		defer wg.Wait()
 		for _, collector := range r.collectors {
-			collector.Collect(ch)
+			wg.Add(1)
+			go func (collector prometheus.Collector) {
+				defer wg.Done()
+				collector.Collect(ch)
+			}(collector)
 		}
 	} else {
 		r.redfishUp.Set(0)
