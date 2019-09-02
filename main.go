@@ -34,7 +34,7 @@ func metricsHandler() http.HandlerFunc {
 			http.Error(w, "'target' parameter must be specified", 400)
 			return
 		}
-		log.Debugf("Scraping target '%s'", target)
+		log.Infof("Scraping target %s", target)
 
 		var targetCredential *Credential
 		var err error

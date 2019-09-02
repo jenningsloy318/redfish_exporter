@@ -52,8 +52,16 @@ github.com/prometheus/procfs v0.0.3/go.mod h1:4A/X28fw3Fc593LaREMrKMqOKvUAntwMDa
 github.com/sirupsen/logrus v1.2.0 h1:juTguoYk5qI21pwyTXY3B3Y5cOTH3ZUyZCg1v/mihuo=
 github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPxbbu5VWo=
 github.com/stmcginnis/gofish v0.0.0-20190801203108-100d28c82238/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
+github.com/stmcginnis/gofish v0.1.0 h1:Y1Cdhu2KcsL1pEiSGLLZ8qkbQ/zLXybIdDLQfVJN1WI=
+github.com/stmcginnis/gofish v0.1.0/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
 github.com/stmcginnis/gofish v0.1.1-0.20190810210240-18b13183933a h1:inKkJfU3lhiVfRRWwd+nMobrG6MgLSivT6TbfG1H2XE=
 github.com/stmcginnis/gofish v0.1.1-0.20190810210240-18b13183933a/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
+github.com/stmcginnis/gofish v0.1.1-0.20190815131059-82b21dac4ccf h1:GT8Jse8uyxUAUcVATIXdVsy5p6f+Xo/czPdUO30c9IA=
+github.com/stmcginnis/gofish v0.1.1-0.20190815131059-82b21dac4ccf/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
+github.com/stmcginnis/gofish v0.1.1-0.20190819215840-c3552f4e7b0e h1:suGWprZP39yUXZjxjXg/yiZZTRdeF5XcBq7P9nGn5lU=
+github.com/stmcginnis/gofish v0.1.1-0.20190819215840-c3552f4e7b0e/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
+github.com/stmcginnis/gofish v0.1.1-0.20190830080111-aa0843fe6773 h1:vat+A3+a6vu4tl06iSWbWZsE7iVjo+bC72WI8cR9Jww=
+github.com/stmcginnis/gofish v0.1.1-0.20190830080111-aa0843fe6773/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=

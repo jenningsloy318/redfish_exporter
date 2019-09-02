@@ -75,10 +75,12 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 	if r.redfishUpValue {
 		r.redfishUp.Set(1)
 		ch <- r.redfishUp
+
 		wg := &sync.WaitGroup{}
+		wg.Add(len(r.collectors))
+		
 		defer wg.Wait()
 		for _, collector := range r.collectors {
-			wg.Add(1)
 			go func (collector prometheus.Collector) {
 				defer wg.Done()
 				collector.Collect(ch)
@@ -123,7 +125,6 @@ func newRedfishClient(host string, username string, password string) (*gofish.Ap
 
 	// Assign the token back to our gofish client
 	redfishClient.Token = auth.Token
-	log.Infof("Scraping target %s", host)
 	return redfishClient, true
 }
 
