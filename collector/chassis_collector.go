@@ -1,16 +1,15 @@
 package collector
 
 import (
-	//redfish "github.com/stmcginnis/gofish/school/redfish"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
-	gofish "github.com/stmcginnis/gofish/school"
+	"github.com/stmcginnis/gofish"
 	"fmt"
 )
 
 // A ChassisCollector implements the prometheus.Collector.
 type ChassisCollector struct {
-	redfishClient           *gofish.ApiClient
+	redfishClient           *gofish.APIClient
 	metrics                 map[string]chassisMetric
 	collectorScrapeStatus   *prometheus.GaugeVec
 	collectorScrapeDuration *prometheus.SummaryVec
@@ -32,7 +31,7 @@ var (
 )
 
 // NewChassisCollector returns a collector that collecting chassis statistics
-func NewChassisCollector(namespace string, redfishClient *gofish.ApiClient) *ChassisCollector {
+func NewChassisCollector(namespace string, redfishClient *gofish.APIClient) *ChassisCollector {
 	var (
 		subsystem = "chassis"
 	)
@@ -216,10 +215,8 @@ func (c *ChassisCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
-	service, err := gofish.ServiceRoot(c.redfishClient)
-	if err != nil {
-		log.Infof("Errors Getting Services for chassis metrics : %s", err)
-	}
+	service := c.redfishClient.Service
+
 
 	// get a list of chassis from service
 	if chassises, err := service.Chassis(); err != nil {

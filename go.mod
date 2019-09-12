@@ -9,7 +9,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/prometheus/client_golang v1.1.0
 	github.com/prometheus/common v0.6.0
-	github.com/stmcginnis/gofish v0.1.1-0.20190830080111-aa0843fe6773
+	github.com/stmcginnis/gofish v0.1.1-0.20190911220651-32bda5bcf553
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/yaml.v2 v2.2.2
 )

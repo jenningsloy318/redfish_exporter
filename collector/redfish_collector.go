@@ -2,15 +2,13 @@ package collector
 
 import (
 	"bytes"
-	"crypto/tls"
 	"fmt"
-	"net/http"
 	"time"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
-	gofish "github.com/stmcginnis/gofish/school"
-	gofishcommon "github.com/stmcginnis/gofish/school/common"
-	redfish "github.com/stmcginnis/gofish/school/redfish"
+	gofish "github.com/stmcginnis/gofish"
+	gofishcommon "github.com/stmcginnis/gofish/common"
+	redfish "github.com/stmcginnis/gofish/redfish"
 	"sync"
 )
 
@@ -35,7 +33,7 @@ var (
 
 // Exporter collects redfish metrics. It implements prometheus.Collector.
 type RedfishCollector struct {
-	redfishClient  *gofish.ApiClient
+	redfishClient  *gofish.APIClient
 	collectors     map[string]prometheus.Collector
 	redfishUp      prometheus.Gauge
 	redfishUpValue bool
@@ -93,38 +91,21 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), )
 }
 
-func newRedfishClient(host string, username string, password string) (*gofish.ApiClient, bool) {
+func newRedfishClient(host string, username string, password string) (*gofish.APIClient, bool) {
 
 	url := fmt.Sprintf("https://%s", host)
 
-	// skip ssl verification
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	config := gofish.ClientConfig{
+		Endpoint: url,
+		Username: username,
+		Password: password,
+		Insecure: true,
 	}
-
-	httpClient := &http.Client{Transport: tr}
-	// Create a new instance of gofish client
-	redfishClient, err := gofish.APIClient(url, httpClient)
+	redfishClient, err := gofish.Connect(config)
 	if err != nil {
 		log.Infof("Errors occours when creating redfish client: %s", err)
 		return redfishClient, false
 	}
-
-	service, err := gofish.ServiceRoot(redfishClient)
-	if err != nil {
-		log.Infof("Errors occours when Getting Services: %s", err)
-		return redfishClient, false
-	}
-
-	// Generates a authenticated session
-	auth, err := service.CreateSession(username, password)
-	if err != nil {
-		log.Infof("Errors occours when creating sessions: %s", err)
-		return redfishClient, false
-	}
-
-	// Assign the token back to our gofish client
-	redfishClient.Token = auth.Token
 	return redfishClient, true
 }
 

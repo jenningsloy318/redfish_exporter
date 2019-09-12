@@ -3,13 +3,13 @@ package collector
 import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
-	gofish "github.com/stmcginnis/gofish/school"
+	"github.com/stmcginnis/gofish"
 	"fmt"
 )
 
 // A SystemCollector implements the prometheus.Collector.
 type SystemCollector struct {
-	redfishClient           *gofish.ApiClient
+	redfishClient           *gofish.APIClient
 	metrics                 map[string]systemMetric
 	collectorScrapeStatus   *prometheus.GaugeVec
 	collectorScrapeDuration *prometheus.SummaryVec
@@ -32,7 +32,7 @@ var (
 )
 
 // NewSystemCollector returns a collector that collecting memory statistics
-func NewSystemCollector(namespace string, redfishClient *gofish.ApiClient) *SystemCollector {
+func NewSystemCollector(namespace string, redfishClient *gofish.APIClient) *SystemCollector {
 	var (
 		subsystem = "system"
 	)
@@ -327,10 +327,7 @@ func (s *SystemCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 	//get service
-	service, err := gofish.ServiceRoot(s.redfishClient)
-	if err != nil {
-		log.Infof("Errors Getting Services for chassis metrics : %s", err)
-	}
+	service := s.redfishClient.Service
 
 	// get a list of systems from service
 	if systems, err := service.Systems(); err != nil {
