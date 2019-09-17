@@ -64,6 +64,8 @@ github.com/stmcginnis/gofish v0.1.1-0.20190830080111-aa0843fe6773 h1:vat+A3+a6vu
 github.com/stmcginnis/gofish v0.1.1-0.20190830080111-aa0843fe6773/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
 github.com/stmcginnis/gofish v0.1.1-0.20190911220651-32bda5bcf553 h1:XHu6rJ9pcmhvGLZaD4/+wTfQnguFCnhwlUrLJqlW/Cc=
 github.com/stmcginnis/gofish v0.1.1-0.20190911220651-32bda5bcf553/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
+github.com/stmcginnis/gofish v0.1.1-0.20190913170745-da1d892cada6 h1:BBL3UnAaZ/dHJTtUGossCpubfdtf1UZLeoFJ4QppT+Y=
+github.com/stmcginnis/gofish v0.1.1-0.20190913170745-da1d892cada6/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
