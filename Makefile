@@ -50,7 +50,7 @@ staticcheck: | $(STATICCHECK)
 
 build: | 
 	@echo ">> building binaries"
-	$(GO) build -o build/redfish_exporter -ldflags  '-X "main.Vsersion=$(VERSION)" -X  "main.BuildRevision=$(REVERSION)" -X  "main.BuildBranch=$(BRANCH)" -X "main.BuildTime=$(TIME)" -X "main.BuildHost=$(HOST)"'
+	$(GO) build -o build/redfish_exporter -ldflags  '-X "main.Version=$(VERSION)" -X  "main.BuildRevision=$(REVERSION)" -X  "main.BuildBranch=$(BRANCH)" -X "main.BuildTime=$(TIME)" -X "main.BuildHost=$(HOSTNAME)"'
 
 
 rpm: | build

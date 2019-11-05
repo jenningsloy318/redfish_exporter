@@ -36,11 +36,10 @@ type RedfishCollector struct {
 	redfishClient  *gofish.APIClient
 	collectors     map[string]prometheus.Collector
 	redfishUp      prometheus.Gauge
-	redfishUpValue bool
 }
 
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
-	redfishClient, redfishUpValue := newRedfishClient(host, username, password)
+	redfishClient, err := newRedfishClient(host, username, password)
 	chassisCollector := NewChassisCollector(namespace, redfishClient)
 	systemCollector := NewSystemCollector(namespace, redfishClient)
 
@@ -55,7 +54,6 @@ func NewRedfishCollector(host string, username string, password string) *Redfish
 				Help:      "redfish up",
 			},
 		),
-		redfishUpValue: redfishUpValue,
 	}
 }
 
@@ -71,10 +69,8 @@ func (r *RedfishCollector) Describe(ch chan<- *prometheus.Desc) {
 func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 	defer r.redfishClient.Logout()
 	scrapeTime := time.Now()
-	if r.redfishUpValue {
+	if r.redfishClient != nil {
 		r.redfishUp.Set(1)
-		ch <- r.redfishUp
-
 		wg := &sync.WaitGroup{}
 		wg.Add(len(r.collectors))
 		
@@ -87,12 +83,12 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 		}
 	} else {
 		r.redfishUp.Set(0)
-		ch <- r.redfishUp
 	}
+	ch <- r.redfishUp
 	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), )
 }
 
-func newRedfishClient(host string, username string, password string) (*gofish.APIClient, bool) {
+func newRedfishClient(host string, username string, password string) (*gofish.APIClient, error) {
 
 	url := fmt.Sprintf("https://%s", host)
 
@@ -105,9 +101,9 @@ func newRedfishClient(host string, username string, password string) (*gofish.AP
 	redfishClient, err := gofish.Connect(config)
 	if err != nil {
 		log.Infof("Errors occours when creating redfish client: %s", err)
-		return redfishClient, false
+		return nil, err
 	}
-	return redfishClient, true
+	return redfishClient, nil
 }
 
 func parseCommonStatusHealth(status gofishcommon.Health) (float64, bool) {
