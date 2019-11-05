@@ -39,13 +39,21 @@ type RedfishCollector struct {
 }
 
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
-	redfishClient, _ := newRedfishClient(host, username, password)
-	chassisCollector := NewChassisCollector(namespace, redfishClient)
-	systemCollector := NewSystemCollector(namespace, redfishClient)
+	var collectors  map[string]prometheus.Collector
+
+	redfishClient, err := newRedfishClient(host, username, password) 
+	if err != nil {
+		log.Infof("Errors occours when creating redfish client: %s", err)
+	}else{
+		chassisCollector := NewChassisCollector(namespace, redfishClient)
+		systemCollector := NewSystemCollector(namespace, redfishClient)
+		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector}
+	}
+	
 
 	return &RedfishCollector{
 		redfishClient: redfishClient,
-		collectors:    map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector},
+		collectors:    collectors,
 		redfishUp: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Namespace: namespace,
@@ -67,9 +75,10 @@ func (r *RedfishCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implements prometheus.Collector.
 func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
-	defer r.redfishClient.Logout()
+	
 	scrapeTime := time.Now()
 	if r.redfishClient != nil {
+		defer r.redfishClient.Logout()
 		r.redfishUp.Set(1)
 		wg := &sync.WaitGroup{}
 		wg.Add(len(r.collectors))
