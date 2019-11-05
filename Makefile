@@ -10,7 +10,7 @@ BIN_DIR                 ?= $(shell pwd)/build
 VERSION ?= $(shell cat VERSION)
 REVERSION ?=$(shell git log -1 --pretty="%H")
 BRANCH ?=$(shell git rev-parse --abbrev-ref HEAD)
-TIME ?=$(shell date)
+TIME ?=$(shell date --rfc-3339=seconds)
 HOST ?=$(shell hostname)  
 
 all: deps vet fmt style staticcheck unused  build  buildrpm test

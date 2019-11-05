@@ -39,7 +39,7 @@ type RedfishCollector struct {
 }
 
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
-	redfishClient, err := newRedfishClient(host, username, password)
+	redfishClient, _ := newRedfishClient(host, username, password)
 	chassisCollector := NewChassisCollector(namespace, redfishClient)
 	systemCollector := NewSystemCollector(namespace, redfishClient)
 
@@ -81,9 +81,10 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 				collector.Collect(ch)
 			}(collector)
 		}
-	} else {
+	}else {
 		r.redfishUp.Set(0)
 	}
+	
 	ch <- r.redfishUp
 	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), )
 }
