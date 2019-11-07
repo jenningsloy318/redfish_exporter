@@ -13,7 +13,7 @@ import (
 // A ChassisCollector implements the prometheus.Collector.
 
 var (
-	subsystem_c = "chassis"
+	ChassisSubsystem = "chassis"
 	ChassisLabelNames = []string{"resource", "chassis_id"}
 	ChassisTemperatureLabelNames    = []string{"resource", "chassis_id", "sensor", "sensor_id"}
 	ChassisFanLabelNames            = []string{"resource", "chassis_id", "fan", "fan_id"}
@@ -25,7 +25,7 @@ var (
 	chassisMetrics = map[string]chassisMetric{
 		"chassis_health": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "health"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "health"),
 				"health of chassis, 1(OK),2(Warning),3(Critical)",
 				ChassisLabelNames,
 				nil,
@@ -33,7 +33,7 @@ var (
 		},
 		"chassis_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "state"),
 				"state of chassis,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisLabelNames,
 				nil,
@@ -41,7 +41,7 @@ var (
 		},
 		"chassis_temperature_sensor_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "temperature_sensor_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "temperature_sensor_state"),
 				"status state of temperature on this chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisTemperatureLabelNames,
 				nil,
@@ -49,7 +49,7 @@ var (
 		},
 		"chassis_temperature_celsius": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "temperature_celsius"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "temperature_celsius"),
 				"celsius of temperature on this chassis component",
 				ChassisTemperatureLabelNames,
 				nil,
@@ -57,7 +57,7 @@ var (
 		},
 		"chassis_fan_health": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "fan_health"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_health"),
 				"fan health on this chassis component,1(OK),2(Warning),3(Critical)",
 				ChassisFanLabelNames,
 				nil,
@@ -65,7 +65,7 @@ var (
 		},
 		"chassis_fan_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "fan_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_state"),
 				"fan state on this chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisFanLabelNames,
 				nil,
@@ -73,7 +73,7 @@ var (
 		},
 		"chassis_fan_rpm": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "fan_rpm_percentage"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_percentage"),
 				"fan rpm percentage on this chassis component",
 				ChassisFanLabelNames,
 				nil,
@@ -81,7 +81,7 @@ var (
 		},
 		"chassis_power_voltage_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "power_voltage_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_voltage_state"),
 				"power voltage state of chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisPowerVotageLabelNames,
 				nil,
@@ -89,7 +89,7 @@ var (
 		},
 		"chassis_power_voltage_volts": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "power_voltage_volts"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_voltage_volts"),
 				"power voltage volts number of chassis component",
 				ChassisPowerVotageLabelNames,
 				nil,
@@ -97,7 +97,7 @@ var (
 		},
 		"chassis_power_powersupply_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "power_powersupply_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_state"),
 				"powersupply state of chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisPowerSupplyLabelNames,
 				nil,
@@ -105,7 +105,7 @@ var (
 		},
 		"chassis_power_powersupply_health": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "power_powersupply_health"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_health"),
 				"powersupply health of chassis component,1(OK),2(Warning),3(Critical)",
 				ChassisPowerSupplyLabelNames,
 				nil,
@@ -113,7 +113,7 @@ var (
 		},
 		"chassis_power_powersupply_last_power_output_watts": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "power_powersupply_last_power_output_watts"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_last_power_output_watts"),
 				"last_power_output_watts of powersupply on this chassis",
 				ChassisPowerSupplyLabelNames,
 				nil,
@@ -121,7 +121,7 @@ var (
 		},
 		"chassis_power_powersupply_power_capacity_watts": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "power_powersupply_power_capacity_watts"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_power_capacity_watts"),
 				"power_capacity_watts of powersupply on this chassis",
 				ChassisPowerSupplyLabelNames,
 				nil,
@@ -129,7 +129,7 @@ var (
 		},
 		"chassis_network_adapter_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "network_adapter_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_adapter_state"),
 				"chassis network adapter state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisNetworkAdapterLabelNames,
 				nil,
@@ -137,7 +137,7 @@ var (
 		},
 		"chassis_network_adapter_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "network_adapter_health_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_adapter_health_state"),
 				"chassis network adapter health state,1(OK),2(Warning),3(Critical)",
 				ChassisNetworkAdapterLabelNames,
 				nil,
@@ -145,7 +145,7 @@ var (
 		},
 		"chassis_network_port_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "network_port_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_state"),
 				"chassis network port state state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisNetworkPortLabelNames,
 				nil,
@@ -153,7 +153,7 @@ var (
 		},
 		"chassis_network_port_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_c, "network_port_health_state"),
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_health_state"),
 				"chassis network port state state,1(OK),2(Warning),3(Critical)",
 				ChassisNetworkPortLabelNames,
 				nil,

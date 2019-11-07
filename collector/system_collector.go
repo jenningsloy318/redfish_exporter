@@ -16,7 +16,7 @@ type systemMetric struct {
 }
 
 var (
-	subsystem_s                         = "system"
+	SystemSubsystem                         = "system"
 	SystemLabelNames                  = []string{"hostname", "resource", "system_id"}
 	SystemMemoryLabelNames            = []string{"hostname", "resource", "memory", "memory_id"}
 	SystemProcessorLabelNames         = []string{"hostname", "resource", "processor", "processor_id"}
@@ -29,7 +29,7 @@ var (
 	systemMetrics                     = map[string]systemMetric{
 		"system_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "state"),
 				"system state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemLabelNames,
 				nil,
@@ -37,7 +37,7 @@ var (
 		},
 		"system_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "health_state"),
 				"system health,1(OK),2(Warning),3(Critical)",
 				SystemLabelNames,
 				nil,
@@ -45,7 +45,7 @@ var (
 		},
 		"system_power_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "power_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "power_state"),
 				"system power state",
 				SystemLabelNames,
 				nil,
@@ -53,7 +53,7 @@ var (
 		},
 		"system_total_memory_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "total_memory_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "total_memory_state"),
 				"system overall memory state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemLabelNames,
 				nil,
@@ -61,7 +61,7 @@ var (
 		},
 		"system_total_memory_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "total_memory_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "total_memory_health_state"),
 				"system overall memory health,1(OK),2(Warning),3(Critical)",
 				SystemLabelNames,
 				nil,
@@ -69,7 +69,7 @@ var (
 		},
 		"system_total_memory_size": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "total_memory_size"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "total_memory_size"),
 				"system total memory size, GiB",
 				SystemLabelNames,
 				nil,
@@ -77,7 +77,7 @@ var (
 		},
 		"system_total_processor_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "total_processor_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "total_processor_state"),
 				"system overall processor state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemLabelNames,
 				nil,
@@ -85,7 +85,7 @@ var (
 		},
 		"system_total_processor_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "total_processor_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "total_processor_health_state"),
 				"system overall processor health,1(OK),2(Warning),3(Critical)",
 				SystemLabelNames,
 				nil,
@@ -93,7 +93,7 @@ var (
 		},
 		"system_total_processor_count": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "total_processor_count"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "total_processor_count"),
 				"system total  processor count",
 				SystemLabelNames,
 				nil,
@@ -101,7 +101,7 @@ var (
 		},
 		"system_memory_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "memory_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "memory_state"),
 				"system memory state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemMemoryLabelNames,
 				nil,
@@ -109,7 +109,7 @@ var (
 		},
 		"system_memory_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "memory_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "memory_health_state"),
 				"system memory  health state,1(OK),2(Warning),3(Critical)",
 				SystemMemoryLabelNames,
 				nil,
@@ -117,7 +117,7 @@ var (
 		},
 		"system_memory_capacity": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "memory_capacity"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "memory_capacity"),
 				"system memory capacity, MiB",
 				SystemMemoryLabelNames,
 				nil,
@@ -126,7 +126,7 @@ var (
 
 		"system_processor_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "processor_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "processor_state"),
 				"system processor state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemProcessorLabelNames,
 				nil,
@@ -134,7 +134,7 @@ var (
 		},
 		"system_processor_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "processor_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "processor_health_state"),
 				"system processor  health state,1(OK),2(Warning),3(Critical)",
 				SystemProcessorLabelNames,
 				nil,
@@ -142,7 +142,7 @@ var (
 		},
 		"system_processor_total_threads": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "processor_total_threads"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "processor_total_threads"),
 				"system processor total threads",
 				SystemProcessorLabelNames,
 				nil,
@@ -150,7 +150,7 @@ var (
 		},
 		"system_processor_total_cores": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "processor_total_cores"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "processor_total_cores"),
 				"system processor total cores",
 				SystemProcessorLabelNames,
 				nil,
@@ -158,7 +158,7 @@ var (
 		},
 		"system_storage_volume_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_volume_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_volume_state"),
 				"system storage volume state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemVolumeLabelNames,
 				nil,
@@ -166,7 +166,7 @@ var (
 		},
 		"system_storage_volume_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_volume_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_volume_health_state"),
 				"system storage volume health state,1(OK),2(Warning),3(Critical)",
 				SystemVolumeLabelNames,
 				nil,
@@ -174,7 +174,7 @@ var (
 		},
 		"system_storage_volume_capacity": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_volume_capacity"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_volume_capacity"),
 				"system storage volume capacity,Bytes",
 				SystemVolumeLabelNames,
 				nil,
@@ -182,7 +182,7 @@ var (
 		},
 		"system_storage_drive_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_drive_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_drive_state"),
 				"system storage drive state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemDriveLabelNames,
 				nil,
@@ -190,7 +190,7 @@ var (
 		},
 		"system_storage_drive_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_drive_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_drive_health_state"),
 				"system storage volume health state,1(OK),2(Warning),3(Critical)",
 				SystemDriveLabelNames,
 				nil,
@@ -198,7 +198,7 @@ var (
 		},
 		"system_storage_drive_capacity": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_drive_capacity"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_drive_capacity"),
 				"system storage drive capacity,Bytes",
 				SystemDriveLabelNames,
 				nil,
@@ -206,7 +206,7 @@ var (
 		},
 		"system_storage_controller_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_controller_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_controller_state"),
 				"system storage controller state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemStorageControllerLabelNames,
 				nil,
@@ -214,7 +214,7 @@ var (
 		},
 		"system_storage_controller_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "storage_controller_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_controller_health_state"),
 				"system storage controller health state,1(OK),2(Warning),3(Critical)",
 				SystemStorageControllerLabelNames,
 				nil,
@@ -222,7 +222,7 @@ var (
 		},
 		"system_pcie_device_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "pcie_device_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "pcie_device_state"),
 				"system pcie device state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemPCIeDeviceLabelNames,
 				nil,
@@ -230,7 +230,7 @@ var (
 		},
 		"system_pcie_device_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "pcie_device_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "pcie_device_health_state"),
 				"system pcie device health state,1(OK),2(Warning),3(Critical)",
 				SystemPCIeDeviceLabelNames,
 				nil,
@@ -238,7 +238,7 @@ var (
 		},
 		"system_network_interface_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "network_interface_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "network_interface_state"),
 				"system network interface state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemNetworkInterfaceLabelNames,
 				nil,
@@ -246,7 +246,7 @@ var (
 		},
 		"system_network_interface_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "network_interface_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "network_interface_health_state"),
 				"system network interface health state,1(OK),2(Warning),3(Critical)",
 				SystemNetworkInterfaceLabelNames,
 				nil,
@@ -254,7 +254,7 @@ var (
 		},
 		"system_etherenet_interface_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "etherenet_interface_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_state"),
 				"system ethernet interface state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
@@ -262,7 +262,7 @@ var (
 		},
 		"system_etherenet_interface_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "etherenet_interface_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_health_state"),
 				"system ethernet interface health state,1(OK),2(Warning),3(Critical)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
@@ -270,7 +270,7 @@ var (
 		},
 		"system_etherenet_interface_link_status": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "etherenet_interface_link_status"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_link_status"),
 				"system ethernet interface link status，1(LinkUp),2(NoLink),3(LinkDown)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
@@ -278,7 +278,7 @@ var (
 		},
 		"system_etherenet_interface_link_enabled": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, subsystem_s, "etherenet_interface_link_enabled"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_link_enabled"),
 				"system ethernet interface if the link is enabled",
 				SystemEthernetInterfaceLabelNames,
 				nil,
