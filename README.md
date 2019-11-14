@@ -1,5 +1,5 @@
 # redfish_exporter
-expoter to get  metrics from redfish based hw such as lenovo servers
+expoter to get  metrics from redfish based servers such as lenovo servers
 
 
 
@@ -13,9 +13,9 @@ credentials:
 
 
 
-then start netapp_exporter via 
+then start redfish_exporter via 
 ```sh
-netapp_exporter --config.file=redfish_exporter.yml
+redfish_exporter --config.file=redfish_exporter.yml
 ```
 
 then we can get the metrics via 
@@ -48,4 +48,6 @@ add redfish-exporter job conif as following
 ````
 
 
-## TODO
+## Supported Devices
+- Lenovo ThinkSystem SR850
+- Lenovo ThinkSystem SR650
