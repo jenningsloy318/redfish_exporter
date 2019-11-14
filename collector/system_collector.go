@@ -308,14 +308,6 @@ func NewSystemCollector(namespace string, redfishClient *gofish.APIClient) *Syst
 			},
 			[]string{"collector"},
 		),
-		collectorScrapeDuration: prometheus.NewSummaryVec(
-			prometheus.SummaryOpts{
-				Namespace: namespace,
-				Name:      "collector_scrape_duration",
-				Help:      "collector_scrape_duration",
-			},
-			[]string{"collector"},
-		),
 	}
 }
 
@@ -324,7 +316,6 @@ func (s *SystemCollector) Describe(ch chan<- *prometheus.Desc) {
 		ch <- metric.desc
 	}
 	s.collectorScrapeStatus.Describe(ch)
-	s.collectorScrapeDuration.Describe(ch)
 
 }
 

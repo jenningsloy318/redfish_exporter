@@ -166,7 +166,6 @@ type ChassisCollector struct {
 	redfishClient           *gofish.APIClient
 	metrics                 map[string]chassisMetric
 	collectorScrapeStatus   *prometheus.GaugeVec
-	collectorScrapeDuration *prometheus.SummaryVec
 }
 
 type chassisMetric struct {
@@ -189,14 +188,6 @@ func NewChassisCollector(namespace string, redfishClient *gofish.APIClient) *Cha
 			},
 			[]string{"collector"},
 		),
-		collectorScrapeDuration: prometheus.NewSummaryVec(
-			prometheus.SummaryOpts{
-				Namespace: namespace,
-				Name:      "collector_scrape_duration",
-				Help:      "collector_scrape_duration",
-			},
-			[]string{"collector"},
-		),
 	}
 }
 
@@ -205,7 +196,6 @@ func (c *ChassisCollector) Describe(ch chan<- *prometheus.Desc) {
 		ch <- metric.desc
 	}
 	c.collectorScrapeStatus.Describe(ch)
-	c.collectorScrapeDuration.Describe(ch)
 
 }
 
