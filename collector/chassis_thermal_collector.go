@@ -13,6 +13,24 @@ import (
 var (
 	ChassisSubsystem         = "chassis"
 	ChassisThermalLabelNames = []string{"resource", "chassis_id"}
+	Metrics := map[string]chassisMetric{
+		"thermal_state": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "thermal_state"),
+				"State of Chassis Thermal",
+				ChassisThermalLabelNames,
+				nil,
+			),
+		},
+		"thermal_health": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "thermal_health"),
+				"Health of Chassis Thermal",
+				ChassisThermalLabelNames,
+				nil,
+			),
+		}
+	}
 )
 
 type ChassisThermalCollector struct {
@@ -36,6 +54,7 @@ func NewChassisThermalCollector(namespace string, chassisID string, thermal *red
 	return &ChassisThermalCollector{
 		chassisID:  chassisID,
 		thermal:    thermal,
+		metrics: Metrics,
 		collectors: collectors,
 		collectorScrapeStatus: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
@@ -52,7 +71,7 @@ func (c *ChassisThermalCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range c.metrics {
 		ch <- metric.desc
 	}
-	
+
 	for _, collector := range c.collectors {
 		collector.Describe(ch)
 	}
@@ -63,43 +82,28 @@ func (c *ChassisThermalCollector) Describe(ch chan<- *prometheus.Desc) {
 
 func (c *ChassisThermalCollector) Collect(ch chan<- prometheus.Metric) {
 	// process thermal itslef metrics
-	labelValues := []string{"thermal", c.chassisID, "interface", "ifnet"}
-	thermalStatus := c.thermal.Status
-	valueOfthermalStatus := reflect.ValueOf(&thermalStatus).Elem()
-	typeOfthermalStatus := valueOfthermalStatus.Type()
-
-	for index := 0; index < valueOfthermalStatus.NumField(); index++ {
-		var floatType = reflect.TypeOf(float64(0))
-
-		metricName := fmt.Sprintf("%s", strings.ToLower(typeOfthermalStatus.Field(index).Name))
-		metricValue := valueOfthermalStatus.Field(index)
-		if !metricValue.Type().ConvertibleTo(floatType) {
-			fmt.Errorf("cannot convert %v to float64", metricValue.Type())
-			continue
-		}
-		metricDesc := fmt.Sprintf("%s of Thermal", strings.Title(metricName))
-		newChassisThermalMetric := ChassisThermalMetric{
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, metricName),
-				metricDesc,
-				ChassisThermalLabelNames,
-				nil,
-			),
-		}
-		c.metrics[metricName] = newChassisThermalMetric
-		ch <- prometheus.MustNewConstMetric(newChassisThermalMetric.desc, prometheus.GaugeValue, metricValue.Convert(floatType).Float(), labelValues...)
+	labelValues := []string{"thermal", c.chassisID}
+	thermalState := c.thermal.Status.State 
+	thermalHealth := c.thermal.Status.Health 
+	
+	if thermalStateValue, ok := parseCommonStatusState(thermalState); ok {
+		ch <- prometheus.MustNewConstMetric(c.metrics["thermal_state"], prometheus.GaugeValue,thermalStateValue , labelValues...)
 	}
-
-	wg := &sync.WaitGroup{}
-	wg.Add(len(c.collectors))
-
-	defer wg.Wait()
-	for _, collector := range c.collectors {
-		go func(collector prometheus.Collector) {
-			defer wg.Done()
-			collector.Collect(ch)
-		}(collector)
+	
+	if thermalHealthValue, ok := parseCommonStatusState(thermalHealth); ok {
+		ch <- prometheus.MustNewConstMetric(c.metrics["thermal_health"], prometheus.GaugeValue,thermalHealthValue , labelValues...)
 	}
+	
+		wg := &sync.WaitGroup{}
+		wg.Add(len(c.collectors)) 
+
+		defer wg.Wait()
+		for _, collector := range c.collectors {
+			go func(collector prometheus.Collector) {
+				defer wg.Done()
+				collector.Collect(ch)
+			}(collector)
+		}
 
 	c.collectorScrapeStatus.WithLabelValues("chassis_thermal").Set(float64(1))
 }

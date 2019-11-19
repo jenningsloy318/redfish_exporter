@@ -3,13 +3,13 @@ package collector
 import (
 	"bytes"
 	"fmt"
+	"time"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish"
 	gofishcommon "github.com/stmcginnis/gofish/common"
 	redfish "github.com/stmcginnis/gofish/redfish"
 	"sync"
-	"time"
 )
 
 // Metric name parts.
@@ -33,41 +33,42 @@ var (
 
 // Exporter collects redfish metrics. It implements prometheus.Collector.
 type RedfishCollector struct {
-	redfishClient *gofish.APIClient
-	collectors    map[string]prometheus.Collector
-	redfishUp     prometheus.Gauge
+	redfishClient  *gofish.APIClient
+	collectors     map[string]prometheus.Collector
+	redfishUp      prometheus.Gauge
 }
 
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
-	var collectors map[string]prometheus.Collector
+	var collectors  map[string]prometheus.Collector
 
-	redfishClient, err := newRedfishClient(host, username, password)
+	redfishClient, err := newRedfishClient(host, username, password) 
 	if err != nil {
 		log.Infof("Errors occours when creating redfish client: %s", err)
-	} else {
+	}else{
 		service := redfishClient.Service
 
 		if chassises, err := service.Chassis(); err != nil {
 			log.Infof("Errors Getting chassis from service : %s", err)
-		} else {
-			for _, chassis := range chassises {
+		}else{
+			for _,chassis :=range chassises {
 				chassisID := chassis.ID
-				collecotorName := fmt.Sprintf("chassis_%s", chassisID)
+				collecotorName := fmt.Sprintf("chassis_%s",chassisID)
 				collectors[collecotorName] = NewChassisCollector(namespace, chassis)
 			}
-
+			
 		}
 
 		if systems, err := service.Systems(); err != nil {
 			log.Infof("Errors Getting systems from service : %s", err)
 		} else {
-			for _, system := range systems {
-				systemID := system.ID
-				collecotorName := fmt.Sprintf("system_%s", systemID)
-				collectors[collecotorName] = NewSystemCollector(namespace, system)
+			for _,system := range systems {
+			systemID := system.ID
+			collecotorName := fmt.Sprintf("system_%s",systemID)
+			collectors[collecotorName] = NewSystemCollector(namespace, system)
 			}
 		}
 	}
+	
 
 	return &RedfishCollector{
 		redfishClient: redfishClient,
@@ -93,27 +94,27 @@ func (r *RedfishCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implements prometheus.Collector.
 func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
-
+	
 	scrapeTime := time.Now()
 	if r.redfishClient != nil {
 		defer r.redfishClient.Logout()
 		r.redfishUp.Set(1)
 		wg := &sync.WaitGroup{}
 		wg.Add(len(r.collectors))
-
+		
 		defer wg.Wait()
 		for _, collector := range r.collectors {
-			go func(collector prometheus.Collector) {
+			go func (collector prometheus.Collector) {
 				defer wg.Done()
 				collector.Collect(ch)
 			}(collector)
 		}
-	} else {
+	}else {
 		r.redfishUp.Set(0)
 	}
-
+	
 	ch <- r.redfishUp
-	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds())
+	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds(), )
 }
 
 func newRedfishClient(host string, username string, password string) (*gofish.APIClient, error) {
