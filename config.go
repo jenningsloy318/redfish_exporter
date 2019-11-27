@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Credentials map[string]Credential `yaml:"credentials"`
+	Hosts map[string]HostConfig `yaml:"hosts"`
 }
 
 type SafeConfig struct {
@@ -17,7 +17,7 @@ type SafeConfig struct {
 	C *Config
 }
 
-type Credential struct {
+type HostConfig struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
@@ -43,20 +43,20 @@ func (sc *SafeConfig) ReloadConfig(configFile string) error {
 	return nil
 }
 
-func (sc *SafeConfig) CredentialsForTarget(target string) (*Credential, error) {
+func (sc *SafeConfig) HostConfigForTarget(target string) (*HostConfig, error) {
 	sc.Lock()
 	defer sc.Unlock()
-	if credential, ok := sc.C.Credentials[target]; ok {
-		return &Credential{
-			Username: credential.Username,
-			Password: credential.Password,
+	if hostConfig, ok := sc.C.Hosts[target]; ok {
+		return &HostConfig{
+			Username: hostConfig.Username,
+			Password: hostConfig.Password,
 		}, nil
 	}
-	if credential, ok := sc.C.Credentials["default"]; ok {
-		return &Credential{
-			Username: credential.Username,
-			Password: credential.Password,
+	if hostConfig, ok := sc.C.Hosts["default"]; ok {
+		return &HostConfig{
+			Username: hostConfig.Username,
+			Password: hostConfig.Password,
 		}, nil
 	}
-	return &Credential{}, fmt.Errorf("no credentials found for target %s", target)
+	return &HostConfig{}, fmt.Errorf("no credentials found for target %s", target)
 }

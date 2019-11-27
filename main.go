@@ -36,13 +36,13 @@ func metricsHandler() http.HandlerFunc {
 		}
 		log.Infof("Scraping target %s", target)
 
-		var targetCredential *Credential
+		var hostConfig *HostConfig
 		var err error
-		if targetCredential, err = sc.CredentialsForTarget(target); err != nil {
+		if hostConfig, err = sc.HostConfigForTarget(target); err != nil {
 			log.Fatalf("Error getting credentialfor target %s file: %s", target, err)
 		}
 
-		collector := collector.NewRedfishCollector(target, targetCredential.Username, targetCredential.Password)
+		collector := collector.NewRedfishCollector(target, hostConfig.Username, hostConfig.Password)
 		registry.MustRegister(collector)
 		gatherers := prometheus.Gatherers{
 			prometheus.DefaultGatherer,

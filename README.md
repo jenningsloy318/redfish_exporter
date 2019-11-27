@@ -5,7 +5,7 @@ expoter to get  metrics from redfish based servers such as lenovo servers
 
 example configure set as [example](./scripts/redfish_exporter.yml)
 ```yaml
-credentials:
+hosts:
     10.36.48.24:
       username: admin
       password: pass
