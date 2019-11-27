@@ -7,6 +7,9 @@ import (
 	"github.com/prometheus/common/log"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 var (
@@ -62,7 +65,8 @@ var BuildTime string
 var BuildHost string
 
 func init() {
-	log.Infof("redfish_exporter version %s, build reversion %s, build branch %s, build at %s on host %s", Version, BuildRevision, BuildBranch, BuildTime, BuildHost)
+	hostname, _ := os.Hostname()
+	log.Infof("redfish_exporter version %s, build reversion %s, build branch %s, build at %s on host %s", Version, BuildRevision, BuildBranch, BuildTime, hostname)
 }
 
 func main() {
@@ -70,10 +74,34 @@ func main() {
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 	log.Infoln("Starting redfish_exporter")
-
+// load config  first time
 	if err := sc.ReloadConfig(*configFile); err != nil {
 		log.Fatalf("Error parsing config file: %s", err)
 	}
+
+	// load config in background to wathc config changes
+	hup := make(chan os.Signal)
+	reloadCh = make(chan chan error)
+	signal.Notify(hup, syscall.SIGHUP)
+
+	go func() {
+		for {
+			select {
+			case <-hup:
+				if err := sc.ReloadConfig(*configFile); err != nil {
+					log.Errorf("Error reloading config: %s", err)
+				}
+			case rc := <-reloadCh:
+				if err := sc.ReloadConfig(*configFile); err != nil {
+					log.Errorf("Error reloading config: %s", err)
+					rc <- err
+				} else {
+					rc <- nil
+				}
+			}
+		}
+	}()
+
 
 	http.Handle("/redfish", metricsHandler()) // Regular metrics endpoint for local Redfish metrics.
 	http.Handle("/metrics", promhttp.Handler())
