@@ -6,7 +6,7 @@
 %endif 
 
 Name:    redfish_exporter
-Version: 0.10.0
+Version: 0.10.1
 Release: 1%{?dist}
 Summary: Prometheus redfish exporter.
 License: MIT
