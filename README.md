@@ -51,3 +51,7 @@ add redfish-exporter job conif as following
 ## Supported Devices
 - Lenovo ThinkSystem SR850
 - Lenovo ThinkSystem SR650
+
+## Acknowledgement
+
+- [gofish](github.com/stmcginnis/gofish) provides the underlying library to interact servers  
