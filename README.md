@@ -48,9 +48,9 @@ add redfish-exporter job conif as following
 ````
 
 
-## Supported Devices
-- Lenovo ThinkSystem SR850
-- Lenovo ThinkSystem SR650
+## Supported Devices(tested)
+- Lenovo ThinkSystem SR850 (BMC 2.1/2.42)
+- Lenovo ThinkSystem SR650 (BMC 2.50)
 
 ## Acknowledgement
 

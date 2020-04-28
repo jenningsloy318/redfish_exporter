@@ -13,7 +13,7 @@ BRANCH ?=$(shell git rev-parse --abbrev-ref HEAD)
 TIME ?=$(shell date --rfc-3339=seconds)
 HOST ?=$(shell hostname)  
 
-all: deps vet fmt style staticcheck unused  build  buildrpm test
+all:  fmt style  build rpm 
 
  
 style:
@@ -30,24 +30,6 @@ check_license:
                exit 1; \
        fi
 
-test-short:
-	@echo ">> running short tests"
-	$(GO) test -short $(pkgs)
-
-test:
-	@echo ">> running all tests"
-	$(GO) test -race $(pkgs)
-
-format:
-	@echo ">> formatting code"
-	$(GO) fmt $(pkgs)
-
-
-staticcheck: | $(STATICCHECK)
-	@echo ">> running staticcheck"
-	$(STATICCHECK) -ignore "$(STATICCHECK_IGNORE)" $(pkgs)
-
-
 build: | 
 	@echo ">> building binaries"
 	$(GO) build -o build/redfish_exporter -ldflags  '-X "main.Version=$(VERSION)" -X  "main.BuildRevision=$(REVERSION)" -X  "main.BuildBranch=$(BRANCH)" -X "main.BuildTime=$(TIME)" -X "main.BuildHost=$(HOSTNAME)"'
@@ -63,10 +45,5 @@ fmt:
 	$(GOFMT) -w $$(find . -path ./vendor -prune -o -name '*.go' -print) 
 
 
-$(STATICCHECK):
-	GOOS= GOARCH= $(GO) get -u honnef.co/go/tools/cmd/staticcheck
 
-$(GOVENDOR):
-	GOOS= GOARCH= $(GO) get -u github.com/kardianos/govendor
-
-.PHONY: all style check_license format build test  assets tarball fmt    $(STATICCHECK) 
+.PHONY: all style check_license format build test   fmt 
