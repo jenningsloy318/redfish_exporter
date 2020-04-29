@@ -74,7 +74,7 @@ func main() {
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
 	log.Infoln("Starting redfish_exporter")
-// load config  first time
+	// load config  first time
 	if err := sc.ReloadConfig(*configFile); err != nil {
 		log.Fatalf("Error parsing config file: %s", err)
 	}
@@ -101,7 +101,6 @@ func main() {
 			}
 		}
 	}()
-
 
 	http.Handle("/redfish", metricsHandler()) // Regular metrics endpoint for local Redfish metrics.
 	http.Handle("/metrics", promhttp.Handler())

@@ -7,14 +7,13 @@ import (
 	"github.com/stmcginnis/gofish"
 	"github.com/stmcginnis/gofish/redfish"
 	"sync"
-
 )
 
 // A ChassisCollector implements the prometheus.Collector.
 
 var (
-	ChassisSubsystem = "chassis"
-	ChassisLabelNames = []string{"resource", "chassis_id"}
+	ChassisSubsystem                = "chassis"
+	ChassisLabelNames               = []string{"resource", "chassis_id"}
 	ChassisTemperatureLabelNames    = []string{"resource", "chassis_id", "sensor", "sensor_id"}
 	ChassisFanLabelNames            = []string{"resource", "chassis_id", "fan", "fan_id"}
 	ChassisPowerVotageLabelNames    = []string{"resource", "chassis_id", "power_votage", "power_votage_id"}
@@ -163,9 +162,9 @@ var (
 )
 
 type ChassisCollector struct {
-	redfishClient           *gofish.APIClient
-	metrics                 map[string]chassisMetric
-	collectorScrapeStatus   *prometheus.GaugeVec
+	redfishClient         *gofish.APIClient
+	metrics               map[string]chassisMetric
+	collectorScrapeStatus *prometheus.GaugeVec
 }
 
 type chassisMetric struct {
@@ -288,8 +287,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 func parseChassisTemperature(ch chan<- prometheus.Metric, chassisID string, chassisTemperature redfish.Temperature, wg *sync.WaitGroup) {
 	defer wg.Done()
 	chassisTemperatureSensorName := chassisTemperature.Name
-	//chassisTemperatureSensorName := chassisTemperature.MemberID
-	chassisTemperatureSensorID := chassisTemperature.ID
+	chassisTemperatureSensorID := chassisTemperature.MemberID
 	chassisTemperatureStatus := chassisTemperature.Status
 	//			chassisTemperatureStatusHealth :=chassisTemperatureStatus.Health
 	chassisTemperatureStatusState := chassisTemperatureStatus.State
@@ -306,9 +304,8 @@ func parseChassisTemperature(ch chan<- prometheus.Metric, chassisID string, chas
 }
 func parseChassisFan(ch chan<- prometheus.Metric, chassisID string, chassisFan redfish.Fan, wg *sync.WaitGroup) {
 	defer wg.Done()
-	chassisFanID := chassisFan.ID
+	chassisFanID := chassisFan.MemberID
 	chassisFanName := chassisFan.Name
-	//chassisFanName := chassisFan.MemberID
 	chassisFanStaus := chassisFan.Status
 	chassisFanStausHealth := chassisFanStaus.Health
 	chassisFanStausState := chassisFanStaus.State
@@ -331,8 +328,7 @@ func parseChassisFan(ch chan<- prometheus.Metric, chassisID string, chassisFan r
 func parseChassisPowerInfoVoltage(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoVoltage redfish.Voltage, wg *sync.WaitGroup) {
 	defer wg.Done()
 	chassisPowerInfoVoltageName := chassisPowerInfoVoltage.Name
-	//chassisPowerInfoVoltageName := chassisPowerInfoVoltage.MemberID
-	chassisPowerInfoVoltageID := chassisPowerInfoVoltage.ID
+	chassisPowerInfoVoltageID := chassisPowerInfoVoltage.MemberID
 	chassisPowerInfoVoltageNameReadingVolts := chassisPowerInfoVoltage.ReadingVolts
 	chassisPowerInfoVoltageState := chassisPowerInfoVoltage.Status.State
 	chassisPowerVotageLabelvalues := []string{"power_votage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID}
@@ -346,7 +342,7 @@ func parseChassisPowerInfoPowerSupply(ch chan<- prometheus.Metric, chassisID str
 
 	defer wg.Done()
 	chassisPowerInfoPowerSupplyName := chassisPowerInfoPowerSupply.Name
-	chassisPowerInfoPowerSupplyID := chassisPowerInfoPowerSupply.ID
+	chassisPowerInfoPowerSupplyID := chassisPowerInfoPowerSupply.MemberID
 	chassisPowerInfoPowerSupplyPowerCapacityWatts := chassisPowerInfoPowerSupply.PowerCapacityWatts
 	chassisPowerInfoPowerSupplyLastPowerOutputWatts := chassisPowerInfoPowerSupply.LastPowerOutputWatts
 	chassisPowerInfoPowerSupplyState := chassisPowerInfoPowerSupply.Status.State
@@ -383,7 +379,7 @@ func parseNetworkAdapter(ch chan<- prometheus.Metric, chassisID string, networkA
 		wg6 := &sync.WaitGroup{}
 		wg6.Add(len(networkPorts))
 		for _, networkPort := range networkPorts {
-			go parseNetworkPort(ch, chassisID, networkPort, networkAdapterName,networkAdapterID, wg6)
+			go parseNetworkPort(ch, chassisID, networkPort, networkAdapterName, networkAdapterID, wg6)
 		}
 
 	}
