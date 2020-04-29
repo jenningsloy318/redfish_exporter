@@ -54,4 +54,4 @@ add redfish-exporter job conif as following
 
 ## Acknowledgement
 
-- [gofish](github.com/stmcginnis/gofish) provides the underlying library to interact servers  
+- [gofish](https://github.com/stmcginnis/gofish) provides the underlying library to interact servers  
