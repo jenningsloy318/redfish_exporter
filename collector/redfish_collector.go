@@ -49,7 +49,7 @@ func NewRedfishCollector(host string, username string, password string) *Redfish
 		systemCollector := NewSystemCollector(namespace, redfishClient)
 		managerCollector := NewManagerCollector(namespace, redfishClient)
 
-		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector,"manager":managerCollector}
+		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector, "manager": managerCollector}
 	}
 
 	return &RedfishCollector{
@@ -155,7 +155,7 @@ func parseCommonStatusState(status gofishcommon.State) (float64, bool) {
 	return float64(0), false
 }
 
-func parseSystemPowerState(status redfish.PowerState) (float64, bool) {
+func parseCommonPowerState(status redfish.PowerState) (float64, bool) {
 	if bytes.Equal([]byte(status), []byte("On")) {
 		return float64(1), true
 	} else if bytes.Equal([]byte(status), []byte("Off")) {

@@ -349,7 +349,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			if systemStateValue, ok := parseCommonStatusState(systemState); ok {
 				ch <- prometheus.MustNewConstMetric(s.metrics["system_state"].desc, prometheus.GaugeValue, systemStateValue, systemLabelValues...)
 			}
-			if systemPowerStateValue, ok := parseSystemPowerState(systemPowerState); ok {
+			if systemPowerStateValue, ok := parseCommonPowerState(systemPowerState); ok {
 				ch <- prometheus.MustNewConstMetric(s.metrics["system_power_state"].desc, prometheus.GaugeValue, systemPowerStateValue, systemLabelValues...)
 
 			}
