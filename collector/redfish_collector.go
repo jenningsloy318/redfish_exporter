@@ -47,7 +47,9 @@ func NewRedfishCollector(host string, username string, password string) *Redfish
 	} else {
 		chassisCollector := NewChassisCollector(namespace, redfishClient)
 		systemCollector := NewSystemCollector(namespace, redfishClient)
-		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector}
+		managerCollector := NewManagerCollector(namespace, redfishClient)
+
+		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector,"manager":managerCollector}
 	}
 
 	return &RedfishCollector{

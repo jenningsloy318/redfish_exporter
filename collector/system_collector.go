@@ -296,7 +296,6 @@ type SystemCollector struct {
 
 // NewSystemCollector returns a collector that collecting memory statistics
 func NewSystemCollector(namespace string, redfishClient *gofish.APIClient) *SystemCollector {
-	var ()
 	return &SystemCollector{
 		redfishClient: redfishClient,
 		metrics:       systemMetrics,
