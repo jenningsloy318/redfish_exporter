@@ -1,15 +1,16 @@
 package main
 
 import (
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"github.com/jenningsloy318/redfish_exporter/collector"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 var (
@@ -42,7 +43,8 @@ func metricsHandler() http.HandlerFunc {
 		var hostConfig *HostConfig
 		var err error
 		if hostConfig, err = sc.HostConfigForTarget(target); err != nil {
-			log.Fatalf("Error getting credentialfor target %s file: %s", target, err)
+			log.Errorf("Error getting credentialfor target %s,%s", target, err)
+			return
 		}
 
 		collector := collector.NewRedfishCollector(target, hostConfig.Username, hostConfig.Password)
