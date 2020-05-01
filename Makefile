@@ -6,14 +6,15 @@ FIRST_GOPATH := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
 RPM          := ./scripts/build_rpm.sh
 pkgs          = ./...
 
-BIN_DIR                 ?= $(shell pwd)/build
+BIN_DIR ?= $(shell pwd)/build
 VERSION ?= $(shell cat VERSION)
 REVERSION ?=$(shell git log -1 --pretty="%H")
 BRANCH ?=$(shell git rev-parse --abbrev-ref HEAD)
 TIME ?=$(shell date --rfc-3339=seconds)
 HOST ?=$(shell hostname)  
 
-all:  fmt style  build rpm 
+DOCKER-CLIENT = /usr/bin/docker
+all:  fmt style  build  docker-build rpm  docker-rpm
 
  
 style:
@@ -34,16 +35,22 @@ build: |
 	@echo ">> building binaries"
 	$(GO) build -o build/redfish_exporter -ldflags  '-X "main.Version=$(VERSION)" -X  "main.BuildRevision=$(REVERSION)" -X  "main.BuildBranch=$(BRANCH)" -X "main.BuildTime=$(TIME)" -X "main.BuildHost=$(HOSTNAME)"'
 
+docker-build:
+	$(DOCKER-CLIENT) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make build
 
 rpm: | build
 	@echo ">> building binaries"
 	$(RPM)
+
+docker-rpm:
+	$(DOCKER-CLIENT) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make rpm
 
 
 fmt:
 	@echo ">> format code style"
 	$(GOFMT) -w $$(find . -path ./vendor -prune -o -name '*.go' -print) 
 
+clean:
+	rm -rf $(BIN_DIR)
 
-
-.PHONY: all style check_license format build test   fmt 
+.PHONY: all style check_license format build test fmt  build docker-build   rpm docker-rpm
