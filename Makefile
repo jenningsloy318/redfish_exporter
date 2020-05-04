@@ -12,10 +12,10 @@ REVERSION ?=$(shell git log -1 --pretty="%H")
 BRANCH ?=$(shell git rev-parse --abbrev-ref HEAD)
 TIME ?=$(shell date --rfc-3339=seconds)
 HOST ?=$(shell hostname)  
+DOCKER := $(shell { command -v podman || command -v docker; } 2>/dev/null)
 
-DOCKER-CLIENT = /usr/bin/docker
+
 all:  fmt style  build  docker-build rpm  docker-rpm
-
  
 style:
 	@echo ">> checking code style"
@@ -36,14 +36,14 @@ build: |
 	$(GO) build -o build/redfish_exporter -ldflags  '-X "main.Version=$(VERSION)" -X  "main.BuildRevision=$(REVERSION)" -X  "main.BuildBranch=$(BRANCH)" -X "main.BuildTime=$(TIME)" -X "main.BuildHost=$(HOSTNAME)"'
 
 docker-build:
-	$(DOCKER-CLIENT) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make build
+	$(DOCKER) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make build
 
 rpm: | build
 	@echo ">> building binaries"
 	$(RPM)
 
 docker-rpm:
-	$(DOCKER-CLIENT) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make rpm
+	$(DOCKER) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make rpm
 
 
 fmt:
