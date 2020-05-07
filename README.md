@@ -1,37 +1,59 @@
 # redfish_exporter
-expoter to get  metrics from redfish based servers such as lenovo servers
+A prometheus expoter to get  metrics from redfish based servers such
+as lenovo servers.
 
+## Configuration
 
-
-example configure set as [example](./scripts/redfish_exporter.yml)
+An example configure given as an [example][1]:
 ```yaml
 hosts:
-    10.36.48.24:
-      username: admin
-      password: pass
+  10.36.48.24:
+    username: admin
+    password: pass
+  default:
+    username: admin
+    password: pass
+```
+Note that the ```default`` entry is useful as it avoids an error
+condition that is discussed in [this issue][2].
+
+## Building
+
+To build the redfish_exporter executable run the command:
+```sh
+make build
 ```
 
+## Running
 
-
-then start redfish_exporter via 
+To run redfish_exporter do something like:
 ```sh
 redfish_exporter --config.file=redfish_exporter.yml
 ```
+and run
+```sh
+redfish_exporter -h
+```
+for more options.
 
-then we can get the metrics via 
+## Scraping
+
+We can get the metrics via
 ```
 curl http://<redfish_exporter host>:9610/redfish?target=10.36.48.24
 
 ```
+or by pointing your favourite browser at this URL.
 
 ## prometheus job conf
-add redfish-exporter job conif as following
+
+You can then setup [Prometheus][3] to scrape the target using
+something like this in your Prometheus configuration files:
 ```yaml
   - job_name: 'redfish-exporter'
 
     # metrics_path defaults to '/metrics'
     metrics_path: /redfish
-
 
     # scheme defaults to 'http'.
 
@@ -45,13 +67,18 @@ add redfish-exporter job conif as following
         target_label: instance
       - target_label: __address__
         replacement: localhost:9610  ### the address of the redfish-exporter address
-````
-
-
-## Supported Devices(tested)
+```
+Note that port 9610 has been [reserved][4] for the redfish_exporter.
+## Supported Devices (tested)
 - Lenovo ThinkSystem SR850 (BMC 2.1/2.42)
 - Lenovo ThinkSystem SR650 (BMC 2.50)
 
 ## Acknowledgement
 
-- [gofish](https://github.com/stmcginnis/gofish) provides the underlying library to interact servers  
+- [gofish][5] provides the underlying library to interact servers
+
+[1]: git@github.com:sbates130272/redfish_exporter.git
+[2]: https://github.com/jenningsloy318/redfish_exporter/issues/7
+[3]: https://prometheus.io/
+[4]: https://github.com/prometheus/prometheus/wiki/Default-port-allocations
+[5]: https://github.com/stmcginnis/gofish
