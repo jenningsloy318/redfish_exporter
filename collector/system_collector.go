@@ -252,33 +252,33 @@ var (
 				nil,
 			),
 		},
-		"system_etherenet_interface_state": {
+		"system_ethernet_interface_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "ethernet_interface_state"),
 				"system ethernet interface state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
 			),
 		},
-		"system_etherenet_interface_health_state": {
+		"system_ethernet_interface_health_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_health_state"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "ethernet_interface_health_state"),
 				"system ethernet interface health state,1(OK),2(Warning),3(Critical)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
 			),
 		},
-		"system_etherenet_interface_link_status": {
+		"system_ethernet_interface_link_status": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_link_status"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "ethernet_interface_link_status"),
 				"system ethernet interface link status，1(LinkUp),2(NoLink),3(LinkDown)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
 			),
 		},
-		"system_etherenet_interface_link_enabled": {
+		"system_ethernet_interface_link_enabled": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, SystemSubsystem, "etherenet_interface_link_enabled"),
+				prometheus.BuildFQName(namespace, SystemSubsystem, "ethernet_interface_link_enabled"),
 				"system ethernet interface if the link is enabled",
 				SystemEthernetInterfaceLabelNames,
 				nil,
@@ -642,18 +642,18 @@ func parseEthernetInterface(ch chan<- prometheus.Metric, systemHostName string, 
 	ethernetInterfaceHealthState := ethernetInterface.Status.Health
 	systemEthernetInterfaceLabelValues := []string{systemHostName, "ethernet_interface", ethernetInterfaceName, ethernetInterfaceID, ethernetInterfaceSpeed}
 	if ethernetInterfaceStateValue, ok := parseCommonStatusState(ethernetInterfaceState); ok {
-		ch <- prometheus.MustNewConstMetric(systemMetrics["system_etherenet_interface_state"].desc, prometheus.GaugeValue, ethernetInterfaceStateValue, systemEthernetInterfaceLabelValues...)
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_ethernet_interface_state"].desc, prometheus.GaugeValue, ethernetInterfaceStateValue, systemEthernetInterfaceLabelValues...)
 
 	}
 	if ethernetInterfaceHealthStateValue, ok := parseCommonStatusHealth(ethernetInterfaceHealthState); ok {
-		ch <- prometheus.MustNewConstMetric(systemMetrics["system_etherenet_interface_health_state"].desc, prometheus.GaugeValue, ethernetInterfaceHealthStateValue, systemEthernetInterfaceLabelValues...)
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_ethernet_interface_health_state"].desc, prometheus.GaugeValue, ethernetInterfaceHealthStateValue, systemEthernetInterfaceLabelValues...)
 	}
 	if ethernetInterfaceLinkStatusValue, ok := parseLinkStatus(ethernetInterfaceLinkStatus); ok {
 
-		ch <- prometheus.MustNewConstMetric(systemMetrics["system_etherenet_interface_link_status"].desc, prometheus.GaugeValue, ethernetInterfaceLinkStatusValue, systemEthernetInterfaceLabelValues...)
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_ethernet_interface_link_status"].desc, prometheus.GaugeValue, ethernetInterfaceLinkStatusValue, systemEthernetInterfaceLabelValues...)
 
 	}
 
-	ch <- prometheus.MustNewConstMetric(systemMetrics["system_etherenet_interface_link_enabled"].desc, prometheus.GaugeValue, boolToFloat64(ethernetInterfaceEnabled), systemEthernetInterfaceLabelValues...)
+	ch <- prometheus.MustNewConstMetric(systemMetrics["system_ethernet_interface_link_enabled"].desc, prometheus.GaugeValue, boolToFloat64(ethernetInterfaceEnabled), systemEthernetInterfaceLabelValues...)
 
 }

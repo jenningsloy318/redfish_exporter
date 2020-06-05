@@ -94,6 +94,14 @@ var (
 				nil,
 			),
 		},
+		"chassis_power_average_consumed_watts": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_average_consumed_watts"),
+				"power wattage watts number of chassis component",
+				ChassisPowerVotageLabelNames,
+				nil,
+			),
+		},
 		"chassis_power_powersupply_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_state"),
@@ -254,13 +262,21 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 				}
 
+				// power control
+				chassisPowerInfoPowerControls := chassisPowerInfo.PowerControl
+				wg4 := &sync.WaitGroup{}
+				wg4.Add(len(chassisPowerInfoPowerControls))
+				for _, chassisPowerInfoPowerControl := range chassisPowerInfoPowerControls {
+					go parseChassisPowerInfoPowerControl(ch, chassisID, chassisPowerInfoPowerControl, wg4)
+				}
+
 				// powerSupply
 				chassisPowerInfoPowerSupplies := chassisPowerInfo.PowerSupplies
-				wg4 := &sync.WaitGroup{}
-				wg4.Add(len(chassisPowerInfoPowerSupplies))
+				wg5 := &sync.WaitGroup{}
+				wg5.Add(len(chassisPowerInfoPowerSupplies))
 				for _, chassisPowerInfoPowerSupply := range chassisPowerInfoPowerSupplies {
 
-					go parseChassisPowerInfoPowerSupply(ch, chassisID, chassisPowerInfoPowerSupply, wg4)
+					go parseChassisPowerInfoPowerSupply(ch, chassisID, chassisPowerInfoPowerSupply, wg5)
 				}
 			}
 
@@ -331,11 +347,19 @@ func parseChassisPowerInfoVoltage(ch chan<- prometheus.Metric, chassisID string,
 	chassisPowerInfoVoltageID := chassisPowerInfoVoltage.MemberID
 	chassisPowerInfoVoltageNameReadingVolts := chassisPowerInfoVoltage.ReadingVolts
 	chassisPowerInfoVoltageState := chassisPowerInfoVoltage.Status.State
-	chassisPowerVotageLabelvalues := []string{"power_votage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID}
+	chassisPowerVotageLabelvalues := []string{"power_voltage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID}
 	if chassisPowerInfoVoltageStateValue, ok := parseCommonStatusState(chassisPowerInfoVoltageState); ok {
 		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_state"].desc, prometheus.GaugeValue, chassisPowerInfoVoltageStateValue, chassisPowerVotageLabelvalues...)
 	}
 	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_volts"].desc, prometheus.GaugeValue, float64(chassisPowerInfoVoltageNameReadingVolts), chassisPowerVotageLabelvalues...)
+}
+func parseChassisPowerInfoPowerControl(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerControl redfish.PowerControl, wg *sync.WaitGroup) {
+	defer wg.Done()
+	name := chassisPowerInfoPowerControl.Name
+	id := chassisPowerInfoPowerControl.MemberID
+	pm := chassisPowerInfoPowerControl.PowerMetrics
+	chassisPowerVotageLabelvalues := []string{"power_wattage", chassisID, name, id}
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_average_consumed_watts"].desc, prometheus.GaugeValue, float64(pm.AverageConsumedWatts), chassisPowerVotageLabelvalues...)
 }
 
 func parseChassisPowerInfoPowerSupply(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerSupply redfish.PowerSupply, wg *sync.WaitGroup) {
