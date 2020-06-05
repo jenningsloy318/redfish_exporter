@@ -1,6 +1,5 @@
 # redfish_exporter
-A prometheus expoter to get  metrics from redfish based servers such
-as lenovo servers.
+A prometheus expoter to get  metrics from redfish based servers such as lenovo/dell/Supermicro servers.
 
 ## Configuration
 
