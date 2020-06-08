@@ -2,6 +2,7 @@ package collector
 
 import (
 	"fmt"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/stmcginnis/gofish"
@@ -98,7 +99,7 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 			ManagerLabelValues := []string{ManagerID, managerName, managerModel, managerType}
 
 			if managerHealthStateValue, ok := parseCommonStatusHealth(managerHealthState); ok {
-				ch <- prometheus.MustNewConstMetric(m.metrics["manager_state"].desc, prometheus.GaugeValue, managerHealthStateValue, ManagerLabelValues...)
+				ch <- prometheus.MustNewConstMetric(m.metrics["manager_health_state"].desc, prometheus.GaugeValue, managerHealthStateValue, ManagerLabelValues...)
 			}
 			if managerStateValue, ok := parseCommonStatusState(managerState); ok {
 				ch <- prometheus.MustNewConstMetric(m.metrics["manager_state"].desc, prometheus.GaugeValue, managerStateValue, ManagerLabelValues...)

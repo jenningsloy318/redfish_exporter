@@ -2,11 +2,12 @@ package collector
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/stmcginnis/gofish"
 	"github.com/stmcginnis/gofish/redfish"
-	"sync"
 )
 
 // A ChassisCollector implements the prometheus.Collector.
@@ -228,7 +229,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				ch <- prometheus.MustNewConstMetric(c.metrics["chassis_state"].desc, prometheus.GaugeValue, chassisStatusStateValue, ChassisLabelValues...)
 			}
 
-			if chassisThermal, err := chassis.Thermal(); err != nil {
+			if chassisThermal, err := chassis.Thermal(); err != nil || chassisThermal == nil {
 				log.Infof("Errors Getting Thermal from chassis : %s", err)
 			} else {
 				// process temperature
@@ -250,7 +251,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 			}
 
-			if chassisPowerInfo, err := chassis.Power(); err != nil {
+			if chassisPowerInfo, err := chassis.Power(); err != nil || chassisPowerInfo == nil {
 				log.Infof("Errors Getting powerinf from chassis : %s", err)
 			} else {
 				// power votages
