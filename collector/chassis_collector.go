@@ -229,8 +229,11 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				ch <- prometheus.MustNewConstMetric(c.metrics["chassis_state"].desc, prometheus.GaugeValue, chassisStatusStateValue, ChassisLabelValues...)
 			}
 
-			if chassisThermal, err := chassis.Thermal(); err != nil || chassisThermal == nil {
-				log.Infof("Errors Getting Thermal from chassis : %s", err)
+			chassisThermal, err := chassis.Thermal()
+			if err != nil {
+				log.Infof("Errors Getting Thermal from chassis, error is : %s ", err)
+			} else if chassisThermal == nil {
+				log.Info("Errors Getting Thermal from chassis, no Thermal data found")
 			} else {
 				// process temperature
 				chassisTemperatures := chassisThermal.Temperatures
@@ -251,8 +254,12 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 			}
 
-			if chassisPowerInfo, err := chassis.Power(); err != nil || chassisPowerInfo == nil {
-				log.Infof("Errors Getting powerinf from chassis : %s", err)
+			chassisPowerInfo, err := chassis.Power()
+			if err != nil {
+				log.Infof("Errors Getting powerinfo from chassis : %s", err)
+			} else if chassisPowerInfo == nil {
+
+				log.Info("Errors Getting powerinfo from chassis, no powerinfo found")
 			} else {
 				// power votages
 				chassisPowerInfoVoltages := chassisPowerInfo.Voltages
