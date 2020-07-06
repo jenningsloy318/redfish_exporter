@@ -290,8 +290,12 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 			// process NetapAdapter
 
-			if networkAdapters, err := chassis.NetworkAdapters(); err != nil {
+			networkAdapters, err := chassis.NetworkAdapters()
+
+			if err != nil {
 				log.Infof("Errors Getting NetworkAdapters from chassis : %s", err)
+			} else if networkAdapters == nil {
+				log.Info("Errors Getting NetworkAdapters from chassis, no NetworkAdapters data found")
 			} else {
 				wg5 := &sync.WaitGroup{}
 				wg5.Add(len(networkAdapters))

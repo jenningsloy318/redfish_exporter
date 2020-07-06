@@ -3,13 +3,14 @@ package collector
 import (
 	"bytes"
 	"fmt"
+	"sync"
+	"time"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish"
 	gofishcommon "github.com/stmcginnis/gofish/common"
 	redfish "github.com/stmcginnis/gofish/redfish"
-	"sync"
-	"time"
 )
 
 // Metric name parts.
@@ -129,7 +130,10 @@ func parseCommonStatusHealth(status gofishcommon.Health) (float64, bool) {
 }
 
 func parseCommonStatusState(status gofishcommon.State) (float64, bool) {
-	if bytes.Equal([]byte(status), []byte("Enabled")) {
+
+	if bytes.Equal([]byte(status), []byte("")) {
+		return float64(0), false
+	} else if bytes.Equal([]byte(status), []byte("Enabled")) {
 		return float64(1), true
 	} else if bytes.Equal([]byte(status), []byte("Disabled")) {
 		return float64(2), true

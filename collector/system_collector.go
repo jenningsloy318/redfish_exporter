@@ -2,11 +2,12 @@ package collector
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/common/log"
 	"github.com/stmcginnis/gofish"
 	"github.com/stmcginnis/gofish/redfish"
-	"sync"
 )
 
 // A SystemCollector implements the prometheus.Collector.
@@ -381,8 +382,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			//memoriesLink := fmt.Sprintf("%sMemory/", systemOdataID)
 
 			//if memories, err := redfish.ListReferencedMemorys(s.redfishClient, memoriesLink); err != nil {
-			if memories, err := system.Memory(); err != nil {
+			memories, err := system.Memory()
+			if err != nil {
 				log.Infof("Errors Getting memory from computer system : %s", err)
+			} else if memories == nil {
+				log.Infof("Errors Getting memory from computer system, no memory data found")
 			} else {
 				wg1 := &sync.WaitGroup{}
 				wg1.Add(len(memories))
@@ -398,8 +402,12 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			//processorsLink := fmt.Sprintf("%sProcessors/", systemOdataID)
 
 			//if processors, err := redfish.ListReferencedProcessors(s.redfishClient, processorsLink); err != nil {
-			if processors, err := system.Processors(); err != nil {
+			processors, err := system.Processors()
+
+			if err != nil {
 				log.Infof("Errors Getting Processors from system: %s", err)
+			} else if processors == nil {
+				log.Infof("Errors Getting Processors from system, no processor data found")
 			} else {
 				wg2 := &sync.WaitGroup{}
 				wg2.Add(len(processors))
@@ -415,8 +423,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			//storagesLink := fmt.Sprintf("%sStorage/", systemOdataID)
 
 			//if storages, err := redfish.ListReferencedStorages(s.redfishClient, storagesLink); err != nil {
-			if storages, err := system.Storage(); err != nil {
+			storages, err := system.Storage()
+			if err != nil {
 				log.Infof("Errors Getting storages from system: %s", err)
+			} else if storages == nil {
+				log.Infof("Errors Getting storages from system, no storage data found")
 			} else {
 				for _, storage := range storages {
 
@@ -432,8 +443,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 						}
 					}
 
-					if drives, err := storage.Drives(); err != nil {
+					drives, err := storage.Drives()
+					if err != nil {
 						log.Infof("Errors Getting volumes  from system storage : %s", err)
+					} else if drives == nil {
+						log.Infof("Errors Getting volumes  from system storage, no dirver data found")
 					} else {
 						wg4 := &sync.WaitGroup{}
 						wg4.Add(len(drives))
@@ -470,8 +484,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 			//process pci devices
 			//pciDevicesLink := fmt.Sprintf("%sPcidevice/", systemOdataID)
-			if pcieDevices, err := system.PCIeDevices(); err != nil {
+			pcieDevices, err := system.PCIeDevices()
+			if err != nil {
 				log.Infof("Errors Getting PCI-E devices from system: %s", err)
+			} else if pcieDevices == nil {
+				log.Infof("Errors Getting PCI-E devices from system, no PCI-E device data found")
 			} else {
 				wg5 := &sync.WaitGroup{}
 				wg5.Add(len(pcieDevices))
@@ -481,8 +498,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			//process networkinterfaces
-			if networkInterfaces, err := system.NetworkInterfaces(); err != nil {
+			networkInterfaces, err := system.NetworkInterfaces()
+			if err != nil {
 				log.Infof("Errors Getting network Interfaces from system: %s", err)
+			} else if networkInterfaces == nil {
+				log.Infof("Errors Getting network Interfaces from system, no networkInterface data found")
 			} else {
 				wg6 := &sync.WaitGroup{}
 				wg6.Add(len(networkInterfaces))
@@ -493,8 +513,11 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 
 			//process nethernetinterfaces
-			if ethernetInterfaces, err := system.EthernetInterfaces(); err != nil {
+			ethernetInterfaces, err := system.EthernetInterfaces()
+			if err != nil {
 				log.Infof("Errors Getting ethernet Interfaces from system: %s", err)
+			} else if ethernetInterfaces == nil {
+				log.Infof("Errors Getting ethernet Interfaces from system,no ethernetInterface data found")
 			} else {
 				wg7 := &sync.WaitGroup{}
 				wg7.Add(len(ethernetInterfaces))
