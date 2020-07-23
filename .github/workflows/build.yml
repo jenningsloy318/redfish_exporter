@@ -1,0 +1,33 @@
+name: build redfish exporter package
+
+on: 
+  issue_comment:
+    types: [edited,created]
+
+jobs:
+  centos-7:
+    name: on centos 7
+    runs-on: ubuntu-20.04
+    if: github.event.comment.body == 'build on centos 7' 
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Update apt repository
+        run: sudo apt-get update -y
+      - name: Install dependencies
+        run: sudo apt-get install -y make curl podman
+      - name: build package
+        run: make docker-build-centos7
+  centos-7:
+    name: on centos 8
+    runs-on: ubuntu-20.04
+    if: github.event.comment.body == 'build on centos 8' 
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Update apt repository
+        run: sudo apt-get update -y
+      - name: Install dependencies
+        run: sudo apt-get install -y make curl podman
+      - name: build package
+        run: make docker-build-centos8
