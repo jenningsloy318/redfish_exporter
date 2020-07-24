@@ -12,10 +12,10 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-      - name: scan codeql
-        uses: github/codeql-action/init@v1
-        with:
-          languages: go
+#      - name: scan codeql
+#        uses: github/codeql-action/init@v1
+#        with:
+#          languages: go
       - name: Update apt repository
         run: sudo apt-get update -y
       - name: Install dependencies
@@ -29,10 +29,10 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-      - name: scan codeql
-        uses: github/codeql-action/init@v1
-        with:
-          languages: go
+#      - name: scan codeql
+#        uses: github/codeql-action/init@v1
+#        with:
+#          languages: go
       - name: Update apt repository
         run: sudo apt-get update -y
       - name: Install dependencies
