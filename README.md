@@ -1,5 +1,5 @@
 # redfish_exporter
-A prometheus expoter to get  metrics from redfish based servers such as lenovo/dell/Supermicro servers.
+A prometheus exporter to get  metrics from redfish based servers such as lenovo/dell/Supermicro servers.
 
 ## Configuration
 
@@ -54,7 +54,7 @@ curl http://<redfish_exporter host>:9610/redfish?target=10.36.48.24
 ```
 or by pointing your favourite browser at this URL.
 
-## prometheus job conf
+## prometheus configuration
 
 You can then setup [Prometheus][3] to scrape the target using
 something like this in your Prometheus configuration files:
