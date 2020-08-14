@@ -16,6 +16,7 @@ type systemMetric struct {
 	desc *prometheus.Desc
 }
 
+// SystemSubsystem is the system subsystem
 var (
 	SystemSubsystem                   = "system"
 	SystemLabelNames                  = []string{"hostname", "resource", "system_id"}
@@ -288,6 +289,7 @@ var (
 	}
 )
 
+// SystemCollector implemented prometheus.Collector
 type SystemCollector struct {
 	redfishClient           *gofish.APIClient
 	metrics                 map[string]systemMetric
@@ -311,6 +313,7 @@ func NewSystemCollector(namespace string, redfishClient *gofish.APIClient) *Syst
 	}
 }
 
+// Describe implements prometheus.Collector.
 func (s *SystemCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range s.metrics {
 		ch <- metric.desc
@@ -319,6 +322,7 @@ func (s *SystemCollector) Describe(ch chan<- *prometheus.Desc) {
 
 }
 
+// Collect implements prometheus.Collector.
 func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 	//get service
 	service := s.redfishClient.Service
@@ -537,13 +541,13 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 func parseMemory(ch chan<- prometheus.Metric, systemHostName string, memory *redfish.Memory, wg *sync.WaitGroup) {
 	defer wg.Done()
 	memoryName := memory.Name
-	memoryId := memory.ID
+	memoryID := memory.ID
 	//memoryDeviceLocator := memory.DeviceLocator
 	memoryCapacityMiB := memory.CapacityMiB
 	memoryState := memory.Status.State
 	memoryHealthState := memory.Status.Health
 
-	systemMemoryLabelValues := []string{systemHostName, "memory", memoryName, memoryId}
+	systemMemoryLabelValues := []string{systemHostName, "memory", memoryName, memoryID}
 	if memoryStateValue, ok := parseCommonStatusState(memoryState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_memory_state"].desc, prometheus.GaugeValue, memoryStateValue, systemMemoryLabelValues...)
 

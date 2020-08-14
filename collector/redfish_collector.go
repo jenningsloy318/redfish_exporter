@@ -32,13 +32,14 @@ var (
 	)
 )
 
-// Exporter collects redfish metrics. It implements prometheus.Collector.
+// RedfishCollector collects redfish metrics. It implements prometheus.Collector.
 type RedfishCollector struct {
 	redfishClient *gofish.APIClient
 	collectors    map[string]prometheus.Collector
 	redfishUp     prometheus.Gauge
 }
 
+// NewRedfishCollector return RedfishCollector
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
 	var collectors map[string]prometheus.Collector
 
@@ -187,7 +188,18 @@ func boolToFloat64(data bool) float64 {
 
 	if data {
 		return float64(1)
-	} else {
-		return float64(0)
 	}
+	return float64(0)
+
+}
+
+func parsePhySecReArmMethod(method redfish.IntrusionSensorReArm) (float64, bool) {
+	if bytes.Equal([]byte(method), []byte("Manual")) {
+		return float64(1), true
+	}
+	if bytes.Equal([]byte(method), []byte("Automatic")) {
+		return float64(2), true
+	}
+
+	return float64(0), false
 }

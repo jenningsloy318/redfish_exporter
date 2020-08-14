@@ -10,17 +10,17 @@ import (
 	"github.com/stmcginnis/gofish/redfish"
 )
 
-// A ChassisCollector implements the prometheus.Collector.
-
+// ChassisSubsystem is the chassis subsystem
 var (
-	ChassisSubsystem                = "chassis"
-	ChassisLabelNames               = []string{"resource", "chassis_id"}
-	ChassisTemperatureLabelNames    = []string{"resource", "chassis_id", "sensor", "sensor_id"}
-	ChassisFanLabelNames            = []string{"resource", "chassis_id", "fan", "fan_id"}
-	ChassisPowerVotageLabelNames    = []string{"resource", "chassis_id", "power_votage", "power_votage_id"}
-	ChassisPowerSupplyLabelNames    = []string{"resource", "chassis_id", "power_supply", "power_supply_id"}
-	ChassisNetworkAdapterLabelNames = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id"}
-	ChassisNetworkPortLabelNames    = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed"}
+	ChassisSubsystem                  = "chassis"
+	ChassisLabelNames                 = []string{"resource", "chassis_id"}
+	ChassisTemperatureLabelNames      = []string{"resource", "chassis_id", "sensor", "sensor_id"}
+	ChassisFanLabelNames              = []string{"resource", "chassis_id", "fan", "fan_id"}
+	ChassisPowerVotageLabelNames      = []string{"resource", "chassis_id", "power_votage", "power_votage_id"}
+	ChassisPowerSupplyLabelNames      = []string{"resource", "chassis_id", "power_supply", "power_supply_id"}
+	ChassisNetworkAdapterLabelNames   = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id"}
+	ChassisNetworkPortLabelNames      = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed"}
+	ChassisPhysicalSecurityLabelNames = []string{"resource", "chassis_id", "intrusion_sensor_number", "intrusion_sensor"}
 
 	chassisMetrics = map[string]chassisMetric{
 		"chassis_health": {
@@ -167,9 +167,18 @@ var (
 				nil,
 			),
 		},
+		"chassis_physical_security_sensor_rearm_method": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "physical_security_sensor_rearm_method"),
+				"method that restores this physical security sensor to the normal state, 1()",
+				ChassisPhysicalSecurityLabelNames,
+				nil,
+			),
+		},
 	}
 )
 
+//ChassisCollector implements the prometheus.Collector.
 type ChassisCollector struct {
 	redfishClient         *gofish.APIClient
 	metrics               map[string]chassisMetric
@@ -199,6 +208,7 @@ func NewChassisCollector(namespace string, redfishClient *gofish.APIClient) *Cha
 	}
 }
 
+// Describe implemented prometheus.Collector
 func (c *ChassisCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range c.metrics {
 		ch <- metric.desc
@@ -207,6 +217,7 @@ func (c *ChassisCollector) Describe(ch chan<- *prometheus.Desc) {
 
 }
 
+// Collect implemented prometheus.Collector
 func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 	service := c.redfishClient.Service
@@ -305,6 +316,18 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					go parseNetworkAdapter(ch, chassisID, networkAdapter, wg5)
 
 				}
+			}
+
+			physicalSecurity := chassis.PhysicalSecurity
+			if physicalSecurity != (redfish.PhysicalSecurity{}) {
+				physicalSecurityIntrusionSensor := fmt.Sprintf("%s", physicalSecurity.IntrusionSensor)
+				physicalSecurityIntrusionSensorNumber := fmt.Sprintf("%d", physicalSecurity.IntrusionSensorNumber)
+				physicalSecurityIntrusionSensorReArmMethod := physicalSecurity.IntrusionSensorReArm
+				if phySecReArmMethod, ok := parsePhySecReArmMethod(physicalSecurityIntrusionSensorReArmMethod); ok {
+					ChassisPhysicalSecurityLabelValues := []string{"physical_security", chassisID, physicalSecurityIntrusionSensorNumber, physicalSecurityIntrusionSensor}
+					ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_physical_security_sensor_rearm_method"].desc, prometheus.GaugeValue, phySecReArmMethod, ChassisPhysicalSecurityLabelValues...)
+				}
+
 			}
 
 		}

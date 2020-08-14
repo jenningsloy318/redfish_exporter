@@ -14,6 +14,7 @@ type managerMetric struct {
 	desc *prometheus.Desc
 }
 
+//ManagerSubmanager is the manager subsystem
 var (
 	ManagerSubmanager = "manager"
 	ManagerLabelNames = []string{"manager_id", "name", "model", "type"}
@@ -45,6 +46,7 @@ var (
 	}
 )
 
+//ManagerCollector implemented prometheus.Collector
 type ManagerCollector struct {
 	redfishClient           *gofish.APIClient
 	metrics                 map[string]managerMetric
@@ -68,6 +70,7 @@ func NewManagerCollector(namespace string, redfishClient *gofish.APIClient) *Man
 	}
 }
 
+// Describe implemented prometheus.Collector
 func (m *ManagerCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range m.metrics {
 		ch <- metric.desc
@@ -76,6 +79,7 @@ func (m *ManagerCollector) Describe(ch chan<- *prometheus.Desc) {
 
 }
 
+// Collect implemented prometheus.Collector
 func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 	//get service
 	service := m.redfishClient.Service
