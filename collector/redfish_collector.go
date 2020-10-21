@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/apex/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish"
 	gofishcommon "github.com/stmcginnis/gofish/common"
 	redfish "github.com/stmcginnis/gofish/redfish"
@@ -40,16 +40,16 @@ type RedfishCollector struct {
 }
 
 // NewRedfishCollector return RedfishCollector
-func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
+func NewRedfishCollector(host string, username string, password string, logger *log.Entry) *RedfishCollector {
 	var collectors map[string]prometheus.Collector
-
+	collectorLogCtx := logger
 	redfishClient, err := newRedfishClient(host, username, password)
 	if err != nil {
-		log.Infof("Errors occours when creating redfish client: %s", err)
+		collectorLogCtx.WithError(err).Error("error creating redfish client")
 	} else {
-		chassisCollector := NewChassisCollector(namespace, redfishClient)
-		systemCollector := NewSystemCollector(namespace, redfishClient)
-		managerCollector := NewManagerCollector(namespace, redfishClient)
+		chassisCollector := NewChassisCollector(namespace, redfishClient, collectorLogCtx)
+		systemCollector := NewSystemCollector(namespace, redfishClient, collectorLogCtx)
+		managerCollector := NewManagerCollector(namespace, redfishClient, collectorLogCtx)
 
 		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector, "manager": managerCollector}
 	}
@@ -113,7 +113,6 @@ func newRedfishClient(host string, username string, password string) (*gofish.AP
 	}
 	redfishClient, err := gofish.Connect(config)
 	if err != nil {
-		log.Infof("Errors occours when creating redfish client: %s", err)
 		return nil, err
 	}
 	return redfishClient, nil
