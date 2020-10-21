@@ -8,7 +8,6 @@ import (
 
 	alog "github.com/apex/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 	gofish "github.com/stmcginnis/gofish"
 	gofishcommon "github.com/stmcginnis/gofish/common"
 	redfish "github.com/stmcginnis/gofish/redfish"
@@ -35,12 +34,6 @@ var (
 	logger *alog.Entry
 )
 
-func init() {
-	// logger.WithField("app", "redfish_exporter")
-	// fmt.Print("hello")
-
-}
-
 // RedfishCollector collects redfish metrics. It implements prometheus.Collector.
 type RedfishCollector struct {
 	redfishClient *gofish.APIClient
@@ -62,7 +55,7 @@ func NewRedfishCollector(host string, username string, password string) *Redfish
 		logger.WithError(err)
 	} else {
 		chassisCollector := NewChassisCollector(namespace, redfishClient, logger)
-		systemCollector := NewSystemCollector(namespace, redfishClient)
+		systemCollector := NewSystemCollector(namespace, redfishClient, logger)
 		managerCollector := NewManagerCollector(namespace, redfishClient)
 
 		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector, "manager": managerCollector}
@@ -126,9 +119,8 @@ func newRedfishClient(host string, username string, password string) (*gofish.AP
 		Insecure: true,
 	}
 	redfishClient, err := gofish.Connect(config)
-	logger.Info("hello")
 	if err != nil {
-		log.Infof("Errors occours when creating redfish client: %s", err)
+		logger.WithField("operation", "newRedfishClient").WithError(err)
 		return nil, err
 	}
 	return redfishClient, nil
