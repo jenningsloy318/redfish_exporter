@@ -198,7 +198,7 @@ func NewChassisCollector(namespace string, redfishClient *gofish.APIClient, logg
 		redfishClient: redfishClient,
 		metrics:       chassisMetrics,
 		Log: logger.WithFields(log.Fields{
-			"collector": "SystemCollector",
+			"collector": "ChassisCollector",
 		}),
 		collectorScrapeStatus: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
