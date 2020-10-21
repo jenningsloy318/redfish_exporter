@@ -91,10 +91,11 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 
 	// get a list of managers from service
 	if managers, err := service.Managers(); err != nil {
-		collectorLogContext.WithField("operation", "service.Managers()").WithError(err)
+		collectorLogContext.WithField("operation", "service.Managers()").WithError(err).Error("error getting managers from service")
 	} else {
 		for _, manager := range managers {
 			managerLogContext := collectorLogContext.WithField("Manager", manager.ID)
+			managerLogContext.Info("collector scrape started")
 			// overall manager metrics
 			ManagerID := manager.ID
 			managerName := manager.Name

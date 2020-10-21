@@ -45,7 +45,7 @@ func NewRedfishCollector(host string, username string, password string, logger *
 	collectorLogCtx := logger
 	redfishClient, err := newRedfishClient(host, username, password)
 	if err != nil {
-		collectorLogCtx.WithError(err)
+		collectorLogCtx.WithError(err).Error("error creating redfish client")
 	} else {
 		chassisCollector := NewChassisCollector(namespace, redfishClient, collectorLogCtx)
 		systemCollector := NewSystemCollector(namespace, redfishClient, collectorLogCtx)

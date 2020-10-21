@@ -29,7 +29,7 @@ var (
 	listenAddress = kingpin.Flag(
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",
-	).Default("127.0.0.1:9610").String()
+	).Default(":9610").String()
 	sc = &SafeConfig{
 		C: &Config{},
 	}
@@ -54,18 +54,18 @@ func metricsHandler() http.HandlerFunc {
 			http.Error(w, "'target' parameter must be specified", 400)
 			return
 		}
-		targetLogCtx := rootLoggerCtx.WithField("target", target)
-		targetLogCtx.Info("scraping target host")
+		targetLoggerCtx := rootLoggerCtx.WithField("target", target)
+		targetLoggerCtx.Info("scraping target host")
 
 		var hostConfig *HostConfig
 		var err error
 
 		if hostConfig, err = sc.HostConfigForTarget(target); err != nil {
-			targetLogCtx.WithError(err)
+			targetLoggerCtx.WithError(err).Error("error getting credentials")
 			return
 		}
 
-		collector := collector.NewRedfishCollector(target, hostConfig.Username, hostConfig.Password, targetLogCtx)
+		collector := collector.NewRedfishCollector(target, hostConfig.Username, hostConfig.Password, targetLoggerCtx)
 		registry.MustRegister(collector)
 		gatherers := prometheus.Gatherers{
 			prometheus.DefaultGatherer,
@@ -87,7 +87,7 @@ func main() {
 	configLoggerCtx.Info("starting app")
 	// load config  first time
 	if err := sc.ReloadConfig(*configFile); err != nil {
-		rootLoggerCtx.WithError(err)
+		configLoggerCtx.WithError(err).Error("error parsing config file")
 		panic(err)
 	}
 

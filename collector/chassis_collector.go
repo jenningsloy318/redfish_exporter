@@ -227,11 +227,12 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 	// get a list of chassis from service
 	if chassises, err := service.Chassis(); err != nil {
-		collectorLogContext.WithField("operation", "service.Chassis()").WithError(err)
+		collectorLogContext.WithField("operation", "service.Chassis()").WithError(err).Error("error getting chassis from service")
 	} else {
 		// process the chassises
 		for _, chassis := range chassises {
 			chassisLogContext := collectorLogContext.WithField("Chassis", chassis.ID)
+			chassisLogContext.Info("collector scrape started")
 			chassisID := chassis.ID
 			chassisStatus := chassis.Status
 			chassisStatusState := chassisStatus.State
@@ -246,7 +247,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 			chassisThermal, err := chassis.Thermal()
 			if err != nil {
-				chassisLogContext.WithField("operation", "chassis.Thermal()").WithError(err)
+				chassisLogContext.WithField("operation", "chassis.Thermal()").WithError(err).Error("error getting thermal data from chassis")
 			} else if chassisThermal == nil {
 				chassisLogContext.WithField("operation", "chassis.Thermal()").Info("no thermal data found")
 			} else {
@@ -271,7 +272,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 			chassisPowerInfo, err := chassis.Power()
 			if err != nil {
-				chassisLogContext.WithField("operation", "chassis.Power()").WithError(err)
+				chassisLogContext.WithField("operation", "chassis.Power()").WithError(err).Error("error getting power data from chassis")
 			} else if chassisPowerInfo == nil {
 				chassisLogContext.WithField("operation", "chassis.Power()").Info("no power data found")
 			} else {
@@ -306,7 +307,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 			networkAdapters, err := chassis.NetworkAdapters()
 			if err != nil {
-				chassisLogContext.WithField("operation", "chassis.NetworkAdapters()").WithError(err)
+				chassisLogContext.WithField("operation", "chassis.NetworkAdapters()").WithError(err).Error("error getting network adapters data from chassis")
 			} else if networkAdapters == nil {
 				chassisLogContext.WithField("operation", "chassis.NetworkAdapters()").Info("no network adapters data found")
 			} else {
@@ -315,7 +316,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 				for _, networkAdapter := range networkAdapters {
 					if err = parseNetworkAdapter(ch, chassisID, networkAdapter, wg5); err != nil {
-						chassisLogContext.WithField("operation", "chassis.NetworkAdapters()").WithError(err)
+						chassisLogContext.WithField("operation", "chassis.NetworkAdapters()").WithError(err).Error("error getting network ports from network adapter")
 					}
 				}
 			}
