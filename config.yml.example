@@ -2,3 +2,6 @@ hosts:
   default:
     username: user
     password: pass 
+  192.168.100.1:
+    username: different_user
+    password: different_pass 
