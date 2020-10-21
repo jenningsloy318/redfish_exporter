@@ -449,9 +449,9 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 
 					drives, err := storage.Drives()
 					if err != nil {
-						log.Infof("Errors Getting volumes  from system storage : %s", err)
+						log.Infof("Errors Getting volumes from system storage : %s", err)
 					} else if drives == nil {
-						log.Infof("Errors Getting volumes  from system storage, no dirver data found")
+						log.Infof("Errors Getting volumes from system storage, no drive data found")
 					} else {
 						wg4 := &sync.WaitGroup{}
 						wg4.Add(len(drives))

@@ -1,0 +1,4 @@
+hosts:
+  default:
+    username: user
+    password: pass 
