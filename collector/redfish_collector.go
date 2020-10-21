@@ -46,7 +46,7 @@ func NewRedfishCollector(host string, username string, password string) *Redfish
 	var collectors map[string]prometheus.Collector
 
 	rootLoggerCtx = alog.WithFields(alog.Fields{
-		"app":  "redfish_collector",
+		"app":  "redfish_exporter",
 		"host": host,
 	})
 
