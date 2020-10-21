@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"sync"
 
-	alog "github.com/apex/log"
+	"github.com/apex/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/stmcginnis/gofish"
 	"github.com/stmcginnis/gofish/redfish"
@@ -183,7 +183,7 @@ type ChassisCollector struct {
 	redfishClient         *gofish.APIClient
 	metrics               map[string]chassisMetric
 	collectorScrapeStatus *prometheus.GaugeVec
-	Log                   *alog.Entry
+	Log                   *log.Entry
 }
 
 type chassisMetric struct {
@@ -191,13 +191,13 @@ type chassisMetric struct {
 }
 
 // NewChassisCollector returns a collector that collecting chassis statistics
-func NewChassisCollector(namespace string, redfishClient *gofish.APIClient, logger *alog.Entry) *ChassisCollector {
+func NewChassisCollector(namespace string, redfishClient *gofish.APIClient, logger *log.Entry) *ChassisCollector {
 	// get service from redfish client
 
 	return &ChassisCollector{
 		redfishClient: redfishClient,
 		metrics:       chassisMetrics,
-		Log: logger.WithFields(alog.Fields{
+		Log: logger.WithFields(log.Fields{
 			"collector": "SystemCollector",
 		}),
 		collectorScrapeStatus: prometheus.NewGaugeVec(
