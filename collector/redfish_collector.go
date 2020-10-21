@@ -31,7 +31,7 @@ var (
 		nil, nil,
 	)
 
-	logger *alog.Entry
+	rootLoggerCtx *alog.Entry
 )
 
 // RedfishCollector collects redfish metrics. It implements prometheus.Collector.
@@ -45,17 +45,17 @@ type RedfishCollector struct {
 func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
 	var collectors map[string]prometheus.Collector
 
-	logger = alog.WithFields(alog.Fields{
+	rootLoggerCtx = alog.WithFields(alog.Fields{
 		"app":  "redfish_collector",
 		"host": host,
 	})
 
 	redfishClient, err := newRedfishClient(host, username, password)
 	if err != nil {
-		logger.WithError(err)
+		rootLoggerCtx.WithError(err)
 	} else {
-		chassisCollector := NewChassisCollector(namespace, redfishClient, logger)
-		systemCollector := NewSystemCollector(namespace, redfishClient, logger)
+		chassisCollector := NewChassisCollector(namespace, redfishClient, rootLoggerCtx)
+		systemCollector := NewSystemCollector(namespace, redfishClient, rootLoggerCtx)
 		managerCollector := NewManagerCollector(namespace, redfishClient)
 
 		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector, "manager": managerCollector}
@@ -120,7 +120,7 @@ func newRedfishClient(host string, username string, password string) (*gofish.AP
 	}
 	redfishClient, err := gofish.Connect(config)
 	if err != nil {
-		logger.WithField("operation", "newRedfishClient").WithError(err)
+		rootLoggerCtx.WithField("operation", "newRedfishClient").WithError(err)
 		return nil, err
 	}
 	return redfishClient, nil
