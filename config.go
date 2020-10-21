@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"regexp"
 	"sync"
 
 	yaml "gopkg.in/yaml.v2"
@@ -14,7 +15,7 @@ type Config struct {
 
 type SafeConfig struct {
 	sync.RWMutex
-	C *Config
+	Config *Config
 }
 
 type HostConfig struct {
@@ -34,7 +35,7 @@ func (sc *SafeConfig) ReloadConfig(configFile string) error {
 	}
 
 	sc.Lock()
-	sc.C = c
+	sc.Config = c
 	sc.Unlock()
 
 	return nil
@@ -43,17 +44,24 @@ func (sc *SafeConfig) ReloadConfig(configFile string) error {
 func (sc *SafeConfig) HostConfigForTarget(target string) (*HostConfig, error) {
 	sc.Lock()
 	defer sc.Unlock()
-	if hostConfig, ok := sc.C.Hosts[target]; ok {
+
+	for host, account := range sc.Config.Hosts {
+		match, _ := regexp.MatchString(host, target)
+		if match {
+			return &HostConfig{
+				Username: account.Username,
+				Password: account.Password,
+			}, nil
+		}
+	}
+	// if no match found, fallback to default
+	if hostConfig, ok := sc.Config.Hosts["default"]; ok {
 		return &HostConfig{
 			Username: hostConfig.Username,
 			Password: hostConfig.Password,
 		}, nil
 	}
-	if hostConfig, ok := sc.C.Hosts["default"]; ok {
-		return &HostConfig{
-			Username: hostConfig.Username,
-			Password: hostConfig.Password,
-		}, nil
-	}
+
+	// if no default specified, exit with an error
 	return &HostConfig{}, fmt.Errorf("no credentials found for target %s", target)
 }

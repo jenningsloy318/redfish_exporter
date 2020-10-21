@@ -29,9 +29,9 @@ var (
 	listenAddress = kingpin.Flag(
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",
-	).Default(":9610").String()
+	).Default("127.0.0.1:9610").String()
 	sc = &SafeConfig{
-		C: &Config{},
+		Config: &Config{},
 	}
 	reloadCh chan chan error
 )
