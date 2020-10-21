@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	alog "github.com/apex/log"
+	"github.com/apex/log"
 	"github.com/prometheus/client_golang/prometheus"
 	gofish "github.com/stmcginnis/gofish"
 	gofishcommon "github.com/stmcginnis/gofish/common"
@@ -30,8 +30,6 @@ var (
 		"Collector time duration.",
 		nil, nil,
 	)
-
-	rootLoggerCtx *alog.Entry
 )
 
 // RedfishCollector collects redfish metrics. It implements prometheus.Collector.
@@ -42,21 +40,16 @@ type RedfishCollector struct {
 }
 
 // NewRedfishCollector return RedfishCollector
-func NewRedfishCollector(host string, username string, password string) *RedfishCollector {
+func NewRedfishCollector(host string, username string, password string, logger *log.Entry) *RedfishCollector {
 	var collectors map[string]prometheus.Collector
-
-	rootLoggerCtx = alog.WithFields(alog.Fields{
-		"app":  "redfish_exporter",
-		"host": host,
-	})
-
+	collectorLogCtx := logger
 	redfishClient, err := newRedfishClient(host, username, password)
 	if err != nil {
-		rootLoggerCtx.WithError(err)
+		collectorLogCtx.WithError(err)
 	} else {
-		chassisCollector := NewChassisCollector(namespace, redfishClient, rootLoggerCtx)
-		systemCollector := NewSystemCollector(namespace, redfishClient, rootLoggerCtx)
-		managerCollector := NewManagerCollector(namespace, redfishClient)
+		chassisCollector := NewChassisCollector(namespace, redfishClient, collectorLogCtx)
+		systemCollector := NewSystemCollector(namespace, redfishClient, collectorLogCtx)
+		managerCollector := NewManagerCollector(namespace, redfishClient, collectorLogCtx)
 
 		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector, "manager": managerCollector}
 	}
@@ -120,7 +113,6 @@ func newRedfishClient(host string, username string, password string) (*gofish.AP
 	}
 	redfishClient, err := gofish.Connect(config)
 	if err != nil {
-		rootLoggerCtx.WithField("operation", "newRedfishClient").WithError(err)
 		return nil, err
 	}
 	return redfishClient, nil

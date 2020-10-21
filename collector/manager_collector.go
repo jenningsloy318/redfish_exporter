@@ -3,8 +3,8 @@ package collector
 import (
 	"fmt"
 
+	"github.com/apex/log"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/log"
 	"github.com/stmcginnis/gofish"
 )
 
@@ -52,13 +52,17 @@ type ManagerCollector struct {
 	metrics                 map[string]managerMetric
 	collectorScrapeStatus   *prometheus.GaugeVec
 	collectorScrapeDuration *prometheus.SummaryVec
+	Log                     *log.Entry
 }
 
 // NewManagerCollector returns a collector that collecting memory statistics
-func NewManagerCollector(namespace string, redfishClient *gofish.APIClient) *ManagerCollector {
+func NewManagerCollector(namespace string, redfishClient *gofish.APIClient, logger *log.Entry) *ManagerCollector {
 	return &ManagerCollector{
 		redfishClient: redfishClient,
 		metrics:       managerMetrics,
+		Log: logger.WithFields(log.Fields{
+			"collector": "ManagerCollector",
+		}),
 		collectorScrapeStatus: prometheus.NewGaugeVec(
 			prometheus.GaugeOpts{
 				Namespace: namespace,
@@ -81,17 +85,17 @@ func (m *ManagerCollector) Describe(ch chan<- *prometheus.Desc) {
 
 // Collect implemented prometheus.Collector
 func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
+	collectorLogContext := m.Log
 	//get service
 	service := m.redfishClient.Service
 
 	// get a list of managers from service
 	if managers, err := service.Managers(); err != nil {
-		log.Infof("Errors Getting managers from service : %s", err)
+		collectorLogContext.WithField("operation", "service.Managers()").WithError(err)
 	} else {
-
 		for _, manager := range managers {
+			managerLogContext := collectorLogContext.WithField("Manager", manager.ID)
 			// overall manager metrics
-
 			ManagerID := manager.ID
 			managerName := manager.Name
 			managerModel := manager.Model
@@ -112,6 +116,7 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 				ch <- prometheus.MustNewConstMetric(m.metrics["manager_power_state"].desc, prometheus.GaugeValue, managerPowerStateValue, ManagerLabelValues...)
 
 			}
+			managerLogContext.Info("collector scrape completed")
 		}
 		m.collectorScrapeStatus.WithLabelValues("manager").Set(float64(1))
 

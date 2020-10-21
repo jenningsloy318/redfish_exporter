@@ -531,6 +531,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 					go parseEthernetInterface(ch, systemHostName, ethernetInterface, wg7)
 				}
 			}
+			systemLogContext.Info("collector scrape completed")
 		}
 		s.collectorScrapeStatus.WithLabelValues("system").Set(float64(1))
 

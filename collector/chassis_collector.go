@@ -329,11 +329,11 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 					ChassisPhysicalSecurityLabelValues := []string{"physical_security", chassisID, physicalSecurityIntrusionSensorNumber, physicalSecurityIntrusionSensor}
 					ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_physical_security_sensor_rearm_method"].desc, prometheus.GaugeValue, phySecReArmMethod, ChassisPhysicalSecurityLabelValues...)
 				}
-
 			}
-
+			chassisLogContext.Info("collector scrape completed")
 		}
 	}
+
 	c.collectorScrapeStatus.WithLabelValues("chassis").Set(float64(1))
 }
 
