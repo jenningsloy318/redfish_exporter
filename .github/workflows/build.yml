@@ -2,7 +2,12 @@ name: build redfish exporter package
 
 on: 
   issue_comment:
-    types: [edited,created]
+    types:
+    - edited
+    - created
+  pull_request:
+    branches:
+    - master
 
 jobs:
   centos-7:
