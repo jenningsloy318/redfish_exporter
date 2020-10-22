@@ -3,7 +3,7 @@ A prometheus exporter to get  metrics from redfish based servers such as lenovo/
 
 ## Configuration
 
-Configuration for hostname supports regex to match servers with the same naming pattern.
+Configuration for hostname supports regex matching for servers with the same naming convention.
 
 An example configure given as an [example][1]:
 
@@ -20,7 +20,7 @@ hosts:
     password: pass
 ```
 
-Note that the ```default`` entry is useful as it avoids an error condition that is discussed in [this issue][2].
+Note that the `default` entry is useful as it avoids an error condition that is discussed in [this issue][2].
 
 ## Building
 
