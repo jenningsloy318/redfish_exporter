@@ -31,7 +31,7 @@ var (
 		"Address to listen on for web interface and telemetry.",
 	).Default(":9610").String()
 	sc = &SafeConfig{
-		C: &Config{},
+		Config: &Config{},
 	}
 	reloadCh chan chan error
 )
