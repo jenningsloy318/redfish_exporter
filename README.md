@@ -3,18 +3,24 @@ A prometheus exporter to get  metrics from redfish based servers such as lenovo/
 
 ## Configuration
 
+Configuration for hostname supports regex to match servers with the same naming pattern.
+
 An example configure given as an [example][1]:
+
 ```yaml
 hosts:
   10.36.48.24:
+    username: admin
+    password: pass
+  serv.+:
     username: admin
     password: pass
   default:
     username: admin
     password: pass
 ```
-Note that the ```default`` entry is useful as it avoids an error
-condition that is discussed in [this issue][2].
+
+Note that the ```default`` entry is useful as it avoids an error condition that is discussed in [this issue][2].
 
 ## Building
 
@@ -78,6 +84,7 @@ something like this in your Prometheus configuration files:
         replacement: localhost:9610  ### the address of the redfish-exporter address
 ```
 Note that port 9610 has been [reserved][4] for the redfish_exporter.
+
 ## Supported Devices (tested)
 - Lenovo ThinkSystem SR850 (BMC 2.1/2.42)
 - Lenovo ThinkSystem SR650 (BMC 2.50)
