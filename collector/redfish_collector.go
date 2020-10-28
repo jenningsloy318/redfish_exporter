@@ -137,7 +137,7 @@ func parseCommonStatusState(status gofishcommon.State) (float64, bool) {
 		return float64(1), true
 	} else if bytes.Equal([]byte(status), []byte("Disabled")) {
 		return float64(2), true
-	} else if bytes.Equal([]byte(status), []byte("StandbyOffinline")) {
+	} else if bytes.Equal([]byte(status), []byte("StandbyOffline")) {
 		return float64(3), true
 	} else if bytes.Equal([]byte(status), []byte("StandbySpare")) {
 		return float64(4), true

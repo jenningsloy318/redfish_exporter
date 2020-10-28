@@ -32,7 +32,7 @@ var (
 		"system_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "state"),
-				"system state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemLabelNames,
 				nil,
 			),
@@ -56,7 +56,7 @@ var (
 		"system_total_memory_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "total_memory_state"),
-				"system overall memory state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system overall memory state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemLabelNames,
 				nil,
 			),
@@ -80,7 +80,7 @@ var (
 		"system_total_processor_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "total_processor_state"),
-				"system overall processor state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system overall processor state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemLabelNames,
 				nil,
 			),
@@ -104,7 +104,7 @@ var (
 		"system_memory_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "memory_state"),
-				"system memory state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system memory state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemMemoryLabelNames,
 				nil,
 			),
@@ -129,7 +129,7 @@ var (
 		"system_processor_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "processor_state"),
-				"system processor state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system processor state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemProcessorLabelNames,
 				nil,
 			),
@@ -161,7 +161,7 @@ var (
 		"system_storage_volume_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_volume_state"),
-				"system storage volume state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system storage volume state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemVolumeLabelNames,
 				nil,
 			),
@@ -185,7 +185,7 @@ var (
 		"system_storage_drive_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_drive_state"),
-				"system storage drive state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system storage drive state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemDriveLabelNames,
 				nil,
 			),
@@ -209,7 +209,7 @@ var (
 		"system_storage_controller_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_controller_state"),
-				"system storage controller state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system storage controller state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemStorageControllerLabelNames,
 				nil,
 			),
@@ -225,7 +225,7 @@ var (
 		"system_pcie_device_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "pcie_device_state"),
-				"system pcie device state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system pcie device state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemPCIeDeviceLabelNames,
 				nil,
 			),
@@ -241,7 +241,7 @@ var (
 		"system_network_interface_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "network_interface_state"),
-				"system network interface state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system network interface state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemNetworkInterfaceLabelNames,
 				nil,
 			),
@@ -257,7 +257,7 @@ var (
 		"system_ethernet_interface_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "ethernet_interface_state"),
-				"system ethernet interface state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"system ethernet interface state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				SystemEthernetInterfaceLabelNames,
 				nil,
 			),

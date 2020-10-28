@@ -22,7 +22,7 @@ var (
 		"manager_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ManagerSubmanager, "state"),
-				"manager state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				"manager state,1(Enabled),2(Disabled),3(StandbyOffline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ManagerLabelNames,
 				nil,
 			),
