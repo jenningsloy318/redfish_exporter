@@ -19,11 +19,11 @@ type systemMetric struct {
 // SystemSubsystem is the system subsystem
 var (
 	SystemSubsystem                   = "system"
-	SystemLabelNames                  = []string{"hostname", "resource", "system_id"}
+	SystemLabelNames                  = []string{"hostname", "resource", "system_id", "serial_number", "bios", "model"}
 	SystemMemoryLabelNames            = []string{"hostname", "resource", "memory", "memory_id"}
 	SystemProcessorLabelNames         = []string{"hostname", "resource", "processor", "processor_id"}
 	SystemVolumeLabelNames            = []string{"hostname", "resource", "volume", "volume_id"}
-	SystemDriveLabelNames             = []string{"hostname", "resource", "drive", "drive_id"}
+	SystemDriveLabelNames             = []string{"hostname", "resource", "drive", "drive_id", "manufacturer", "model", "serial_number", "part_number"}
 	SystemStorageControllerLabelNames = []string{"hostname", "resource", "storage_controller", "storage_controller_id"}
 	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id"}
 	SystemNetworkInterfaceLabelNames  = []string{"hostname", "resource", "network_interface", "network_interface_id"}
@@ -201,6 +201,14 @@ var (
 		"system_storage_drive_capacity": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_drive_capacity"),
+				"Is this drive currently predicting a failure in the near future, (0)False, 1(True)",
+				SystemDriveLabelNames,
+				nil,
+			),
+		},
+		"system_storage_drive_failure_predicted": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, SystemSubsystem, "storage_drive_failure_predicted"),
 				"system storage drive capacity,Bytes",
 				SystemDriveLabelNames,
 				nil,
@@ -353,7 +361,8 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			systemTotalMemoryHealthState := system.MemorySummary.Status.Health
 			systemTotalMemoryAmount := system.MemorySummary.TotalSystemMemoryGiB
 
-			systemLabelValues := []string{systemHostName, "system", SystemID}
+			systemLabelValues := []string{systemHostName, "system", SystemID, system.SerialNumber, system.BIOSVersion, system.Model}
+
 			if systemHealthStateValue, ok := parseCommonStatusHealth(systemHealthState); ok {
 				ch <- prometheus.MustNewConstMetric(s.metrics["system_health_state"].desc, prometheus.GaugeValue, systemHealthStateValue, systemLabelValues...)
 			}
@@ -589,10 +598,10 @@ func parseVolume(ch chan<- prometheus.Metric, systemHostName string, volume *red
 	volumeCapacityBytes := volume.CapacityBytes
 	volumeState := volume.Status.State
 	volumeHealthState := volume.Status.Health
+
 	systemVolumeLabelValues := []string{systemHostName, "volume", volumeName, volumeID}
 	if volumeStateValue, ok := parseCommonStatusState(volumeState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_volume_state"].desc, prometheus.GaugeValue, volumeStateValue, systemVolumeLabelValues...)
-
 	}
 	if volumeHealthStateValue, ok := parseCommonStatusHealth(volumeHealthState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_volume_health_state"].desc, prometheus.GaugeValue, volumeHealthStateValue, systemVolumeLabelValues...)
@@ -607,16 +616,23 @@ func parseDrive(ch chan<- prometheus.Metric, systemHostName string, drive *redfi
 	driveCapacityBytes := drive.CapacityBytes
 	driveState := drive.Status.State
 	driveHealthState := drive.Status.Health
-	systemdriveLabelValues := []string{systemHostName, "drive", driveName, driveID}
+	driveFailurePredicted := 0
+
+	systemdriveLabelValues := []string{systemHostName, "drive", driveName, driveID, drive.Manufacturer, drive.Model, drive.SerialNumber, drive.PartNumber}
+
+	if drive.FailurePredicted {
+		driveFailurePredicted = 1
+	}
+
 	if driveStateValue, ok := parseCommonStatusState(driveState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_drive_state"].desc, prometheus.GaugeValue, driveStateValue, systemdriveLabelValues...)
-
 	}
 	if driveHealthStateValue, ok := parseCommonStatusHealth(driveHealthState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_drive_health_state"].desc, prometheus.GaugeValue, driveHealthStateValue, systemdriveLabelValues...)
 
 	}
 	ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_drive_capacity"].desc, prometheus.GaugeValue, float64(driveCapacityBytes), systemdriveLabelValues...)
+	ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_drive_failure_predicted"].desc, prometheus.GaugeValue, float64(driveFailurePredicted), systemdriveLabelValues...)
 }
 
 func parsePcieDevice(ch chan<- prometheus.Metric, systemHostName string, pcieDevice *redfish.PCIeDevice, wg *sync.WaitGroup) {

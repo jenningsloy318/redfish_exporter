@@ -392,8 +392,6 @@ func parseChassisPowerInfoVoltage(ch chan<- prometheus.Metric, chassisID string,
 		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_state"].desc, prometheus.GaugeValue, chassisPowerInfoVoltageStateValue, chassisPowerVoltageLabelvalues...)
 	}
 	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_volts"].desc, prometheus.GaugeValue, float64(chassisPowerInfoVoltageNameReadingVolts), chassisPowerVoltageLabelvalues...)
-
-	fmt.Printf("%+v - %+v\n", chassisPowerInfoVoltage.Name, chassisPowerInfoVoltage.ReadingVolts)
 }
 func parseChassisPowerInfoPowerControl(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerControl redfish.PowerControl, wg *sync.WaitGroup) {
 	defer wg.Done()
