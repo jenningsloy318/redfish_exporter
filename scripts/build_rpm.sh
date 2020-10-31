@@ -7,6 +7,8 @@ cp   ${SCRIPTPATH}/../build/redfish_exporter ${TOP_DIR}/SOURCES
 cp   ${SCRIPTPATH}/redfish_exporter.service ${TOP_DIR}/SOURCES
 cp   ${SCRIPTPATH}/redfish_exporter.yml ${TOP_DIR}/SOURCES
 cp   ${SCRIPTPATH}/redfish_exporter.spec ${TOP_DIR}/SPECS
+newVersion=$(cat $SCRIPTPATH/../VERSION)
+sed -i "s/VERSION/$newVersion/g" ${TOP_DIR}/SPECS/redfish_exporter.spec
 rpmbuild --define "_topdir ${TOP_DIR}" -bb ${TOP_DIR}/SPECS/redfish_exporter.spec
 cp -f ${TOP_DIR}/RPMS/x86_64/redfish_exporter*.rpm   ${SCRIPTPATH}/../build
 
