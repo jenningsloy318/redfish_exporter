@@ -15,7 +15,7 @@ HOST ?=$(shell hostname)
 DOCKER := $(shell { command -v podman || command -v docker; } 2>/dev/null)
 
 
-all:  fmt style  build  docker-build rpm  docker-rpm
+all:  fmt style build docker-build docker-rpm
  
 style:
 	@echo ">> checking code style"
@@ -42,13 +42,23 @@ docker-build-centos7:
 docker-build-centos8:
 	$(DOCKER) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder:centos8  make build
 
+docker-build:
+	make docker-build-centos7
+	make docker-build-centos8
+
 rpm: | build
 	@echo ">> building binaries"
 	$(RPM)
 
-docker-rpm:
-	$(DOCKER) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder  make rpm
+docker-rpm-centos7:
+	$(DOCKER) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder:centos7  make rpm
 
+docker-rpm-centos8:
+	$(DOCKER) run -v `pwd`:/go/src/github.com/jenningsloy318/redfish_exporter  -w /go/src/github.com/jenningsloy318/redfish_exporter docker.io/jenningsloy318/prom-builder:centos8  make rpm
+
+docker-rpm:
+	make docker-rpm-centos7
+	make docker-rpm-centos8
 
 fmt:
 	@echo ">> format code style"
@@ -57,4 +67,4 @@ fmt:
 clean:
 	rm -rf $(BIN_DIR)
 
-.PHONY: all style check_license format build test fmt  build docker-build   rpm docker-rpm
+.PHONY: all style check_license fmt build fmt build rpm docker-build docker-rpm 
