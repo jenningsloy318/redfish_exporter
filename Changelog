@@ -1,0 +1,18 @@
+0.11.0
+
+1. add manager metrics
+2. fix none objects error
+3. improve the log processing and handling, thanks for @mjavier2k  
+4. other misc fixes 
+
+
+
+0.10.1
+
+1. update rpm spec
+
+0.10.0 
+
+This is initial release, implemented following metrics
+- chassis metircs
+- system metrics
