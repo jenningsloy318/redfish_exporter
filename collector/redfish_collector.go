@@ -2,11 +2,14 @@ package collector
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
+	"net/http"
 	"sync"
 	"time"
 
 	"github.com/apex/log"
+	"github.com/jenningsloy318/redfish_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	gofish "github.com/stmcginnis/gofish"
 	gofishcommon "github.com/stmcginnis/gofish/common"
@@ -40,12 +43,14 @@ type RedfishCollector struct {
 }
 
 // NewRedfishCollector return RedfishCollector
-func NewRedfishCollector(host string, username string, password string, logger *log.Entry) *RedfishCollector {
+func NewRedfishCollector(targetHostConfig *config.HostConfig, logger *log.Entry) *RedfishCollector {
 	var collectors map[string]prometheus.Collector
 	collectorLogCtx := logger
-	redfishClient, err := newRedfishClient(host, username, password)
+
+	redfishClient, err := newRedfishClient(targetHostConfig)
+
 	if err != nil {
-		collectorLogCtx.WithError(err).Error("error creating redfish client")
+		collectorLogCtx.WithError(err).Error("error creating redfish client for target host")
 	} else {
 		chassisCollector := NewChassisCollector(namespace, redfishClient, collectorLogCtx)
 		systemCollector := NewSystemCollector(namespace, redfishClient, collectorLogCtx)
@@ -101,16 +106,22 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(totalScrapeDurationDesc, prometheus.GaugeValue, time.Since(scrapeTime).Seconds())
 }
 
-func newRedfishClient(host string, username string, password string) (*gofish.APIClient, error) {
+func newRedfishClient(targetHostConfig *config.HostConfig) (*gofish.APIClient, error) {
 
-	url := fmt.Sprintf("https://%s", host)
+	url := fmt.Sprintf("https://%s", targetHostConfig.Host)
 
 	config := gofish.ClientConfig{
 		Endpoint: url,
-		Username: username,
-		Password: password,
-		Insecure: true,
+		Username: targetHostConfig.Username,
+		Password: targetHostConfig.Password,
+		HTTPClient: &http.Client{
+			Timeout: time.Duration(targetHostConfig.Timeout) * time.Second,
+			Transport: &http.Transport{
+				TLSClientConfig: &tls.Config{InsecureSkipVerify: targetHostConfig.Insecure},
+			},
+		},
 	}
+
 	redfishClient, err := gofish.Connect(config)
 	if err != nil {
 		return nil, err

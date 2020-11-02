@@ -8,6 +8,7 @@ import (
 
 	alog "github.com/apex/log"
 	"github.com/jenningsloy318/redfish_exporter/collector"
+	"github.com/jenningsloy318/redfish_exporter/config"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
@@ -30,9 +31,11 @@ var (
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",
 	).Default(":9610").String()
-	sc = &SafeConfig{
-		Config: &Config{},
+
+	sc = &config.SafeConfig{
+		Config: &config.Config{},
 	}
+
 	reloadCh chan chan error
 )
 
@@ -57,15 +60,15 @@ func metricsHandler() http.HandlerFunc {
 		targetLoggerCtx := rootLoggerCtx.WithField("target", target)
 		targetLoggerCtx.Info("scraping target host")
 
-		var hostConfig *HostConfig
+		var targetHostConfig *config.HostConfig
 		var err error
 
-		if hostConfig, err = sc.HostConfigForTarget(target); err != nil {
+		if targetHostConfig, err = sc.HostConfigForTarget(target); err != nil {
 			targetLoggerCtx.WithError(err).Error("error getting credentials")
 			return
 		}
 
-		collector := collector.NewRedfishCollector(target, hostConfig.Username, hostConfig.Password, targetLoggerCtx)
+		collector := collector.NewRedfishCollector(targetHostConfig, targetLoggerCtx)
 		registry.MustRegister(collector)
 		gatherers := prometheus.Gatherers{
 			prometheus.DefaultGatherer,

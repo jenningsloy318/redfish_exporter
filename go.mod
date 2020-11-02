@@ -8,7 +8,7 @@ require (
 	github.com/apex/log v1.9.0
 	github.com/prometheus/client_golang v1.1.0
 	github.com/prometheus/common v0.6.0
-	github.com/stmcginnis/gofish v0.4.1-0.20200604221848-686ec78d313a
+	github.com/stmcginnis/gofish v0.5.0
 	gopkg.in/alecthomas/kingpin.v2 v2.2.6
 	gopkg.in/yaml.v2 v2.2.2
 )
