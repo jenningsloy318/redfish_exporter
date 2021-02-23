@@ -57,12 +57,29 @@ func metricsHandler() http.HandlerFunc {
 		targetLoggerCtx := rootLoggerCtx.WithField("target", target)
 		targetLoggerCtx.Info("scraping target host")
 
-		var hostConfig *HostConfig
-		var err error
+		var (
+			hostConfig *HostConfig
+			err        error
+			ok         bool
+			group      []string
+		)
 
-		if hostConfig, err = sc.HostConfigForTarget(target); err != nil {
-			targetLoggerCtx.WithError(err).Error("error getting credentials")
-			return
+		group, ok = r.URL.Query()["group"]
+
+		if ok && len(group[0]) >= 1 {
+			// Trying to get hostConfig from group.
+			if hostConfig, err = sc.HostConfigForGroup(group[0]); err != nil {
+				targetLoggerCtx.WithError(err).Error("error getting credentials")
+				return
+			}
+		}
+
+		// Always falling back to single host config when group config failed.
+		if hostConfig == nil {
+			if hostConfig, err = sc.HostConfigForTarget(target); err != nil {
+				targetLoggerCtx.WithError(err).Error("error getting credentials")
+				return
+			}
 		}
 
 		collector := collector.NewRedfishCollector(target, hostConfig.Username, hostConfig.Password, targetLoggerCtx)
@@ -131,6 +148,7 @@ func main() {
             <h1>redfish Exporter</h1>
             <form action="/redfish">
             <label>Target:</label> <input type="text" name="target" placeholder="X.X.X.X" value="1.2.3.4"><br>
+            <label>Group:</label> <input type="text" name="group" placeholder="group (optional)" value=""><br>
             <input type="submit" value="Submit">
 						</form>
 						<p><a href="/metrics">Local metrics</a></p>
