@@ -13,7 +13,7 @@ jobs:
   centos-7:
     name: on centos 7
     runs-on: ubuntu-20.04
-    if: github.event.comment.body == 'build on centos 7' 
+    if: github.event.comment.body == 'build on centos 7'  || github.event.pull_request.opened || github.event.pull_request.reopened
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
@@ -30,7 +30,7 @@ jobs:
   centos-8:
     name: on centos 8
     runs-on: ubuntu-20.04
-    if: github.event.comment.body == 'build on centos 8' 
+    if: github.event.comment.body == 'build on centos 8' || github.event.pull_request.opened || github.event.pull_request.reopened
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
