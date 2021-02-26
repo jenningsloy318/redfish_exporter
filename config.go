@@ -9,7 +9,8 @@ import (
 )
 
 type Config struct {
-	Hosts map[string]HostConfig `yaml:"hosts"`
+	Hosts  map[string]HostConfig `yaml:"hosts"`
+	Groups map[string]HostConfig `yaml:"groups"`
 }
 
 type SafeConfig struct {
@@ -56,4 +57,15 @@ func (sc *SafeConfig) HostConfigForTarget(target string) (*HostConfig, error) {
 		}, nil
 	}
 	return &HostConfig{}, fmt.Errorf("no credentials found for target %s", target)
+}
+
+// HostConfigForGroup checks the configuration for a matching group config and returns the configured HostConfig for
+// that matched group.
+func (sc *SafeConfig) HostConfigForGroup(group string) (*HostConfig, error) {
+	sc.Lock()
+	defer sc.Unlock()
+	if hostConfig, ok := sc.C.Groups[group]; ok {
+		return &hostConfig, nil
+	}
+	return &HostConfig{}, fmt.Errorf("no credentials found for group %s", group)
 }

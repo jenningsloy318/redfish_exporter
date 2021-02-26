@@ -12,6 +12,10 @@ hosts:
   default:
     username: admin
     password: pass
+groups:
+  group1:
+    username: group1_user
+    password: group1_pass
 ```
 Note that the ```default`` entry is useful as it avoids an error
 condition that is discussed in [this issue][2].
@@ -76,6 +80,9 @@ something like this in your Prometheus configuration files:
         target_label: instance
       - target_label: __address__
         replacement: localhost:9610  ### the address of the redfish-exporter address
+      # (optional) when using group config add this to have group=my_group_name
+      - target_label: __param_group
+        replacement: my_group_name
 ```
 Note that port 9610 has been [reserved][4] for the redfish_exporter.
 ## Supported Devices (tested)
