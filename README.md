@@ -36,19 +36,19 @@ or build in centos 8 docker image
 ```sh
 make docker-build-centos8
 ```
+or we can also build a docker image  using [Dockerfile](./Dockerfile)
 
 ## Running
+- running directly on linux
+  ```sh
+  redfish_exporter --config.file=redfish_exporter.yml
+  ```
+  and run   `redfish_exporter -h
+  `  for more options.
 
-To run redfish_exporter do something like:
-```sh
-redfish_exporter --config.file=redfish_exporter.yml
-```
-and run
-```sh
-redfish_exporter -h
-```
-for more options.
-
+- running in container
+  
+  Also if you build it as a docker image, you can also run in container, just remember to replace your config  `/etc/prometheus/redfish_exporter.yml` in container
 ## Scraping
 
 We can get the metrics via
