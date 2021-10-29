@@ -72,14 +72,14 @@ something like this in your Prometheus configuration files:
 
     static_configs:
     - targets:
-       - 10.36.48.24
+       - 10.36.48.24 ## here is the list of the redfish targets which will be monitored
     relabel_configs:
       - source_labels: [__address__]
         target_label: __param_target
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: localhost:9610  ### the address of the redfish-exporter address
+        replacement: localhost:9610  ### the address of the redfish-exporter address, hence relpace localhost with the server IP address that redfish-export is running on
       # (optional) when using group config add this to have group=my_group_name
       - target_label: __param_group
         replacement: my_group_name
