@@ -58,7 +58,17 @@ curl http://<redfish_exporter host>:9610/redfish?target=10.36.48.24
 ```
 or by pointing your favourite browser at this URL.
 
-## prometheus configuration
+## Reloading Configuration
+```
+PUT /-/reload
+POST /-/reload
+```
+The `/-/reload` endpoint triggers a reload of the redfish_exporter configuration.
+500 will be returned when the reload fails.
+
+Alternatively, a configuration reload can be triggered by sending `SIGHUP` to the redfish_exporter process as well.
+
+## Prometheus Configuration
 
 You can then setup [Prometheus][3] to scrape the target using
 something like this in your Prometheus configuration files:
