@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io"
 	"net/http"
 	"os"
 	"os/signal"
@@ -43,6 +44,25 @@ func init() {
 
 	hostname, _ := os.Hostname()
 	rootLoggerCtx.Infof("version %s, build reversion %s, build branch %s, build at %s on host %s", Version, BuildRevision, BuildBranch, BuildTime, hostname)
+}
+
+func reloadHandler(configLoggerCtx *alog.Entry) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "POST" || r.Method == "PUT" {
+			configLoggerCtx.Info("Triggered configuration reload from /-/reload HTTP endpoint")
+			err := sc.ReloadConfig(*configFile)
+			if err != nil {
+				configLoggerCtx.WithError(err).Error("failed to reload config file")
+				http.Error(w, "failed to reload config file", http.StatusInternalServerError)
+			}
+			configLoggerCtx.WithField("operation", "sc.ReloadConfig").Info("config file reloaded")
+
+			w.WriteHeader(http.StatusOK)
+			io.WriteString(w, "Configuration reloaded successfully!")
+		} else {
+			http.Error(w, "Only PUT and POST methods are allowed", http.StatusBadRequest)
+		}
+	}
 }
 
 // define new http handleer
@@ -136,7 +156,8 @@ func main() {
 		}
 	}()
 
-	http.Handle("/redfish", metricsHandler()) // Regular metrics endpoint for local Redfish metrics.
+	http.Handle("/redfish", metricsHandler())                // Regular metrics endpoint for local Redfish metrics.
+	http.Handle("/-/reload", reloadHandler(configLoggerCtx)) // HTTP endpoint for triggering configuration reload
 	http.Handle("/metrics", promhttp.Handler())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
