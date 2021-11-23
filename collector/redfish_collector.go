@@ -202,3 +202,17 @@ func parsePhySecReArmMethod(method redfish.IntrusionSensorReArm) (float64, bool)
 
 	return float64(0), false
 }
+
+func parsePhySecIntrusionSensor(method redfish.IntrusionSensor) (float64, bool) {
+	if bytes.Equal([]byte(method), []byte("Normal")) {
+		return float64(1), true
+	}
+	if bytes.Equal([]byte(method), []byte("TamperingDetected")) {
+		return float64(2), true
+	}
+	if bytes.Equal([]byte(method), []byte("HardwareIntrusion")) {
+		return float64(3), true
+	}
+
+	return float64(0), false
+}

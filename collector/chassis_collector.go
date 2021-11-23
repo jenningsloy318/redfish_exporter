@@ -20,7 +20,7 @@ var (
 	ChassisPowerSupplyLabelNames      = []string{"resource", "chassis_id", "power_supply", "power_supply_id"}
 	ChassisNetworkAdapterLabelNames   = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id"}
 	ChassisNetworkPortLabelNames      = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed"}
-	ChassisPhysicalSecurityLabelNames = []string{"resource", "chassis_id", "intrusion_sensor_number", "intrusion_sensor"}
+	ChassisPhysicalSecurityLabelNames = []string{"resource", "chassis_id", "intrusion_sensor_number", "intrusion_sensor_rearm"}
 
 	chassisMetrics = map[string]chassisMetric{
 		"chassis_health": {
@@ -167,10 +167,10 @@ var (
 				nil,
 			),
 		},
-		"chassis_physical_security_sensor_rearm_method": {
+		"chassis_physical_security_sensor_state": {
 			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "physical_security_sensor_rearm_method"),
-				"method that restores this physical security sensor to the normal state, 1()",
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "physical_security_sensor_state"),
+				"indicates the known state of the physical security sensor, such as if it is hardware intrusion detected, 1(Normal),2(TamperingDetected),3(HardwareIntrusion)",
 				ChassisPhysicalSecurityLabelNames,
 				nil,
 			),
@@ -323,12 +323,14 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 
 			physicalSecurity := chassis.PhysicalSecurity
 			if physicalSecurity != (redfish.PhysicalSecurity{}) {
-				physicalSecurityIntrusionSensor := fmt.Sprintf("%s", physicalSecurity.IntrusionSensor)
+				physicalSecurityIntrusionSensor := physicalSecurity.IntrusionSensor
 				physicalSecurityIntrusionSensorNumber := fmt.Sprintf("%d", physicalSecurity.IntrusionSensorNumber)
-				physicalSecurityIntrusionSensorReArmMethod := physicalSecurity.IntrusionSensorReArm
-				if phySecReArmMethod, ok := parsePhySecReArmMethod(physicalSecurityIntrusionSensorReArmMethod); ok {
-					ChassisPhysicalSecurityLabelValues := []string{"physical_security", chassisID, physicalSecurityIntrusionSensorNumber, physicalSecurityIntrusionSensor}
-					ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_physical_security_sensor_rearm_method"].desc, prometheus.GaugeValue, phySecReArmMethod, ChassisPhysicalSecurityLabelValues...)
+				physicalSecurityIntrusionSensorReArmMethod := string(physicalSecurity.IntrusionSensorReArm)
+
+				if phySecIntrusionSensor, ok := parsePhySecIntrusionSensor(physicalSecurityIntrusionSensor); ok {
+					ChassisPhysicalSecurityLabelValues := []string{"physical_security", chassisID, physicalSecurityIntrusionSensorNumber, physicalSecurityIntrusionSensorReArmMethod}
+					ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_physical_security_sensor_state"].desc, prometheus.GaugeValue, phySecIntrusionSensor, ChassisPhysicalSecurityLabelValues...)
+
 				}
 			}
 			chassisLogContext.Info("collector scrape completed")
