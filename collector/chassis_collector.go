@@ -16,7 +16,7 @@ var (
 	ChassisLabelNames                 = []string{"resource", "chassis_id"}
 	ChassisTemperatureLabelNames      = []string{"resource", "chassis_id", "sensor", "sensor_id"}
 	ChassisFanLabelNames              = []string{"resource", "chassis_id", "fan", "fan_id"}
-	ChassisPowerVotageLabelNames      = []string{"resource", "chassis_id", "power_votage", "power_votage_id"}
+	ChassisPowerVoltageLabelNames     = []string{"resource", "chassis_id", "power_voltage", "power_voltage_id"}
 	ChassisPowerSupplyLabelNames      = []string{"resource", "chassis_id", "power_supply", "power_supply_id"}
 	ChassisNetworkAdapterLabelNames   = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id"}
 	ChassisNetworkPortLabelNames      = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed"}
@@ -83,7 +83,7 @@ var (
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_voltage_state"),
 				"power voltage state of chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisPowerVotageLabelNames,
+				ChassisPowerVoltageLabelNames,
 				nil,
 			),
 		},
@@ -91,7 +91,7 @@ var (
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_voltage_volts"),
 				"power voltage volts number of chassis component",
-				ChassisPowerVotageLabelNames,
+				ChassisPowerVoltageLabelNames,
 				nil,
 			),
 		},
@@ -99,7 +99,7 @@ var (
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_average_consumed_watts"),
 				"power wattage watts number of chassis component",
-				ChassisPowerVotageLabelNames,
+				ChassisPowerVoltageLabelNames,
 				nil,
 			),
 		},
@@ -276,7 +276,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 			} else if chassisPowerInfo == nil {
 				chassisLogContext.WithField("operation", "chassis.Power()").Info("no power data found")
 			} else {
-				// power votages
+				// power voltages
 				chassisPowerInfoVoltages := chassisPowerInfo.Voltages
 				wg3 := &sync.WaitGroup{}
 				wg3.Add(len(chassisPowerInfoVoltages))
@@ -387,19 +387,19 @@ func parseChassisPowerInfoVoltage(ch chan<- prometheus.Metric, chassisID string,
 	chassisPowerInfoVoltageID := chassisPowerInfoVoltage.MemberID
 	chassisPowerInfoVoltageNameReadingVolts := chassisPowerInfoVoltage.ReadingVolts
 	chassisPowerInfoVoltageState := chassisPowerInfoVoltage.Status.State
-	chassisPowerVotageLabelvalues := []string{"power_voltage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID}
+	chassisPowerVoltageLabelvalues := []string{"power_voltage", chassisID, chassisPowerInfoVoltageName, chassisPowerInfoVoltageID}
 	if chassisPowerInfoVoltageStateValue, ok := parseCommonStatusState(chassisPowerInfoVoltageState); ok {
-		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_state"].desc, prometheus.GaugeValue, chassisPowerInfoVoltageStateValue, chassisPowerVotageLabelvalues...)
+		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_state"].desc, prometheus.GaugeValue, chassisPowerInfoVoltageStateValue, chassisPowerVoltageLabelvalues...)
 	}
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_volts"].desc, prometheus.GaugeValue, float64(chassisPowerInfoVoltageNameReadingVolts), chassisPowerVotageLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_volts"].desc, prometheus.GaugeValue, float64(chassisPowerInfoVoltageNameReadingVolts), chassisPowerVoltageLabelvalues...)
 }
 func parseChassisPowerInfoPowerControl(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerControl redfish.PowerControl, wg *sync.WaitGroup) {
 	defer wg.Done()
 	name := chassisPowerInfoPowerControl.Name
 	id := chassisPowerInfoPowerControl.MemberID
 	pm := chassisPowerInfoPowerControl.PowerMetrics
-	chassisPowerVotageLabelvalues := []string{"power_wattage", chassisID, name, id}
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_average_consumed_watts"].desc, prometheus.GaugeValue, float64(pm.AverageConsumedWatts), chassisPowerVotageLabelvalues...)
+	chassisPowerVoltageLabelvalues := []string{"power_wattage", chassisID, name, id}
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_average_consumed_watts"].desc, prometheus.GaugeValue, float64(pm.AverageConsumedWatts), chassisPowerVoltageLabelvalues...)
 }
 
 func parseChassisPowerInfoPowerSupply(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerSupply redfish.PowerSupply, wg *sync.WaitGroup) {
