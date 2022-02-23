@@ -17,7 +17,7 @@ groups:
     username: group1_user
     password: group1_pass
 ```
-Note that the ```default`` entry is useful as it avoids an error
+Note that the ```default``` entry is useful as it avoids an error
 condition that is discussed in [this issue][2].
 
 ## Building
