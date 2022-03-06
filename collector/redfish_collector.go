@@ -86,13 +86,13 @@ func (r *RedfishCollector) Collect(ch chan<- prometheus.Metric) {
 		wg := &sync.WaitGroup{}
 		wg.Add(len(r.collectors))
 
-		defer wg.Wait()
 		for _, collector := range r.collectors {
 			go func(collector prometheus.Collector) {
 				defer wg.Done()
 				collector.Collect(ch)
 			}(collector)
 		}
+		wg.Wait()
 	} else {
 		r.redfishUp.Set(0)
 	}
