@@ -86,8 +86,6 @@ github.com/sirupsen/logrus v1.2.0/go.mod h1:LxeOpSwHxABJmUn/MG1IvRgCAasNZTLOkJPx
 github.com/smartystreets/assertions v1.0.0/go.mod h1:kHHU4qYBaI3q23Pp3VPrmWhuIUrLW/7eUrw0BU5VaoM=
 github.com/smartystreets/go-aws-auth v0.0.0-20180515143844-0c1422d1fdb9/go.mod h1:SnhjPscd9TpLiy1LpzGSKh3bXCfxxXuqd9xmQJy3slM=
 github.com/smartystreets/gunit v1.0.0/go.mod h1:qwPWnhz6pn0NnRBP++URONOVyNkPyr4SauJk4cUOwJs=
-github.com/stmcginnis/gofish v0.4.1-0.20200604221848-686ec78d313a h1:htamKApX77urNAThHwI56sTyhLNHp1TBRsFZDt+p/G8=
-github.com/stmcginnis/gofish v0.4.1-0.20200604221848-686ec78d313a/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
 github.com/stmcginnis/gofish v0.6.0 h1:ZTMR0pNO/cBUEvsUOfY0cK0eqRR2Fb1y9B9U7sEwcK8=
 github.com/stmcginnis/gofish v0.6.0/go.mod h1:t0RUeoOLznx9vExQOeLZUrjU0u3yy0wL4iVMQviUl+k=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
