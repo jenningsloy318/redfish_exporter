@@ -8,10 +8,13 @@ import (
 	"syscall"
 
 	alog "github.com/apex/log"
+	kitlog "github.com/go-kit/log"
 	"github.com/jenningsloy318/redfish_exporter/collector"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/log"
+	"github.com/prometheus/exporter-toolkit/web"
+	webflag "github.com/prometheus/exporter-toolkit/web/kingpinflag"
 	kingpin "gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -27,6 +30,7 @@ var (
 		"config.file",
 		"Path to configuration file.",
 	).String()
+	webConfig   = webflag.AddFlags(kingpin.CommandLine)
 	listenAddress = kingpin.Flag(
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",
@@ -119,6 +123,7 @@ func main() {
 	log.AddFlags(kingpin.CommandLine)
 	kingpin.HelpFlag.Short('h')
 	kingpin.Parse()
+	kitlogger := kitlog.NewLogfmtLogger(os.Stderr)
 
 	configLoggerCtx := rootLoggerCtx.WithField("config", *configFile)
 	configLoggerCtx.Info("starting app")
@@ -178,7 +183,8 @@ func main() {
 	})
 
 	rootLoggerCtx.Infof("app started. listening on %s", *listenAddress)
-	err := http.ListenAndServe(*listenAddress, nil)
+	srv := &http.Server{Addr: *listenAddress}
+	err := web.ListenAndServe(srv, *webConfig, kitlogger)
 	if err != nil {
 		log.Fatal(err)
 	}
