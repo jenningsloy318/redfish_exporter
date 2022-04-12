@@ -96,6 +96,8 @@ something like this in your Prometheus configuration files:
 ```
 Note that port 9610 has been [reserved][4] for the redfish_exporter.
 ## Supported Devices (tested)
+- Enginetech EG520R-G20 (Supermicro Firmware Revision 1.76.39)
+- Enginetech EG920A-G20 (Huawei iBMC 6.22)
 - Lenovo ThinkSystem SR850 (BMC 2.1/2.42)
 - Lenovo ThinkSystem SR650 (BMC 2.50)
 - PowerEdge R440 
