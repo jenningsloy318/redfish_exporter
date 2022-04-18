@@ -98,7 +98,9 @@ Note that port 9610 has been [reserved][4] for the redfish_exporter.
 ## Supported Devices (tested)
 - Lenovo ThinkSystem SR850 (BMC 2.1/2.42)
 - Lenovo ThinkSystem SR650 (BMC 2.50)
-- PowerEdge R440 
+- Dell PowerEdge R440, R640, R650, R6515, C6420
+- GIGABYTE G292-Z20, G292-Z40, G482-Z54
+
 ## Acknowledgement
 
 - [gofish][5] provides the underlying library to interact servers
