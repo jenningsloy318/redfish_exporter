@@ -2,6 +2,7 @@ package collector
 
 import (
 	"fmt"
+        "math"
 	"strings"
 	"sync"
 
@@ -438,18 +439,27 @@ func parseChassisFan(ch chan<- prometheus.Metric, chassisID string, chassisFan r
 	chassisFanStaus := chassisFan.Status
 	chassisFanStausHealth := chassisFanStaus.Health
 	chassisFanStausState := chassisFanStaus.State
-	chassisFanRPM := chassisFan.Reading
+	chassisFanRPM := float64(chassisFan.Reading)
 	chassisFanUnit := chassisFan.ReadingUnits
-	chassisFanRPMLowerCriticalThreshold := chassisFan.LowerThresholdCritical
-	chassisFanRPMUpperCriticalThreshold := chassisFan.UpperThresholdCritical
-	chassisFanRPMLowerFatalThreshold := chassisFan.LowerThresholdFatal
-	chassisFanRPMUpperFatalThreshold := chassisFan.UpperThresholdFatal
-	chassisFanRPMMin := chassisFan.MinReadingRange
-	chassisFanRPMMax := chassisFan.MaxReadingRange
+	chassisFanRPMLowerCriticalThreshold := float64(chassisFan.LowerThresholdCritical)
+	chassisFanRPMUpperCriticalThreshold := float64(chassisFan.UpperThresholdCritical)
+	chassisFanRPMLowerFatalThreshold := float64(chassisFan.LowerThresholdFatal)
+	chassisFanRPMUpperFatalThreshold := float64(chassisFan.UpperThresholdFatal)
+	chassisFanRPMMin := float64(chassisFan.MinReadingRange)
+	chassisFanRPMMax := float64(chassisFan.MaxReadingRange)
 
 	chassisFanPercentage := chassisFanRPM
 	if chassisFanUnit != redfish.PercentReadingUnits {
-		chassisFanPercentage = float32((chassisFanRPM+chassisFanRPMMin)/chassisFanRPMMax) * 100
+                // Some vendors (e.g. PowerEdge C6420) report null RPMs for Min/Max, as well as Lower/UpperFatal, 
+                // but provide Lower/UpperCritical, so use largest non-null for max. However, we can't know if 
+                // min is null (reported as zero by gofish) or just zero, so we'll have to assume a min of zero 
+                // if Min is not reported...
+                min := chassisFanRPMMin
+                max := math.Max(math.Max(chassisFanRPMMax, chassisFanRPMUpperFatalThreshold), chassisFanRPMUpperCriticalThreshold)
+                chassisFanPercentage = 0
+                if max != 0 {
+                        chassisFanPercentage = float64((chassisFanRPM+min)/max) * 100
+                }
 	}
 
 	//			chassisFanStatusLabelNames :=[]string{BaseLabelNames,"fan_name","fan_member_id")
@@ -462,14 +472,14 @@ func parseChassisFan(ch chan<- prometheus.Metric, chassisID string, chassisFan r
 	if chassisFanStausStateValue, ok := parseCommonStatusState(chassisFanStausState); ok {
 		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_state"].desc, prometheus.GaugeValue, chassisFanStausStateValue, chassisFanLabelvalues...)
 	}
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm"].desc, prometheus.GaugeValue, float64(chassisFanRPM), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_min"].desc, prometheus.GaugeValue, float64(chassisFanRPMMin), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_max"].desc, prometheus.GaugeValue, float64(chassisFanRPMMax), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_percentage"].desc, prometheus.GaugeValue, float64(chassisFanPercentage), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_lower_threshold_critical"].desc, prometheus.GaugeValue, float64(chassisFanRPMLowerCriticalThreshold), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_upper_threshold_critical"].desc, prometheus.GaugeValue, float64(chassisFanRPMUpperCriticalThreshold), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_lower_threshold_fatal"].desc, prometheus.GaugeValue, float64(chassisFanRPMLowerFatalThreshold), chassisFanLabelvalues...)
-	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_upper_threshold_fatal"].desc, prometheus.GaugeValue, float64(chassisFanRPMUpperFatalThreshold), chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm"].desc, prometheus.GaugeValue, chassisFanRPM, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_min"].desc, prometheus.GaugeValue, chassisFanRPMMin, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_max"].desc, prometheus.GaugeValue, chassisFanRPMMax, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_percentage"].desc, prometheus.GaugeValue, chassisFanPercentage, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_lower_threshold_critical"].desc, prometheus.GaugeValue, chassisFanRPMLowerCriticalThreshold, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_upper_threshold_critical"].desc, prometheus.GaugeValue, chassisFanRPMUpperCriticalThreshold, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_lower_threshold_fatal"].desc, prometheus.GaugeValue, chassisFanRPMLowerFatalThreshold, chassisFanLabelvalues...)
+	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_fan_rpm_upper_threshold_fatal"].desc, prometheus.GaugeValue, chassisFanRPMUpperFatalThreshold, chassisFanLabelvalues...)
 }
 
 func parseChassisPowerInfoVoltage(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoVoltage redfish.Voltage, wg *sync.WaitGroup) {
