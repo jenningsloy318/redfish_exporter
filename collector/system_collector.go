@@ -23,6 +23,7 @@ var (
 	SystemMemoryLabelNames            = []string{"hostname", "resource", "memory", "memory_id"}
 	SystemProcessorLabelNames         = []string{"hostname", "resource", "processor", "processor_id"}
 	SystemVolumeLabelNames            = []string{"hostname", "resource", "volume", "volume_id"}
+	SystemDeviceLabelNames            = []string{"hostname", "resource", "device"}
 	SystemDriveLabelNames             = []string{"hostname", "resource", "drive", "drive_id"}
 	SystemStorageControllerLabelNames = []string{"hostname", "resource", "storage_controller", "storage_controller_id"}
 	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id"}
@@ -155,6 +156,22 @@ var (
 				prometheus.BuildFQName(namespace, SystemSubsystem, "processor_total_cores"),
 				"system processor total cores",
 				SystemProcessorLabelNames,
+				nil,
+			),
+		},
+		"system_simple_storage_device_state": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, SystemSubsystem, "simple_storage_device_state"),
+				"system simple storage device state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				SystemDeviceLabelNames,
+				nil,
+			),
+		},
+		"system_simple_storage_device_health_state": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, SystemSubsystem, "simple_storage_device_health_state"),
+				"system simple storage device health state,1(OK),2(Warning),3(Critical)",
+				SystemDeviceLabelNames,
 				nil,
 			),
 		},
@@ -532,6 +549,23 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 					go parseEthernetInterface(ch, systemHostName, ethernetInterface, wg7)
 				}
 			}
+
+			//process simple storage
+			simpleStorages, err := system.SimpleStorages()
+			if err != nil {
+				systemLogContext.WithField("operation", "system.SimpleStorages()").WithError(err).Error("error getting simple storage data from system")
+			} else if simpleStorages == nil {
+				systemLogContext.WithField("operation", "system.SimpleStorages()").Info("no simple storage data found")
+			} else {
+				for _, simpleStorage := range simpleStorages {
+					devices := simpleStorage.Devices
+					wg8 := &sync.WaitGroup{}
+					wg8.Add(len(devices))
+					for _, device := range devices {
+						go parseDevice(ch, systemHostName, device, wg8)
+					}
+				}
+			}
 			systemLogContext.Info("collector scrape completed")
 		}
 		s.collectorScrapeStatus.WithLabelValues("system").Set(float64(1))
@@ -599,6 +633,19 @@ func parseVolume(ch chan<- prometheus.Metric, systemHostName string, volume *red
 
 	}
 	ch <- prometheus.MustNewConstMetric(systemMetrics["system_storage_volume_capacity"].desc, prometheus.GaugeValue, float64(volumeCapacityBytes), systemVolumeLabelValues...)
+}
+func parseDevice(ch chan<- prometheus.Metric, systemHostName string, device redfish.Device, wg *sync.WaitGroup) {
+	defer wg.Done()
+	deviceName := device.Name
+	deviceState := device.Status.State
+	deviceHealthState := device.Status.Health
+	systemDeviceLabelValues := []string{systemHostName, "device", deviceName}
+	if deviceStateValue, ok := parseCommonStatusState(deviceState); ok {
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_simple_storage_device_state"].desc, prometheus.GaugeValue, deviceStateValue, systemDeviceLabelValues...)
+	}
+	if deviceHealthStateValue, ok := parseCommonStatusHealth(deviceHealthState); ok {
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_simple_storage_device_health_state"].desc, prometheus.GaugeValue, deviceHealthStateValue, systemDeviceLabelValues...)
+	}
 }
 func parseDrive(ch chan<- prometheus.Metric, systemHostName string, drive *redfish.Drive, wg *sync.WaitGroup) {
 	defer wg.Done()

@@ -1,0 +1,37 @@
+{
+    "@odata.context": "/redfish/v1/$metadata#SimpleStorage.SimpleStorage",
+    "@odata.type": "#SimpleStorage.v1_2_0.SimpleStorage",
+    "@odata.id": "/redfish/v1/Systems/1/SimpleStorage/1",
+    "Id": "1",
+    "Name": "Simple Storage",
+    "Description": "LSI HDD",
+    "Status": {
+        "State": "Enabled",
+        "Health": "OK"
+    },
+    "Devices": [
+        {
+            "@odata.type": "#SimpleStorage.1.1.0.Device",
+            "Name": "Physical Drive 0 (LSI Device0)",
+            "Manufacturer": "ATA",
+            "Model": "ST16000NM001G-2K",
+            "Status": {
+                "State": "Enabled",
+                "Health": "OK"
+            }
+        },
+        {
+            "@odata.type": "#SimpleStorage.1.1.0.Device",
+            "Name": "Physical Drive 1 (LSI Device0)",
+            "Manufacturer": "ATA",
+            "Model": "ST16000NM001G-2K",
+            "Status": {
+                "State": "Enabled",
+                "Health": "OK"
+            }
+        }
+    ],
+    "Links": {
+        "Chassis": {}
+    }
+}
