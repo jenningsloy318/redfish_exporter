@@ -16,6 +16,7 @@ import (
 var (
 	ChassisSubsystem                  = "chassis"
 	ChassisLabelNames                 = []string{"resource", "chassis_id"}
+	ChassisModel                      = []string{"resource", "chassis_id", "manufacturer", "model", "part_number"}
 	ChassisTemperatureLabelNames      = []string{"resource", "chassis_id", "sensor", "sensor_id"}
 	ChassisFanLabelNames              = []string{"resource", "chassis_id", "fan", "fan_id", "fan_unit"}
 	ChassisPowerVoltageLabelNames     = []string{"resource", "chassis_id", "power_voltage", "power_voltage_id"}
@@ -38,6 +39,14 @@ var (
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "state"),
 				"state of chassis,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
 				ChassisLabelNames,
+				nil,
+			),
+		},
+		"chassis_model_info": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "model_info"),
+				"organization responsible for producing the chassis, the name by which the manufacturer generally refers to the chassis, and a part number assigned by the organization that is responsible for producing or manufacturing the chassis",
+				ChassisModel,
 				nil,
 			),
 		},
@@ -342,6 +351,12 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 			if chassisStatusStateValue, ok := parseCommonStatusState(chassisStatusState); ok {
 				ch <- prometheus.MustNewConstMetric(c.metrics["chassis_state"].desc, prometheus.GaugeValue, chassisStatusStateValue, ChassisLabelValues...)
 			}
+
+			chassisManufacturer := chassis.Manufacturer
+			chassisModel := chassis.Model
+			chassisPartNumber := chassis.PartNumber
+			ChassisModelLabelValues := []string{"chassis", chassisID, chassisManufacturer, chassisModel, chassisPartNumber}
+			ch <- prometheus.MustNewConstMetric(c.metrics["chassis_model_info"].desc, prometheus.GaugeValue, 1, ChassisModelLabelValues...)
 
 			chassisThermal, err := chassis.Thermal()
 			if err != nil {
