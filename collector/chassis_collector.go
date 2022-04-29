@@ -16,7 +16,7 @@ import (
 var (
 	ChassisSubsystem                  = "chassis"
 	ChassisLabelNames                 = []string{"resource", "chassis_id"}
-	ChassisModel                      = []string{"resource", "chassis_id", "manufacturer", "model", "part_number"}
+	ChassisModel                      = []string{"resource", "chassis_id", "manufacturer", "model", "part_number", "sku"}
 	ChassisTemperatureLabelNames      = []string{"resource", "chassis_id", "sensor", "sensor_id"}
 	ChassisFanLabelNames              = []string{"resource", "chassis_id", "fan", "fan_id", "fan_unit"}
 	ChassisPowerVoltageLabelNames     = []string{"resource", "chassis_id", "power_voltage", "power_voltage_id"}
@@ -45,7 +45,7 @@ var (
 		"chassis_model_info": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "model_info"),
-				"organization responsible for producing the chassis, the name by which the manufacturer generally refers to the chassis, and a part number assigned by the organization that is responsible for producing or manufacturing the chassis",
+				"organization responsible for producing the chassis, the name by which the manufacturer generally refers to the chassis, and a part number and sku assigned by the organization that is responsible for producing or manufacturing the chassis",
 				ChassisModel,
 				nil,
 			),
@@ -355,7 +355,8 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 			chassisManufacturer := chassis.Manufacturer
 			chassisModel := chassis.Model
 			chassisPartNumber := chassis.PartNumber
-			ChassisModelLabelValues := []string{"chassis", chassisID, chassisManufacturer, chassisModel, chassisPartNumber}
+			chassisSKU := chassis.SKU
+			ChassisModelLabelValues := []string{"chassis", chassisID, chassisManufacturer, chassisModel, chassisPartNumber, chassisSKU}
 			ch <- prometheus.MustNewConstMetric(c.metrics["chassis_model_info"].desc, prometheus.GaugeValue, 1, ChassisModelLabelValues...)
 
 			chassisThermal, err := chassis.Thermal()
