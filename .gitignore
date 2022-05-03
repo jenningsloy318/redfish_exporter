@@ -23,3 +23,7 @@ redfish_exporter
 
 # config file
 config.yml
+
+# Commit all Helm chart files
+!helm/**
+helm/*.lock
