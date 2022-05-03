@@ -24,17 +24,19 @@ spec:
       {{- include "redfish_exporter.selectorLabels" . | nindent 6 }}
 ---
 {{- range $host, $hostConfig := .Values.exporterConfig.hosts }}
+{{- if ne $host "default" }}
+---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "redfish_exporter.fullname" . }}-{{ $host }}
+  name: {{ include "redfish_exporter.fullname" $ }}-{{ $host }}
   labels:
-    {{- include "redfish_exporter.labels" . | nindent 4 }}
+    {{- include "redfish_exporter.labels" $ | nindent 4 }}
     redfish-exporter/host: {{ $host }}
 spec:
   endpoints:
     - port: http
-      interval: {{ .Values.serviceMonitor.interval }}
+      interval: {{ $.Values.serviceMonitor.interval }}
       params:
         target:
           - {{ $host }}
@@ -44,19 +46,15 @@ spec:
         {{- end }}
       {{- /* Path */}}
       path: /redfish
-      relabelings:
-        - sourceLabels: [__address__]
-          targetLabel: __param_target
-        - sourceLabels: [__param_target]
-          targetLabel: instance
-        - targetLabel: __address__
-          replacement: localhost:9610
+      metricRelabelings:
+        - targetLabel: instance
+          replacement: {{ $host }}
         # (optional) when using group config add this to have group=my_group_name
         {{- if $hostConfig.group }}
-        - targetLabel: __param_group
+        - targetLabel: instance_group
           replacement: {{ $hostConfig.group }}
         {{- end }}
-      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ $.Values.serviceMonitor.scrapeTimeout }}
   targetLabels:
     - "app.kubernetes.io/instance"
     {{- if $.Values.extraLabels }}
@@ -66,7 +64,7 @@ spec:
     {{- end }}
   selector:
     matchLabels:
-      {{- include "redfish_exporter.selectorLabels" . | nindent 6 }}
+      {{- include "redfish_exporter.selectorLabels" $ | nindent 6 }}
 {{- end }}
-
+{{- end }}
 {{- end }}

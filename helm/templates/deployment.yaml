@@ -38,6 +38,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+            - "/usr/local/bin/redfish_exporter"
+            - "--config.file=/etc/prometheus/redfish_exporter.yml"
+            - "--log.level={{ .Values.logLevel }}"
           ports:
             - name: http
               containerPort: 9610

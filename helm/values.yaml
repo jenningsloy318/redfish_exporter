@@ -94,6 +94,8 @@ serviceMonitor:
   interval: 120s
   scrapeTimeout: 30s
 
+logLevel: error
+
 exporterConfig:
   {}
   # hosts:
