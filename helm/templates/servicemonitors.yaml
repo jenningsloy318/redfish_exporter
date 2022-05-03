@@ -1,0 +1,72 @@
+{{- if .Values.serviceMonitor.enabled }}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "redfish_exporter.fullname" . }}-self
+  labels:
+    {{- include "redfish_exporter.labels" . | nindent 4 }}
+spec:
+  endpoints:
+    - port: http
+      interval: {{ .Values.serviceMonitor.interval }}
+      path: /metrics
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+  targetLabels:
+    - "app.kubernetes.io/instance"
+    {{- if $.Values.extraLabels }}
+    {{- range $key, $val := $.Values.extraLabels }}
+    - {{ $key | quote }}
+    {{ end -}}
+    {{- end }}
+  selector:
+    matchLabels:
+      {{- include "redfish_exporter.selectorLabels" . | nindent 6 }}
+---
+{{- range $host, $hostConfig := .Values.exporterConfig.hosts }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "redfish_exporter.fullname" . }}-{{ $host }}
+  labels:
+    {{- include "redfish_exporter.labels" . | nindent 4 }}
+    redfish-exporter/host: {{ $host }}
+spec:
+  endpoints:
+    - port: http
+      interval: {{ .Values.serviceMonitor.interval }}
+      params:
+        target:
+          - {{ $host }}
+        {{- if $hostConfig.group }}
+        group:
+          - {{ $hostConfig.group }}
+        {{- end }}
+      {{- /* Path */}}
+      path: /redfish
+      relabelings:
+        - sourceLabels: [__address__]
+          targetLabel: __param_target
+        - sourceLabels: [__param_target]
+          targetLabel: instance
+        - targetLabel: __address__
+          replacement: localhost:9610
+        # (optional) when using group config add this to have group=my_group_name
+        {{- if $hostConfig.group }}
+        - targetLabel: __param_group
+          replacement: {{ $hostConfig.group }}
+        {{- end }}
+      scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
+  targetLabels:
+    - "app.kubernetes.io/instance"
+    {{- if $.Values.extraLabels }}
+    {{- range $key, $val := $.Values.extraLabels }}
+    - {{ $key | quote }}
+    {{ end -}}
+    {{- end }}
+  selector:
+    matchLabels:
+      {{- include "redfish_exporter.selectorLabels" . | nindent 6 }}
+{{- end }}
+
+{{- end }}
