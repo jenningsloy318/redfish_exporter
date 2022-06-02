@@ -29,17 +29,17 @@ spec:
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ include "redfish_exporter.fullname" $ }}-{{ $host }}
+  name: {{ include "redfish_exporter.fullname" $ }}-{{ regexReplaceAll ":" $host "-" | trimAll "[]" }}
   labels:
     {{- include "redfish_exporter.labels" $ | nindent 4 }}
-    redfish-exporter/host: {{ $host }}
+    redfish-exporter/host: {{ regexReplaceAll ":" $host "_" | trimAll "[]" }}
 spec:
   endpoints:
     - port: http
       interval: {{ $.Values.serviceMonitor.interval }}
       params:
         target:
-          - {{ $host }}
+          - "{{ $host }}"
         {{- if $hostConfig.group }}
         group:
           - {{ $hostConfig.group }}
@@ -48,7 +48,7 @@ spec:
       path: /redfish
       metricRelabelings:
         - targetLabel: instance
-          replacement: {{ $host }}
+          replacement: {{ trimAll "[]" $host }}
         # (optional) when using group config add this to have group=my_group_name
         {{- if $hostConfig.group }}
         - targetLabel: instance_group
