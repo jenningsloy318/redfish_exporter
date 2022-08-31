@@ -1,0 +1,5869 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "$$hashKey": "object:539",
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Dashboard for custom prometheus exporter",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": 12403,
+  "graphTooltip": 0,
+  "id": 355,
+  "iteration": 1661933778878,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 34,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": true,
+          "expr": "redfish_chassis_health{chassis_id=~\"System.*\",instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Chassis health",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Critical"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "from": 0,
+                "result": {
+                  "color": "yellow",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "to": 1
+              },
+              "type": "range"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d44a3a",
+                "value": null
+              },
+              {
+                "color": "#FF9830",
+                "value": 1
+              },
+              {
+                "color": "#299c46",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 8,
+        "y": 0
+      },
+      "id": 22,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "avg(redfish_chassis_fan_health{instance=~\"$instance\"})",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "FAN",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 10,
+        "y": 0
+      },
+      "id": 35,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_health{chassis_id!~\"System.*\",instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "RAID",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "1": {
+                  "index": 0,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d44a3a",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 0
+      },
+      "id": 9,
+      "links": [],
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Value$/",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_powersupply_state{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Power Supply",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "max": 500,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 250
+              },
+              {
+                "color": "red",
+                "value": 400
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 14,
+        "y": 0
+      },
+      "id": 19,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_average_consumed_watts{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Power comsumption",
+      "type": "gauge"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "celsius"
+              },
+              {
+                "id": "displayName",
+                "value": "Temperature"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "orange",
+                      "value": 50
+                    },
+                    {
+                      "color": "red",
+                      "value": 70
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "Sensor state"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 17,
+        "y": 0
+      },
+      "id": 37,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_temperature_celsius{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_temperature_sensor_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "Chassis Temperature",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "sensor"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Time|__name__|chassis_id|instance|job|prome.*|Value|resource"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 0,
+        "y": 3
+      },
+      "id": 33,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_model_info{chassis_id=~\"System.*\",instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Chassis info",
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 8,
+        "y": 3
+      },
+      "id": 43,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_total_processor_count{instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Count",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 10,
+        "y": 3
+      },
+      "id": 77,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_processor_total_cores{instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": " ",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Cores",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decmbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 3
+      },
+      "id": 47,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "sum(redfish_system_memory_capacity{instance=~\"$instance\"})",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "RAM Capacity",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 70,
+      "panels": [],
+      "title": "System",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "name.*|.* 2|Time.*|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "manager_id 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Manager ID"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "model 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Model"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "type 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Type"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 11,
+        "x": 0,
+        "y": 7
+      },
+      "id": 54,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_manager_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_manager_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "iDRAC status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "instance"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 13,
+        "x": 11,
+        "y": 7
+      },
+      "id": 49,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": true,
+          "expr": "redfish_exporter_collector_duration_seconds{instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Redfish Collector Duration",
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Time.*|sensor_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 10
+      },
+      "id": 39,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_state{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Chassis State",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 5,
+        "x": 6,
+        "y": 10
+      },
+      "id": 38,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_state{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "System State",
+      "transformations": [],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 68,
+      "panels": [],
+      "title": "CPU & RAM",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "memory 2|memory 3|memory_id*|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Capacity"
+              },
+              {
+                "id": "unit",
+                "value": "decmbytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 9,
+        "x": 0,
+        "y": 15
+      },
+      "id": 48,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_memory_capacity{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_memory_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_memory_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "RAM status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "memory_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "processor .*|Time.*|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Cores"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 9,
+        "y": 15
+      },
+      "id": 71,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_processor_total_cores{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_processor_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_processor_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "CPU status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "processor_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 18,
+        "y": 15
+      },
+      "id": 72,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_total_processor_count{instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Count",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 20,
+        "y": 15
+      },
+      "id": 45,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_processor_total_cores{instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": " ",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Cores",
+      "type": "stat"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 22,
+        "y": 15
+      },
+      "id": 46,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [],
+          "fields": "",
+          "values": true
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_processor_total_threads{instance=~\"$instance\"}",
+          "format": "time_series",
+          "instant": true,
+          "interval": "",
+          "legendFormat": " ",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Threads",
+      "type": "stat"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "system.*|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 19
+      },
+      "id": 44,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_total_processor_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_total_processor_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "CPU status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "instance"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 66,
+      "panels": [],
+      "title": "Storage",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "drive_id.*|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Capacity"
+              },
+              {
+                "id": "unit",
+                "value": "bytes"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 42,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_storage_drive_capacity{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_storage_drive_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_storage_drive_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Storage Drive status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "drive"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "network_ada.*|network_.* [2-3]|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "blue",
+                        "index": 11,
+                        "text": "Down"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Port ID"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Network Port"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port_speed 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Speed"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port_type 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Type"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 51,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_network_port_health_state{instance=~\"$instance\",network_port_type=\"FibreChannel\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_network_port_state{instance=~\"$instance\",network_port_type=\"FibreChannel\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "FC status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "network_port_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "Time|__name__|instance|job|prome.*|Value|resource"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 12,
+        "y": 35
+      },
+      "id": 36,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_model_info{chassis_id!~\"System.*\",instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "RAID info",
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "fan_unit.*|fan 2|fan 3|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "RPM"
+              },
+              {
+                "id": "unit",
+                "value": "rotrpm"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fan_id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 60
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 37
+      },
+      "id": 41,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_simple_storage_device_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_simple_storage_device_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "Storage Device status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "device"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 44
+      },
+      "id": 64,
+      "panels": [],
+      "title": "Power",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "power_voltage_id|Time.*|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Volts"
+              },
+              {
+                "id": "unit",
+                "value": "volt"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "power_supply_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Power supply ID"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 10,
+        "x": 0,
+        "y": 45
+      },
+      "id": 56,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Volts"
+          }
+        ]
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_voltage_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_voltage_volts{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Power voltage status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "power_voltage"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "power_supply .*|Time.*|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Wats"
+              },
+              {
+                "id": "unit",
+                "value": "watt"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "power_supply_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Power supply ID"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 14,
+        "x": 10,
+        "y": 45
+      },
+      "id": 55,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_powersupply_health{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_powersupply_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_power_powersupply_power_input_watts{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Power supply status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "power_supply_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "watt"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 14,
+        "x": 10,
+        "y": 49
+      },
+      "id": 76,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": true,
+          "expr": "redfish_chassis_power_powersupply_power_input_watts{instance=~\"$instance\"}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Power supply {{power_supply_id}}:",
+          "refId": "C"
+        }
+      ],
+      "title": "Power supply wats",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 56
+      },
+      "id": 62,
+      "panels": [],
+      "title": "FAN",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "fan_unit.*|fan 2|fan 3|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "RPM"
+              },
+              {
+                "id": "unit",
+                "value": "rotrpm"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "fan_id"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 60
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 18,
+        "w": 10,
+        "x": 0,
+        "y": 57
+      },
+      "id": 40,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_fan_health{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_fan_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_fan_rpm{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "FAN status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "fan_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 11000,
+            "axisSoftMin": 5000,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "rotrpm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 14,
+        "x": 10,
+        "y": 57
+      },
+      "id": 75,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": true,
+          "expr": "redfish_chassis_fan_rpm{instance=~\"$instance\"}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{fan}}",
+          "refId": "C"
+        }
+      ],
+      "title": "FAN RPM",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 14,
+        "x": 10,
+        "y": 66
+      },
+      "id": 78,
+      "options": {
+        "legend": {
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "sortBy": "Max",
+          "sortDesc": true
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": true,
+          "expr": "redfish_chassis_temperature_celsius{instance=~\"$instance\"}",
+          "format": "time_series",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Sensor {{sensor}}:",
+          "refId": "C"
+        }
+      ],
+      "title": "Sensor Temperature",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 75
+      },
+      "id": 60,
+      "panels": [],
+      "title": "PCIE",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "pcie_device 2|Time.*|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "blue",
+                        "index": 11,
+                        "text": "Down"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pcie_device_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Device ID"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "pcie_device 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "PCIE Device Name"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 12,
+        "x": 0,
+        "y": 76
+      },
+      "id": 53,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_pcie_device_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_pcie_device_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "PCIE device status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "pcie_device_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 87
+      },
+      "id": 58,
+      "panels": [],
+      "title": "Network",
+      "type": "row"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "network_adapter .*|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "blue",
+                        "index": 11,
+                        "text": "Down"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 88
+      },
+      "id": 52,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_network_adapter_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_network_adapter_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Network Adapter status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "network_adapter_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "ethernet_.* [2-3]|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "blue",
+                        "index": 11,
+                        "text": "Down"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #A"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Interface state"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "LinkUp"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "NoLink"
+                      },
+                      "3": {
+                        "color": "blue",
+                        "index": 2,
+                        "text": "LinkDown"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ethernet_interface_speed 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Speed"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ethernet_interface 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Interface"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ethernet_interface_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Interface ID"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 93
+      },
+      "id": 50,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_ethernet_interface_link_status{instance=~\"$instance\"}",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_ethernet_interface_health_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_system_ethernet_interface_state{instance=~\"$instance\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "Ethernet Interface status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "ethernet_interface_id"
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "network_ada.*|network_.* [2-3]|Time.*|sensor_id|chassis_id|__name_.*|instance.*|prometh.*|resource.*|job.*|drive_id 2"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #B"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Status"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "OK"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Warning"
+                      },
+                      "3": {
+                        "color": "red",
+                        "index": 2,
+                        "text": "Critical"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value #C"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "1": {
+                        "color": "green",
+                        "index": 0,
+                        "text": "Enabled"
+                      },
+                      "2": {
+                        "color": "orange",
+                        "index": 1,
+                        "text": "Disabled"
+                      },
+                      "3": {
+                        "color": "orange",
+                        "index": 2,
+                        "text": "StandbyOffinline"
+                      },
+                      "4": {
+                        "color": "orange",
+                        "index": 3,
+                        "text": "StandbySpare"
+                      },
+                      "5": {
+                        "color": "yellow",
+                        "index": 4,
+                        "text": "InTest"
+                      },
+                      "6": {
+                        "color": "yellow",
+                        "index": 5,
+                        "text": "Starting"
+                      },
+                      "7": {
+                        "color": "orange",
+                        "index": 6,
+                        "text": "Absent"
+                      },
+                      "8": {
+                        "color": "red",
+                        "index": 7,
+                        "text": "UnavailableOffline"
+                      },
+                      "9": {
+                        "color": "red",
+                        "index": 8,
+                        "text": "Deferring"
+                      },
+                      "10": {
+                        "color": "red",
+                        "index": 9,
+                        "text": "Quiesced"
+                      },
+                      "11": {
+                        "color": "yellow",
+                        "index": 10,
+                        "text": "Updating"
+                      }
+                    },
+                    "type": "value"
+                  },
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "color": "blue",
+                        "index": 11,
+                        "text": "Down"
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              },
+              {
+                "id": "displayName",
+                "value": "State"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port_id"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Port ID"
+              },
+              {
+                "id": "custom.width",
+                "value": 150
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Network Port"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port_speed 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Speed"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "network_port_type 1"
+            },
+            "properties": [
+              {
+                "id": "displayName",
+                "value": "Type"
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 12,
+        "x": 0,
+        "y": 101
+      },
+      "id": 74,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.3.10",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_network_port_health_state{instance=~\"$instance\",network_port_type=\"FibreChannel\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "vGm2EMeGk"
+          },
+          "exemplar": false,
+          "expr": "redfish_chassis_network_port_state{instance=~\"$instance\",network_port_type=\"FibreChannel\"}",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "C"
+        }
+      ],
+      "title": "FC status",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "network_port_id"
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 34,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "10.100.11.114",
+          "value": "10.100.11.114"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "vGm2EMeGk"
+        },
+        "definition": "label_values(redfish_up, instance)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "instance",
+        "multi": false,
+        "name": "instance",
+        "options": [],
+        "query": {
+          "query": "label_values(redfish_up, instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now-3h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "",
+  "title": "iDRAC exporter",
+  "uid": "fPvfQ3zGk",
+  "version": 70,
+  "weekStart": ""
+}
