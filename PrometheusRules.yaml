@@ -1,0 +1,156 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    app: prometheus-operator
+    release: prom
+  name: dell-idrac
+  namespace: monitoring
+spec:
+  groups:
+  - name: dell-idrac.rules
+    rules:
+      
+        - alert: Dell_server_system_health
+          annotations:
+            summary: Dell Server system health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> system health is bad'
+          expr: redfish_system_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_iDRAC_health
+          annotations:
+            summary: Dell server iDRAC health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> iDRAC health is bad'
+          expr: redfish_manager_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_CPU_health
+          annotations:
+            summary: Dell server CPU health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> CPU {{ $labels.processor_id }} is bad'
+          expr: redfish_system_processor_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_RAM_health
+          annotations:
+            summary: Dell server RAM health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> RAM {{ $labels.memory_id }} is bad'
+          expr: redfish_system_memory_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_PCIE_device_health
+          annotations:
+            summary: Dell server PCIE device health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> PCIE device {{ $labels.pcie_device }} is bad'
+          expr: redfish_system_pcie_device_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_FAN_health
+          annotations:
+            summary: Dell server FAN health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> FAN {{ $labels.fan }} is bad'
+          expr: redfish_chassis_fan_health != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_powersupply_health
+          annotations:
+            summary: Dell server powersupply health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> powersupply {{ $labels.power_supply }} is bad'
+          expr: redfish_chassis_power_powersupply_health != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_temperature
+          annotations:
+            summary: Dell server temperature is high
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> temperature sensor {{ $labels.sensor }} is {{ humanize $value}} °C'
+          expr: redfish_chassis_temperature_celsius > 60
+          for: 1m
+          labels:
+             severity: critical
+             team: infra
+
+#---------Storage-------
+        - alert: Dell_server_storage_device_health
+          annotations:
+            summary: Dell server storage device health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> storage device {{ $labels.device }} is bad'
+          expr: redfish_system_simple_storage_device_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_storage_drive_health
+          annotations:
+            summary: Dell server storage drive health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> storage drive {{ $labels.drive_id }} is bad'
+          expr: redfish_system_storage_drive_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+#--------Network------
+        - alert: Dell_server_network_adapter_health
+          annotations:
+            summary: Dell server network adapter health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> network adapter {{ $labels.network_adapter_id }} is bad'
+          expr: redfish_chassis_network_adapter_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_network_port_health
+          annotations:
+            summary: Dell server network port health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> network port {{ $labels.network_port_id }} is bad'
+          expr: redfish_chassis_network_port_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_network_interface_health
+          annotations:
+            summary: Dell server network interface health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> system network interface {{ $labels.network_interface_id }} is bad'
+          expr: redfish_system_network_interface_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+        - alert: Dell_server_ethernet_interface_health
+          annotations:
+            summary: Dell server ethernet interface health
+            description: 'On <http://localhost:3000/d/fPvfQ3zGk/dell-idrac-exporter?var-instance={{ $labels.instance }}|{{ $labels.instance }}> system ethernet interface {{ $labels.ethernet_interface_id }} is bad'
+          expr: redfish_system_ethernet_interface_health_state != 1
+          for: 1m
+          labels:
+             severity: disaster
+             team: infra
+
+
