@@ -266,6 +266,14 @@ var (
 				nil,
 			),
 		},
+		"chassis_network_port_link_state": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_link_state"),
+				"chassis network port link state state,1(Up),0(Down)",
+				ChassisNetworkPortLabelNames,
+				nil,
+			),
+		},
 		"chassis_network_port_health_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_health_state"),
@@ -602,6 +610,7 @@ func parseNetworkPort(ch chan<- prometheus.Metric, chassisID string, networkPort
 	networkPortName := networkPort.Name
 	networkPortID := networkPort.ID
 	networkPortState := networkPort.Status.State
+	networkLinkStatus :=networkPort.LinkStatus
 	networkPortLinkType := networkPort.ActiveLinkTechnology
 	networkPortLinkSpeed := fmt.Sprintf("%d Mbps", networkPort.CurrentLinkSpeedMbps)
 	networkPortHealthState := networkPort.Status.Health
@@ -609,6 +618,10 @@ func parseNetworkPort(ch chan<- prometheus.Metric, chassisID string, networkPort
 	networkPhysicalPortNumber :=networkPort.PhysicalPortNumber
 	chassisNetworkPortLabelValues := []string{"network_port", chassisID, networkAdapterName, networkAdapterID, networkPortName, networkPortID, string(networkPortLinkType), networkPortLinkSpeed,string(networkPortConnectionType),networkPhysicalPortNumber}
 	
+	if networkLinkStatusValue,ok := parsePortLinkStatus(networkLinkStatus);ok {
+		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_network_port_link_state"].desc, prometheus.GaugeValue, networkLinkStatusValue, chassisNetworkPortLabelValues...)
+
+	}
 	
 	if networkPortStateValue, ok := parseCommonStatusState(networkPortState); ok {
 		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_network_port_state"].desc, prometheus.GaugeValue, networkPortStateValue, chassisNetworkPortLabelValues...)
