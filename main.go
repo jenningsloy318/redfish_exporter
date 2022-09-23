@@ -30,7 +30,7 @@ var (
 		"config.file",
 		"Path to configuration file.",
 	).String()
-	webConfig   = webflag.AddFlags(kingpin.CommandLine)
+	webConfig     = webflag.AddFlags(kingpin.CommandLine)
 	listenAddress = kingpin.Flag(
 		"web.listen-address",
 		"Address to listen on for web interface and telemetry.",

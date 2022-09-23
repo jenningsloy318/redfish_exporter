@@ -2,7 +2,7 @@ package collector
 
 import (
 	"fmt"
-        "math"
+	"math"
 	"strings"
 	"sync"
 
@@ -285,7 +285,7 @@ var (
 	}
 )
 
-//ChassisCollector implements the prometheus.Collector.
+// ChassisCollector implements the prometheus.Collector.
 type ChassisCollector struct {
 	redfishClient         *gofish.APIClient
 	metrics               map[string]chassisMetric
@@ -490,16 +490,16 @@ func parseChassisFan(ch chan<- prometheus.Metric, chassisID string, chassisFan r
 
 	chassisFanPercentage := chassisFanRPM
 	if chassisFanUnit != redfish.PercentReadingUnits {
-                // Some vendors (e.g. PowerEdge C6420) report null RPMs for Min/Max, as well as Lower/UpperFatal, 
-                // but provide Lower/UpperCritical, so use largest non-null for max. However, we can't know if 
-                // min is null (reported as zero by gofish) or just zero, so we'll have to assume a min of zero 
-                // if Min is not reported...
-                min := chassisFanRPMMin
-                max := math.Max(math.Max(chassisFanRPMMax, chassisFanRPMUpperFatalThreshold), chassisFanRPMUpperCriticalThreshold)
-                chassisFanPercentage = 0
-                if max != 0 {
-                        chassisFanPercentage = float64((chassisFanRPM+min)/max) * 100
-                }
+		// Some vendors (e.g. PowerEdge C6420) report null RPMs for Min/Max, as well as Lower/UpperFatal,
+		// but provide Lower/UpperCritical, so use largest non-null for max. However, we can't know if
+		// min is null (reported as zero by gofish) or just zero, so we'll have to assume a min of zero
+		// if Min is not reported...
+		min := chassisFanRPMMin
+		max := math.Max(math.Max(chassisFanRPMMax, chassisFanRPMUpperFatalThreshold), chassisFanRPMUpperCriticalThreshold)
+		chassisFanPercentage = 0
+		if max != 0 {
+			chassisFanPercentage = float64((chassisFanRPM+min)/max) * 100
+		}
 	}
 
 	//			chassisFanStatusLabelNames :=[]string{BaseLabelNames,"fan_name","fan_member_id")

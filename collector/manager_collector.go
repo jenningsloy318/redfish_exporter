@@ -14,7 +14,7 @@ type managerMetric struct {
 	desc *prometheus.Desc
 }
 
-//ManagerSubmanager is the manager subsystem
+// ManagerSubmanager is the manager subsystem
 var (
 	ManagerSubmanager = "manager"
 	ManagerLabelNames = []string{"manager_id", "name", "model", "type"}
@@ -46,7 +46,7 @@ var (
 	}
 )
 
-//ManagerCollector implemented prometheus.Collector
+// ManagerCollector implemented prometheus.Collector
 type ManagerCollector struct {
 	redfishClient           *gofish.APIClient
 	metrics                 map[string]managerMetric
