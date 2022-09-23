@@ -26,10 +26,12 @@ var (
 	SystemDeviceLabelNames            = []string{"hostname", "resource", "device"}
 	SystemDriveLabelNames             = []string{"hostname", "resource", "drive", "drive_id"}
 	SystemStorageControllerLabelNames = []string{"hostname", "resource", "storage_controller", "storage_controller_id"}
-	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id", "pcie_device_partnumber","pcie_device_type","pcie_serial_number"}
+	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id", "pcie_device_partnumber", "pcie_device_type", "pcie_serial_number"}
 	SystemNetworkInterfaceLabelNames  = []string{"hostname", "resource", "network_interface", "network_interface_id"}
 	SystemEthernetInterfaceLabelNames = []string{"hostname", "resource", "ethernet_interface", "ethernet_interface_id", "ethernet_interface_speed"}
-	systemMetrics                     = map[string]systemMetric{
+	SystemPCIeFunctionLabelNames      = []string{"hostname", "resource", "pcie_function_name", "pcie_function_id", "pci_function_deviceclass", "pci_function_type"}
+
+	systemMetrics = map[string]systemMetric{
 		"system_state": {
 			desc: prometheus.NewDesc(
 				prometheus.BuildFQName(namespace, SystemSubsystem, "state"),
@@ -252,6 +254,22 @@ var (
 				prometheus.BuildFQName(namespace, SystemSubsystem, "pcie_device_health_state"),
 				"system pcie device health state,1(OK),2(Warning),3(Critical)",
 				SystemPCIeDeviceLabelNames,
+				nil,
+			),
+		},
+		"system_pcie_function_state": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, SystemSubsystem, "pcie_function_state"),
+				"system pcie device state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
+				SystemPCIeFunctionLabelNames,
+				nil,
+			),
+		},
+		"system_pcie_function_health_state": {
+			desc: prometheus.NewDesc(
+				prometheus.BuildFQName(namespace, SystemSubsystem, "pcie_function_health_state"),
+				"system pcie device health state,1(OK),2(Warning),3(Critical)",
+				SystemPCIeFunctionLabelNames,
 				nil,
 			),
 		},
@@ -536,7 +554,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 
 			}
 
-			//process nethernetinterfaces
+			//process ethernetinterfaces
 			ethernetInterfaces, err := system.EthernetInterfaces()
 			if err != nil {
 				systemLogContext.WithField("operation", "system.EthernetInterfaces()").WithError(err).Error("error getting ethernet interface data from system")
@@ -564,6 +582,19 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 					for _, device := range devices {
 						go parseDevice(ch, systemHostName, device, wg8)
 					}
+				}
+			}
+			//process pci functions
+			pcieFunctions, err := system.PCIeFunctions()
+			if err != nil {
+				systemLogContext.WithField("operation", "system.PCIeFunctions()").WithError(err).Error("error getting PCI-E device function data from system")
+			} else if pcieFunctions == nil {
+				systemLogContext.WithField("operation", "system.PCIeFunctions()").Info("no PCI-E device function data found")
+			} else {
+				wg9 := &sync.WaitGroup{}
+				wg9.Add(len(pcieFunctions))
+				for _, pcieFunction := range pcieFunctions {
+					go parsePcieFunction(ch, systemHostName, pcieFunction, wg9)
 				}
 			}
 			systemLogContext.Info("collector scrape completed")
@@ -674,9 +705,9 @@ func parsePcieDevice(ch chan<- prometheus.Metric, systemHostName string, pcieDev
 	pcieDeviceState := pcieDevice.Status.State
 	pcieDeviceHealthState := pcieDevice.Status.Health
 	pcieDevicePartNumber := pcieDevice.PartNumber
-	pcieDeviceType := fmt.Sprintf("%v,",pcieDevice.DeviceType)
-	pcieSerialNumber :=pcieDevice.SerialNumber
-	systemPCIeDeviceLabelValues := []string{systemHostName, "pcie_device", pcieDeviceName, pcieDeviceID, pcieDevicePartNumber,pcieDeviceType,pcieSerialNumber}
+	pcieDeviceType := fmt.Sprintf("%v,", pcieDevice.DeviceType)
+	pcieSerialNumber := pcieDevice.SerialNumber
+	systemPCIeDeviceLabelValues := []string{systemHostName, "pcie_device", pcieDeviceName, pcieDeviceID, pcieDevicePartNumber, pcieDeviceType, pcieSerialNumber}
 
 	if pcieStateVaule, ok := parseCommonStatusState(pcieDeviceState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_pcie_device_state"].desc, prometheus.GaugeValue, pcieStateVaule, systemPCIeDeviceLabelValues...)
@@ -733,4 +764,25 @@ func parseEthernetInterface(ch chan<- prometheus.Metric, systemHostName string, 
 
 	ch <- prometheus.MustNewConstMetric(systemMetrics["system_ethernet_interface_link_enabled"].desc, prometheus.GaugeValue, boolToFloat64(ethernetInterfaceEnabled), systemEthernetInterfaceLabelValues...)
 
+}
+
+func parsePcieFunction(ch chan<- prometheus.Metric, systemHostName string, pcieFunction *redfish.PCIeFunction, wg *sync.WaitGroup) {
+
+	defer wg.Done()
+	pcieFunctionName := pcieFunction.Name
+	pcieFunctionID := fmt.Sprint("%v", pcieFunction.ID)
+	pciFunctionDeviceclass := fmt.Sprintf("%v", pcieFunction.DeviceClass)
+	pciFunctionType := fmt.Sprintf("%v", pcieFunction.FunctionType)
+	pciFunctionState := pcieFunction.Status.State
+	pciFunctionHealthState := pcieFunction.Status.Health
+
+	systemPCIeFunctionLabelLabelValues := []string{systemHostName, "pcie_function", pcieFunctionName, pcieFunctionID, pciFunctionDeviceclass, pciFunctionType}
+
+	if pciFunctionStateValue, ok := parseCommonStatusState(pciFunctionState); ok {
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_pcie_function_state"].desc, prometheus.GaugeValue, pciFunctionStateValue, systemPCIeFunctionLabelLabelValues...)
+	}
+
+	if pciFunctionHealthStateValue, ok := parseCommonStatusHealth(pciFunctionHealthState); ok {
+		ch <- prometheus.MustNewConstMetric(systemMetrics["system_pcie_function_health_state"].desc, prometheus.GaugeValue, pciFunctionHealthStateValue, systemPCIeFunctionLabelLabelValues...)
+	}
 }
