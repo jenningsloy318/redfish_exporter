@@ -26,7 +26,7 @@ var (
 	SystemDeviceLabelNames            = []string{"hostname", "resource", "device"}
 	SystemDriveLabelNames             = []string{"hostname", "resource", "drive", "drive_id"}
 	SystemStorageControllerLabelNames = []string{"hostname", "resource", "storage_controller", "storage_controller_id"}
-	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id", "pcie_device_partnumber"}
+	SystemPCIeDeviceLabelNames        = []string{"hostname", "resource", "pcie_device", "pcie_device_id", "pcie_device_partnumber","pcie_device_type","pcie_serial_number"}
 	SystemNetworkInterfaceLabelNames  = []string{"hostname", "resource", "network_interface", "network_interface_id"}
 	SystemEthernetInterfaceLabelNames = []string{"hostname", "resource", "ethernet_interface", "ethernet_interface_id", "ethernet_interface_speed"}
 	systemMetrics                     = map[string]systemMetric{
@@ -674,7 +674,9 @@ func parsePcieDevice(ch chan<- prometheus.Metric, systemHostName string, pcieDev
 	pcieDeviceState := pcieDevice.Status.State
 	pcieDeviceHealthState := pcieDevice.Status.Health
 	pcieDevicePartNumber := pcieDevice.PartNumber
-	systemPCIeDeviceLabelValues := []string{systemHostName, "pcie_device", pcieDeviceName, pcieDeviceID, pcieDevicePartNumber}
+	pcieDeviceType := fmt.Sprintf("%v,",pcieDevice.DeviceType)
+	pcieSerialNumber :=pcieDevice.SerialNumber
+	systemPCIeDeviceLabelValues := []string{systemHostName, "pcie_device", pcieDeviceName, pcieDeviceID, pcieDevicePartNumber,pcieDeviceType,pcieSerialNumber}
 
 	if pcieStateVaule, ok := parseCommonStatusState(pcieDeviceState); ok {
 		ch <- prometheus.MustNewConstMetric(systemMetrics["system_pcie_device_state"].desc, prometheus.GaugeValue, pcieStateVaule, systemPCIeDeviceLabelValues...)
