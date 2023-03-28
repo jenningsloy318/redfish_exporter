@@ -503,7 +503,7 @@ func parseEthernetInterface(ch chan<- prometheus.Metric, systemHostName string, 
 func parsePcieFunction(ch chan<- prometheus.Metric, systemHostName string, pcieFunction *redfish.PCIeFunction, wg *sync.WaitGroup) {
 	defer wg.Done()
 	pcieFunctionName := pcieFunction.Name
-	pcieFunctionID := fmt.Sprint("%v", pcieFunction.ID)
+	pcieFunctionID := fmt.Sprintf("%v", pcieFunction.ID)
 	pciFunctionDeviceclass := fmt.Sprintf("%v", pcieFunction.DeviceClass)
 	pciFunctionType := fmt.Sprintf("%v", pcieFunction.FunctionType)
 	pciFunctionState := pcieFunction.Status.State
