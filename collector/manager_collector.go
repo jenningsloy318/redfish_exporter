@@ -8,55 +8,33 @@ import (
 	"github.com/stmcginnis/gofish"
 )
 
-// A ManagerCollector implements the prometheus.Collector.
-
-type managerMetric struct {
-	desc *prometheus.Desc
-}
-
 // ManagerSubmanager is the manager subsystem
 var (
 	ManagerSubmanager = "manager"
 	ManagerLabelNames = []string{"manager_id", "name", "model", "type"}
-	managerMetrics    = map[string]managerMetric{
-		"manager_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ManagerSubmanager, "state"),
-				"manager state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ManagerLabelNames,
-				nil,
-			),
-		},
-		"manager_health_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ManagerSubmanager, "health_state"),
-				"manager health,1(OK),2(Warning),3(Critical)",
-				ManagerLabelNames,
-				nil,
-			),
-		},
-		"manager_power_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ManagerSubmanager, "power_state"),
-				"manager power state",
-				ManagerLabelNames,
-				nil,
-			),
-		},
-	}
+
+	managerMetrics = createManagerMetricMap()
 )
 
-// ManagerCollector implemented prometheus.Collector
+// ManagerCollector implements the prometheus.Collector.
 type ManagerCollector struct {
-	redfishClient           *gofish.APIClient
-	metrics                 map[string]managerMetric
-	collectorScrapeStatus   *prometheus.GaugeVec
-	collectorScrapeDuration *prometheus.SummaryVec
-	Log                     *log.Entry
+	redfishClient         *gofish.APIClient
+	metrics               map[string]Metric
+	collectorScrapeStatus *prometheus.GaugeVec
+	Log                   *log.Entry
+}
+
+func createManagerMetricMap() map[string]Metric {
+	managerMetrics := make(map[string]Metric)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "state", fmt.Sprintf("manager state,%s", CommonStateHelp), ManagerLabelNames)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "health_state", fmt.Sprintf("manager health,%s", CommonHealthHelp), ManagerLabelNames)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "power_state", "manager power state", ManagerLabelNames)
+
+	return managerMetrics
 }
 
 // NewManagerCollector returns a collector that collecting memory statistics
-func NewManagerCollector(namespace string, redfishClient *gofish.APIClient, logger *log.Entry) *ManagerCollector {
+func NewManagerCollector(redfishClient *gofish.APIClient, logger *log.Entry) *ManagerCollector {
 	return &ManagerCollector{
 		redfishClient: redfishClient,
 		metrics:       managerMetrics,
@@ -117,6 +95,7 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 				ch <- prometheus.MustNewConstMetric(m.metrics["manager_power_state"].desc, prometheus.GaugeValue, managerPowerStateValue, ManagerLabelValues...)
 
 			}
+
 			managerLogContext.Info("collector scrape completed")
 		}
 		m.collectorScrapeStatus.WithLabelValues("manager").Set(float64(1))

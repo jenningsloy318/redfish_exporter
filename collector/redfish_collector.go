@@ -47,9 +47,9 @@ func NewRedfishCollector(host string, username string, password string, logger *
 	if err != nil {
 		collectorLogCtx.WithError(err).Error("error creating redfish client")
 	} else {
-		chassisCollector := NewChassisCollector(namespace, redfishClient, collectorLogCtx)
-		systemCollector := NewSystemCollector(namespace, redfishClient, collectorLogCtx)
-		managerCollector := NewManagerCollector(namespace, redfishClient, collectorLogCtx)
+		chassisCollector := NewChassisCollector(redfishClient, collectorLogCtx)
+		systemCollector := NewSystemCollector(redfishClient, collectorLogCtx)
+		managerCollector := NewManagerCollector(redfishClient, collectorLogCtx)
 
 		collectors = map[string]prometheus.Collector{"chassis": chassisCollector, "system": systemCollector, "manager": managerCollector}
 	}
@@ -186,7 +186,7 @@ func parseLinkStatus(status redfish.LinkStatus) (float64, bool) {
 func parsePortLinkStatus(status redfish.PortLinkStatus) (float64, bool) {
 	if bytes.Equal([]byte(status), []byte("Up")) {
 		return float64(1), true
-	} 
+	}
 	return float64(0), false
 }
 func boolToFloat64(data bool) float64 {
