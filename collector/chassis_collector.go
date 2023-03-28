@@ -25,6 +25,9 @@ var (
 	ChassisNetworkPortLabelNames      = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed", "network_port_connectiont_type", "network_physical_port_number"}
 	ChassisPhysicalSecurityLabelNames = []string{"resource", "chassis_id", "intrusion_sensor_number", "intrusion_sensor_rearm"}
 
+	ChassisLogServiceLabelNames = []string{"chassis_id", "log_service", "log_service_id", "log_service_enabled", "log_service_overwrite_policy"}
+	ChassisLogEntryLabelNames   = []string{"chassis_id", "log_service", "log_service_id", "log_entry", "log_entry_id", "log_entry_code", "log_entry_type", "log_entry_message_id", "log_entry_sensor_number", "log_entry_sensor_type"}
+
 	chassisMetrics = createChassisMetricMap()
 )
 
@@ -77,6 +80,10 @@ func createChassisMetricMap() map[string]Metric {
 	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_port_health_state", fmt.Sprintf("chassis network port health state,%s", CommonHealthHelp), ChassisNetworkPortLabelNames)
 	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_port_link_state", fmt.Sprintf("chassis network port link state state,%s", CommonPortLinkHelp), ChassisNetworkPortLabelNames)
 	addToMetricMap(chassisMetrics, ChassisSubsystem, "physical_security_sensor_state", fmt.Sprintf("indicates the known state of the physical security sensor, such as if it is hardware intrusion detected,%s", CommonIntrusionSensorHelp), ChassisPhysicalSecurityLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "log_service_state", fmt.Sprintf("chassis log service state,%s", CommonStateHelp), ChassisLogServiceLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "log_service_health_state", fmt.Sprintf("chassis log service health state,%s", CommonHealthHelp), ChassisLogServiceLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "log_entry_severity_state", fmt.Sprintf("chassis log entry severity state,%s", CommonSeverityHelp), ChassisLogEntryLabelNames)
 
 	return chassisMetrics
 }
@@ -229,6 +236,22 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				}
 			}
 
+			// process log services
+			logServices, err := chassis.LogServices()
+			if err != nil {
+				chassisLogContext.WithField("operation", "chassis.LogServices()").WithError(err).Error("error getting log services from chassis")
+			} else if logServices == nil {
+				chassisLogContext.WithField("operation", "chassis.LogServices()").Info("no log services found")
+			} else {
+				wg6 := &sync.WaitGroup{}
+				wg6.Add(len(logServices))
+
+				for _, logService := range logServices {
+					if err = parseLogService(ch, chassisMetrics, ChassisSubsystem, chassisID, logService, wg6); err != nil {
+						chassisLogContext.WithField("operation", "chassis.LogServices()").WithError(err).Error("error getting log entries from log service")
+					}
+				}
+			}
 			chassisLogContext.Info("collector scrape completed")
 		}
 	}

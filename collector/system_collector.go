@@ -25,6 +25,9 @@ var (
 	SystemEthernetInterfaceLabelNames = []string{"hostname", "resource", "ethernet_interface", "ethernet_interface_id", "ethernet_interface_speed"}
 	SystemPCIeFunctionLabelNames      = []string{"hostname", "resource", "pcie_function_name", "pcie_function_id", "pci_function_deviceclass", "pci_function_type"}
 
+	SystemLogServiceLabelNames = []string{"system_id", "log_service", "log_service_id", "log_service_enabled", "log_service_overwrite_policy"}
+	SystemLogEntryLabelNames   = []string{"system_id", "log_service", "log_service_id", "log_entry", "log_entry_id", "log_entry_code", "log_entry_type", "log_entry_message_id", "log_entry_sensor_number", "log_entry_sensor_type"}
+
 	systemMetrics = createSystemMetricMap()
 )
 
@@ -88,6 +91,10 @@ func createSystemMetricMap() map[string]Metric {
 	addToMetricMap(systemMetrics, SystemSubsystem, "ethernet_interface_health_state", fmt.Sprintf("system ethernet interface health state,%s", CommonHealthHelp), SystemEthernetInterfaceLabelNames)
 	addToMetricMap(systemMetrics, SystemSubsystem, "ethernet_interface_link_status", fmt.Sprintf("system ethernet interface link status,%s", CommonLinkHelp), SystemEthernetInterfaceLabelNames)
 	addToMetricMap(systemMetrics, SystemSubsystem, "ethernet_interface_link_enabled", "system ethernet interface if the link is enabled", SystemEthernetInterfaceLabelNames)
+
+	addToMetricMap(systemMetrics, SystemSubsystem, "log_service_state", fmt.Sprintf("system log service state,%s", CommonStateHelp), SystemLogServiceLabelNames)
+	addToMetricMap(systemMetrics, SystemSubsystem, "log_service_health_state", fmt.Sprintf("system log service health state,%s", CommonHealthHelp), SystemLogServiceLabelNames)
+	addToMetricMap(systemMetrics, SystemSubsystem, "log_entry_severity_state", fmt.Sprintf("system log entry severity state,%s", CommonSeverityHelp), SystemLogEntryLabelNames)
 
 	return systemMetrics
 }
@@ -345,6 +352,23 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 				wg9.Add(len(pcieFunctions))
 				for _, pcieFunction := range pcieFunctions {
 					go parsePcieFunction(ch, systemHostName, pcieFunction, wg9)
+				}
+			}
+
+			// process log services
+			logServices, err := system.LogServices()
+			if err != nil {
+				systemLogContext.WithField("operation", "system.LogServices()").WithError(err).Error("error getting log services from system")
+			} else if logServices == nil {
+				systemLogContext.WithField("operation", "system.LogServices()").Info("no log services found")
+			} else {
+				wg10 := &sync.WaitGroup{}
+				wg10.Add(len(logServices))
+
+				for _, logService := range logServices {
+					if err = parseLogService(ch, systemMetrics, SystemSubsystem, SystemID, logService, wg10); err != nil {
+						systemLogContext.WithField("operation", "system.LogServices()").WithError(err).Error("error getting log entries from log service")
+					}
 				}
 			}
 
