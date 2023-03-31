@@ -37,7 +37,7 @@ func parseLogService(ch chan<- prometheus.Metric, metrics map[string]Metric, sub
 	defer wg.Done()
 	logServiceName := logService.Name
 	logServiceID := logService.ID
-	logServiceEnabled := fmt.Sprintf("%t", logService.ServiceEnabled)
+	logServiceEnabled := fmt.Sprint(logService.ServiceEnabled)
 	logServiceOverWritePolicy := string(logService.OverWritePolicy)
 	logServiceState := logService.Status.State
 	logServiceHealthState := logService.Status.Health
@@ -70,7 +70,7 @@ func parseLogEntry(ch chan<- prometheus.Metric, desc *prometheus.Desc, collector
 	logEntryCode := string(logEntry.EntryCode)
 	logEntryType := string(logEntry.EntryType)
 	logEntryMessageID := logEntry.MessageID
-	logEntrySensorNumber := fmt.Sprintf("%d", logEntry.SensorNumber)
+	logEntrySensorNumber := fmt.Sprint(logEntry.SensorNumber)
 	logEntrySensorType := string(logEntry.SensorType)
 	logEntrySeverityState := logEntry.Severity
 

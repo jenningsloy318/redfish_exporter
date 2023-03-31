@@ -227,7 +227,7 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 			physicalSecurity := chassis.PhysicalSecurity
 			if physicalSecurity != (redfish.PhysicalSecurity{}) {
 				physicalSecurityIntrusionSensor := physicalSecurity.IntrusionSensor
-				physicalSecurityIntrusionSensorNumber := fmt.Sprintf("%d", physicalSecurity.IntrusionSensorNumber)
+				physicalSecurityIntrusionSensorNumber := fmt.Sprint(physicalSecurity.IntrusionSensorNumber)
 				physicalSecurityIntrusionSensorReArmMethod := string(physicalSecurity.IntrusionSensorReArm)
 
 				if phySecIntrusionSensor, ok := parsePhySecIntrusionSensor(physicalSecurityIntrusionSensor); ok {

@@ -471,7 +471,7 @@ func parsePcieDevice(ch chan<- prometheus.Metric, systemHostName string, pcieDev
 	pcieDeviceState := pcieDevice.Status.State
 	pcieDeviceHealthState := pcieDevice.Status.Health
 	pcieDevicePartNumber := pcieDevice.PartNumber
-	pcieDeviceType := fmt.Sprintf("%v,", pcieDevice.DeviceType)
+	pcieDeviceType := fmt.Sprint(pcieDevice.DeviceType)
 	pcieSerialNumber := pcieDevice.SerialNumber
 	systemPCIeDeviceLabelValues := []string{systemHostName, "pcie_device", pcieDeviceName, pcieDeviceID, pcieDevicePartNumber, pcieDeviceType, pcieSerialNumber}
 
@@ -527,9 +527,9 @@ func parseEthernetInterface(ch chan<- prometheus.Metric, systemHostName string, 
 func parsePcieFunction(ch chan<- prometheus.Metric, systemHostName string, pcieFunction *redfish.PCIeFunction, wg *sync.WaitGroup) {
 	defer wg.Done()
 	pcieFunctionName := pcieFunction.Name
-	pcieFunctionID := fmt.Sprintf("%v", pcieFunction.ID)
-	pciFunctionDeviceclass := fmt.Sprintf("%v", pcieFunction.DeviceClass)
-	pciFunctionType := fmt.Sprintf("%v", pcieFunction.FunctionType)
+	pcieFunctionID := fmt.Sprint(pcieFunction.ID)
+	pciFunctionDeviceclass := fmt.Sprint(pcieFunction.DeviceClass)
+	pciFunctionType := fmt.Sprint(pcieFunction.FunctionType)
 	pciFunctionState := pcieFunction.Status.State
 	pciFunctionHealthState := pcieFunction.Status.Health
 

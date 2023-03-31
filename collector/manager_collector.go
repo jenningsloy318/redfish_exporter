@@ -86,7 +86,7 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 			ManagerID := manager.ID
 			managerName := manager.Name
 			managerModel := manager.Model
-			managerType := fmt.Sprintf("%v", manager.ManagerType)
+			managerType := fmt.Sprint(manager.ManagerType)
 			managerPowerState := manager.PowerState
 			managerState := manager.Status.State
 			managerHealthState := manager.Status.Health
