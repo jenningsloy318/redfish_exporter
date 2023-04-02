@@ -2,61 +2,47 @@ package collector
 
 import (
 	"fmt"
+	"sync"
 
 	"github.com/apex/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/stmcginnis/gofish"
 )
 
-// A ManagerCollector implements the prometheus.Collector.
-
-type managerMetric struct {
-	desc *prometheus.Desc
-}
-
 // ManagerSubmanager is the manager subsystem
 var (
 	ManagerSubmanager = "manager"
 	ManagerLabelNames = []string{"manager_id", "name", "model", "type"}
-	managerMetrics    = map[string]managerMetric{
-		"manager_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ManagerSubmanager, "state"),
-				"manager state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ManagerLabelNames,
-				nil,
-			),
-		},
-		"manager_health_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ManagerSubmanager, "health_state"),
-				"manager health,1(OK),2(Warning),3(Critical)",
-				ManagerLabelNames,
-				nil,
-			),
-		},
-		"manager_power_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ManagerSubmanager, "power_state"),
-				"manager power state",
-				ManagerLabelNames,
-				nil,
-			),
-		},
-	}
+
+	ManagerLogServiceLabelNames = []string{"manager_id", "log_service", "log_service_id", "log_service_enabled", "log_service_overwrite_policy"}
+	ManagerLogEntryLabelNames   = []string{"manager_id", "log_service", "log_service_id", "log_entry", "log_entry_id", "log_entry_code", "log_entry_type", "log_entry_message_id", "log_entry_sensor_number", "log_entry_sensor_type"}
+
+	managerMetrics = createManagerMetricMap()
 )
 
-// ManagerCollector implemented prometheus.Collector
+// ManagerCollector implements the prometheus.Collector.
 type ManagerCollector struct {
-	redfishClient           *gofish.APIClient
-	metrics                 map[string]managerMetric
-	collectorScrapeStatus   *prometheus.GaugeVec
-	collectorScrapeDuration *prometheus.SummaryVec
-	Log                     *log.Entry
+	redfishClient         *gofish.APIClient
+	metrics               map[string]Metric
+	collectorScrapeStatus *prometheus.GaugeVec
+	Log                   *log.Entry
+}
+
+func createManagerMetricMap() map[string]Metric {
+	managerMetrics := make(map[string]Metric)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "state", fmt.Sprintf("manager state,%s", CommonStateHelp), ManagerLabelNames)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "health_state", fmt.Sprintf("manager health,%s", CommonHealthHelp), ManagerLabelNames)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "power_state", "manager power state", ManagerLabelNames)
+
+	addToMetricMap(managerMetrics, ManagerSubmanager, "log_service_state", fmt.Sprintf("manager log service state,%s", CommonStateHelp), ManagerLogServiceLabelNames)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "log_service_health_state", fmt.Sprintf("manager log service health state,%s", CommonHealthHelp), ManagerLogServiceLabelNames)
+	addToMetricMap(managerMetrics, ManagerSubmanager, "log_entry_severity_state", fmt.Sprintf("manager log entry severity state,%s", CommonSeverityHelp), ManagerLogEntryLabelNames)
+
+	return managerMetrics
 }
 
 // NewManagerCollector returns a collector that collecting memory statistics
-func NewManagerCollector(namespace string, redfishClient *gofish.APIClient, logger *log.Entry) *ManagerCollector {
+func NewManagerCollector(redfishClient *gofish.APIClient, logger *log.Entry) *ManagerCollector {
 	return &ManagerCollector{
 		redfishClient: redfishClient,
 		metrics:       managerMetrics,
@@ -100,7 +86,7 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 			ManagerID := manager.ID
 			managerName := manager.Name
 			managerModel := manager.Model
-			managerType := fmt.Sprintf("%v", manager.ManagerType)
+			managerType := fmt.Sprint(manager.ManagerType)
 			managerPowerState := manager.PowerState
 			managerState := manager.Status.State
 			managerHealthState := manager.Status.Health
@@ -115,8 +101,25 @@ func (m *ManagerCollector) Collect(ch chan<- prometheus.Metric) {
 			}
 			if managerPowerStateValue, ok := parseCommonPowerState(managerPowerState); ok {
 				ch <- prometheus.MustNewConstMetric(m.metrics["manager_power_state"].desc, prometheus.GaugeValue, managerPowerStateValue, ManagerLabelValues...)
-
 			}
+
+			// process log services
+			logServices, err := manager.LogServices()
+			if err != nil {
+				managerLogContext.WithField("operation", "manager.LogServices()").WithError(err).Error("error getting log services from manager")
+			} else if logServices == nil {
+				managerLogContext.WithField("operation", "manager.LogServices()").Info("no log services found")
+			} else {
+				wg := &sync.WaitGroup{}
+				wg.Add(len(logServices))
+
+				for _, logService := range logServices {
+					if err = parseLogService(ch, managerMetrics, ManagerSubmanager, ManagerID, logService, wg); err != nil {
+						managerLogContext.WithField("operation", "manager.LogServices()").WithError(err).Error("error getting log entries from log service")
+					}
+				}
+			}
+
 			managerLogContext.Info("collector scrape completed")
 		}
 		m.collectorScrapeStatus.WithLabelValues("manager").Set(float64(1))

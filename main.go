@@ -62,7 +62,10 @@ func reloadHandler(configLoggerCtx *alog.Entry) http.HandlerFunc {
 			configLoggerCtx.WithField("operation", "sc.ReloadConfig").Info("config file reloaded")
 
 			w.WriteHeader(http.StatusOK)
-			io.WriteString(w, "Configuration reloaded successfully!")
+			_, err = io.WriteString(w, "Configuration reloaded successfully!")
+			if err != nil {
+				configLoggerCtx.Warn("failed to send configuration reload status message")
+			}
 		} else {
 			http.Error(w, "Only PUT and POST methods are allowed", http.StatusBadRequest)
 		}
@@ -136,7 +139,7 @@ func main() {
 	configLoggerCtx.WithField("operation", "sc.ReloadConfig").Info("config file loaded")
 
 	// load config in background to watch for config changes
-	hup := make(chan os.Signal)
+	hup := make(chan os.Signal, 1)
 	reloadCh = make(chan chan error)
 	signal.Notify(hup, syscall.SIGHUP)
 
@@ -166,6 +169,7 @@ func main() {
 	http.Handle("/metrics", promhttp.Handler())
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// nolint
 		w.Write([]byte(`<html>
             <head>
             <title>Redfish Exporter</title>

@@ -22,291 +22,74 @@ var (
 	ChassisPowerVoltageLabelNames     = []string{"resource", "chassis_id", "power_voltage", "power_voltage_id"}
 	ChassisPowerSupplyLabelNames      = []string{"resource", "chassis_id", "power_supply", "power_supply_id"}
 	ChassisNetworkAdapterLabelNames   = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id"}
-	ChassisNetworkPortLabelNames      = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed","network_port_connectiont_type","network_physical_port_number"}
+	ChassisNetworkPortLabelNames      = []string{"resource", "chassis_id", "network_adapter", "network_adapter_id", "network_port", "network_port_id", "network_port_type", "network_port_speed", "network_port_connectiont_type", "network_physical_port_number"}
 	ChassisPhysicalSecurityLabelNames = []string{"resource", "chassis_id", "intrusion_sensor_number", "intrusion_sensor_rearm"}
 
-	chassisMetrics = map[string]chassisMetric{
-		"chassis_health": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "health"),
-				"health of chassis, 1(OK),2(Warning),3(Critical)",
-				ChassisLabelNames,
-				nil,
-			),
-		},
-		"chassis_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "state"),
-				"state of chassis,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisLabelNames,
-				nil,
-			),
-		},
-		"chassis_model_info": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "model_info"),
-				"organization responsible for producing the chassis, the name by which the manufacturer generally refers to the chassis, and a part number and sku assigned by the organization that is responsible for producing or manufacturing the chassis",
-				ChassisModel,
-				nil,
-			),
-		},
-		"chassis_temperature_sensor_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "temperature_sensor_state"),
-				"status state of temperature on this chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisTemperatureLabelNames,
-				nil,
-			),
-		},
-		"chassis_temperature_celsius": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "temperature_celsius"),
-				"celsius of temperature on this chassis component",
-				ChassisTemperatureLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_health": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_health"),
-				"fan health on this chassis component,1(OK),2(Warning),3(Critical)",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_state"),
-				"fan state on this chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm"),
-				"fan RPM or percentage on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_percentage": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_percentage"),
-				"fan RPM, as a percentage of the min-max RPMs possible, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_min": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_min"),
-				"lowest possible fan RPM or percentage, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_max": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_max"),
-				"highest possible fan RPM or percentage, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_lower_threshold_critical": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_lower_threshold_critical"),
-				"threshold below the normal range fan RPM or percentage, but not fatal, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_lower_threshold_non_critical": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_lower_threshold_non_critical"),
-				"threshold below the normal range fan RPM or percentage, but not critical, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_lower_threshold_fatal": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_lower_threshold_fatal"),
-				"threshold below the normal range fan RPM or percentage, and is fatal, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_upper_threshold_critical": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_upper_threshold_critical"),
-				"threshold above the normal range fan RPM or percentage, but not fatal, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_upper_threshold_non_critical": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_upper_threshold_non_critical"),
-				"threshold above the normal range fan RPM or percentage, but not critical, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_fan_rpm_upper_threshold_fatal": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "fan_rpm_upper_threshold_fatal"),
-				"threshold above the normal range fan RPM or percentage, and is fatal, on this chassis component",
-				ChassisFanLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_voltage_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_voltage_state"),
-				"power voltage state of chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisPowerVoltageLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_voltage_volts": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_voltage_volts"),
-				"power voltage volts number of chassis component",
-				ChassisPowerVoltageLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_average_consumed_watts": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_average_consumed_watts"),
-				"power wattage watts number of chassis component",
-				ChassisPowerVoltageLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_state"),
-				"powersupply state of chassis component,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_health": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_health"),
-				"powersupply health of chassis component,1(OK),2(Warning),3(Critical)",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_power_efficiency_percentage": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_power_efficiency_percentage"),
-				"rated efficiency, as a percentage, of the associated power supply on this chassis",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_last_power_output_watts": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_last_power_output_watts"),
-				"average power output, measured in Watts, of the associated power supply on this chassis",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_power_input_watts": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_power_input_watts"),
-				"measured input power, in Watts, of powersupply on this chassis",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_power_output_watts": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_power_output_watts"),
-				"measured output power, in Watts, of powersupply on this chassis",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_power_powersupply_power_capacity_watts": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "power_powersupply_power_capacity_watts"),
-				"power_capacity_watts of powersupply on this chassis",
-				ChassisPowerSupplyLabelNames,
-				nil,
-			),
-		},
-		"chassis_network_adapter_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_adapter_state"),
-				"chassis network adapter state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisNetworkAdapterLabelNames,
-				nil,
-			),
-		},
-		"chassis_network_adapter_health_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_adapter_health_state"),
-				"chassis network adapter health state,1(OK),2(Warning),3(Critical)",
-				ChassisNetworkAdapterLabelNames,
-				nil,
-			),
-		},
-		"chassis_network_port_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_state"),
-				"chassis network port state state,1(Enabled),2(Disabled),3(StandbyOffinline),4(StandbySpare),5(InTest),6(Starting),7(Absent),8(UnavailableOffline),9(Deferring),10(Quiesced),11(Updating)",
-				ChassisNetworkPortLabelNames,
-				nil,
-			),
-		},
-		"chassis_network_port_link_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_link_state"),
-				"chassis network port link state state,1(Up),0(Down)",
-				ChassisNetworkPortLabelNames,
-				nil,
-			),
-		},
-		"chassis_network_port_health_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "network_port_health_state"),
-				"chassis network port state state,1(OK),2(Warning),3(Critical)",
-				ChassisNetworkPortLabelNames,
-				nil,
-			),
-		},
-		"chassis_physical_security_sensor_state": {
-			desc: prometheus.NewDesc(
-				prometheus.BuildFQName(namespace, ChassisSubsystem, "physical_security_sensor_state"),
-				"indicates the known state of the physical security sensor, such as if it is hardware intrusion detected, 1(Normal),2(TamperingDetected),3(HardwareIntrusion)",
-				ChassisPhysicalSecurityLabelNames,
-				nil,
-			),
-		},
-	}
+	ChassisLogServiceLabelNames = []string{"chassis_id", "log_service", "log_service_id", "log_service_enabled", "log_service_overwrite_policy"}
+	ChassisLogEntryLabelNames   = []string{"chassis_id", "log_service", "log_service_id", "log_entry", "log_entry_id", "log_entry_code", "log_entry_type", "log_entry_message_id", "log_entry_sensor_number", "log_entry_sensor_type"}
+
+	chassisMetrics = createChassisMetricMap()
 )
 
 // ChassisCollector implements the prometheus.Collector.
 type ChassisCollector struct {
 	redfishClient         *gofish.APIClient
-	metrics               map[string]chassisMetric
+	metrics               map[string]Metric
 	collectorScrapeStatus *prometheus.GaugeVec
 	Log                   *log.Entry
 }
 
-type chassisMetric struct {
-	desc *prometheus.Desc
+func createChassisMetricMap() map[string]Metric {
+	chassisMetrics := make(map[string]Metric)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "health", fmt.Sprintf("health of chassis,%s", CommonHealthHelp), ChassisLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "state", fmt.Sprintf("state of chassis,%s", CommonStateHelp), ChassisLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "model_info", "organization responsible for producing the chassis, the name by which the manufacturer generally refers to the chassis, and a part number and sku assigned by the organization that is responsible for producing or manufacturing the chassis", ChassisModel)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "temperature_sensor_state", fmt.Sprintf("status state of temperature on this chassis component,%s", CommonStateHelp), ChassisTemperatureLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "temperature_celsius", "celsius of temperature on this chassis component", ChassisTemperatureLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_health", fmt.Sprintf("fan health on this chassis component,%s", CommonHealthHelp), ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_state", fmt.Sprintf("fan state on this chassis component,%s", CommonStateHelp), ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm", "fan RPM or percentage on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_percentage", "fan RPM, as a percentage of the min-max RPMs possible, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_min", "lowest possible fan RPM or percentage, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_max", "highest possible fan RPM or percentage, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_lower_threshold_critical", "threshold below the normal range fan RPM or percentage, but not fatal, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_lower_threshold_non_critical", "threshold below the normal range fan RPM or percentage, but not critical, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_lower_threshold_fatal", "threshold below the normal range fan RPM or percentage, and is fatal, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_upper_threshold_critical", "threshold above the normal range fan RPM or percentage, but not fatal, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_upper_threshold_non_critical", "threshold above the normal range fan RPM or percentage, but not critical, on this chassis component", ChassisFanLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "fan_rpm_upper_threshold_fatal", "threshold above the normal range fan RPM or percentage, and is fatal, on this chassis component", ChassisFanLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_voltage_state", fmt.Sprintf("power voltage state of chassis component,%s", CommonStateHelp), ChassisPowerVoltageLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_voltage_volts", "power voltage volts number of chassis component", ChassisPowerVoltageLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_average_consumed_watts", "power wattage watts number of chassis component", ChassisPowerVoltageLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_state", fmt.Sprintf("powersupply state of chassis component,%s", CommonStateHelp), ChassisPowerSupplyLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_health", fmt.Sprintf("powersupply health of chassis component,%s", CommonHealthHelp), ChassisPowerSupplyLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_power_efficiency_percentage", "rated efficiency, as a percentage, of the associated power supply on this chassis", ChassisPowerSupplyLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_last_power_output_watts", "average power output, measured in Watts, of the associated power supply on this chassis", ChassisPowerSupplyLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_power_input_watts", "measured input power, in Watts, of powersupply on this chassis", ChassisPowerSupplyLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_power_output_watts", "measured output power, in Watts, of powersupply on this chassis", ChassisPowerSupplyLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "power_powersupply_power_capacity_watts", "power_capacity_watts of powersupply on this chassis", ChassisPowerSupplyLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_adapter_state", fmt.Sprintf("chassis network adapter state,%s", CommonStateHelp), ChassisNetworkAdapterLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_adapter_health_state", fmt.Sprintf("chassis network adapter health state,%s", CommonHealthHelp), ChassisNetworkAdapterLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_port_state", fmt.Sprintf("chassis network port state,%s", CommonStateHelp), ChassisNetworkPortLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_port_health_state", fmt.Sprintf("chassis network port health state,%s", CommonHealthHelp), ChassisNetworkPortLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "network_port_link_state", fmt.Sprintf("chassis network port link state state,%s", CommonPortLinkHelp), ChassisNetworkPortLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "physical_security_sensor_state", fmt.Sprintf("indicates the known state of the physical security sensor, such as if it is hardware intrusion detected,%s", CommonIntrusionSensorHelp), ChassisPhysicalSecurityLabelNames)
+
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "log_service_state", fmt.Sprintf("chassis log service state,%s", CommonStateHelp), ChassisLogServiceLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "log_service_health_state", fmt.Sprintf("chassis log service health state,%s", CommonHealthHelp), ChassisLogServiceLabelNames)
+	addToMetricMap(chassisMetrics, ChassisSubsystem, "log_entry_severity_state", fmt.Sprintf("chassis log entry severity state,%s", CommonSeverityHelp), ChassisLogEntryLabelNames)
+
+	return chassisMetrics
 }
 
 // NewChassisCollector returns a collector that collecting chassis statistics
-func NewChassisCollector(namespace string, redfishClient *gofish.APIClient, logger *log.Entry) *ChassisCollector {
+func NewChassisCollector(redfishClient *gofish.APIClient, logger *log.Entry) *ChassisCollector {
 	// get service from redfish client
 
 	return &ChassisCollector{
@@ -404,7 +187,6 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				wg3.Add(len(chassisPowerInfoVoltages))
 				for _, chassisPowerInfoVoltage := range chassisPowerInfoVoltages {
 					go parseChassisPowerInfoVoltage(ch, chassisID, chassisPowerInfoVoltage, wg3)
-
 				}
 
 				// power control
@@ -420,7 +202,6 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 				wg5 := &sync.WaitGroup{}
 				wg5.Add(len(chassisPowerInfoPowerSupplies))
 				for _, chassisPowerInfoPowerSupply := range chassisPowerInfoPowerSupplies {
-
 					go parseChassisPowerInfoPowerSupply(ch, chassisID, chassisPowerInfoPowerSupply, wg5)
 				}
 			}
@@ -446,13 +227,29 @@ func (c *ChassisCollector) Collect(ch chan<- prometheus.Metric) {
 			physicalSecurity := chassis.PhysicalSecurity
 			if physicalSecurity != (redfish.PhysicalSecurity{}) {
 				physicalSecurityIntrusionSensor := physicalSecurity.IntrusionSensor
-				physicalSecurityIntrusionSensorNumber := fmt.Sprintf("%d", physicalSecurity.IntrusionSensorNumber)
+				physicalSecurityIntrusionSensorNumber := fmt.Sprint(physicalSecurity.IntrusionSensorNumber)
 				physicalSecurityIntrusionSensorReArmMethod := string(physicalSecurity.IntrusionSensorReArm)
 
 				if phySecIntrusionSensor, ok := parsePhySecIntrusionSensor(physicalSecurityIntrusionSensor); ok {
 					ChassisPhysicalSecurityLabelValues := []string{"physical_security", chassisID, physicalSecurityIntrusionSensorNumber, physicalSecurityIntrusionSensorReArmMethod}
 					ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_physical_security_sensor_state"].desc, prometheus.GaugeValue, phySecIntrusionSensor, ChassisPhysicalSecurityLabelValues...)
+				}
+			}
 
+			// process log services
+			logServices, err := chassis.LogServices()
+			if err != nil {
+				chassisLogContext.WithField("operation", "chassis.LogServices()").WithError(err).Error("error getting log services from chassis")
+			} else if logServices == nil {
+				chassisLogContext.WithField("operation", "chassis.LogServices()").Info("no log services found")
+			} else {
+				wg6 := &sync.WaitGroup{}
+				wg6.Add(len(logServices))
+
+				for _, logService := range logServices {
+					if err = parseLogService(ch, chassisMetrics, ChassisSubsystem, chassisID, logService, wg6); err != nil {
+						chassisLogContext.WithField("operation", "chassis.LogServices()").WithError(err).Error("error getting log entries from log service")
+					}
 				}
 			}
 			chassisLogContext.Info("collector scrape completed")
@@ -480,6 +277,7 @@ func parseChassisTemperature(ch chan<- prometheus.Metric, chassisID string, chas
 	chassisTemperatureReadingCelsius := chassisTemperature.ReadingCelsius
 	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_temperature_celsius"].desc, prometheus.GaugeValue, float64(chassisTemperatureReadingCelsius), chassisTemperatureLabelvalues...)
 }
+
 func parseChassisFan(ch chan<- prometheus.Metric, chassisID string, chassisFan redfish.Fan, wg *sync.WaitGroup) {
 	defer wg.Done()
 	chassisFanID := chassisFan.MemberID
@@ -542,6 +340,7 @@ func parseChassisPowerInfoVoltage(ch chan<- prometheus.Metric, chassisID string,
 	}
 	ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_power_voltage_volts"].desc, prometheus.GaugeValue, float64(chassisPowerInfoVoltageNameReadingVolts), chassisPowerVoltageLabelvalues...)
 }
+
 func parseChassisPowerInfoPowerControl(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerControl redfish.PowerControl, wg *sync.WaitGroup) {
 	defer wg.Done()
 	name := chassisPowerInfoPowerControl.Name
@@ -552,7 +351,6 @@ func parseChassisPowerInfoPowerControl(ch chan<- prometheus.Metric, chassisID st
 }
 
 func parseChassisPowerInfoPowerSupply(ch chan<- prometheus.Metric, chassisID string, chassisPowerInfoPowerSupply redfish.PowerSupply, wg *sync.WaitGroup) {
-
 	defer wg.Done()
 	chassisPowerInfoPowerSupplyName := chassisPowerInfoPowerSupply.Name
 	chassisPowerInfoPowerSupplyID := chassisPowerInfoPowerSupply.MemberID
@@ -579,7 +377,6 @@ func parseChassisPowerInfoPowerSupply(ch chan<- prometheus.Metric, chassisID str
 }
 
 func parseNetworkAdapter(ch chan<- prometheus.Metric, chassisID string, networkAdapter *redfish.NetworkAdapter, wg *sync.WaitGroup) error {
-
 	defer wg.Done()
 	networkAdapterName := networkAdapter.Name
 	networkAdapterID := networkAdapter.ID
@@ -610,19 +407,18 @@ func parseNetworkPort(ch chan<- prometheus.Metric, chassisID string, networkPort
 	networkPortName := networkPort.Name
 	networkPortID := networkPort.ID
 	networkPortState := networkPort.Status.State
-	networkLinkStatus :=networkPort.LinkStatus
+	networkLinkStatus := networkPort.LinkStatus
 	networkPortLinkType := networkPort.ActiveLinkTechnology
 	networkPortLinkSpeed := fmt.Sprintf("%d Mbps", networkPort.CurrentLinkSpeedMbps)
 	networkPortHealthState := networkPort.Status.Health
-	networkPortConnectionType :=networkPort.FCPortConnectionType
-	networkPhysicalPortNumber :=networkPort.PhysicalPortNumber
-	chassisNetworkPortLabelValues := []string{"network_port", chassisID, networkAdapterName, networkAdapterID, networkPortName, networkPortID, string(networkPortLinkType), networkPortLinkSpeed,string(networkPortConnectionType),networkPhysicalPortNumber}
-	
-	if networkLinkStatusValue,ok := parsePortLinkStatus(networkLinkStatus);ok {
-		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_network_port_link_state"].desc, prometheus.GaugeValue, networkLinkStatusValue, chassisNetworkPortLabelValues...)
+	networkPortConnectionType := networkPort.FCPortConnectionType
+	networkPhysicalPortNumber := networkPort.PhysicalPortNumber
+	chassisNetworkPortLabelValues := []string{"network_port", chassisID, networkAdapterName, networkAdapterID, networkPortName, networkPortID, string(networkPortLinkType), networkPortLinkSpeed, string(networkPortConnectionType), networkPhysicalPortNumber}
 
+	if networkLinkStatusValue, ok := parsePortLinkStatus(networkLinkStatus); ok {
+		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_network_port_link_state"].desc, prometheus.GaugeValue, networkLinkStatusValue, chassisNetworkPortLabelValues...)
 	}
-	
+
 	if networkPortStateValue, ok := parseCommonStatusState(networkPortState); ok {
 		ch <- prometheus.MustNewConstMetric(chassisMetrics["chassis_network_port_state"].desc, prometheus.GaugeValue, networkPortStateValue, chassisNetworkPortLabelValues...)
 	}
