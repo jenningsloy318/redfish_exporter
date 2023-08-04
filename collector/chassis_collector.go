@@ -398,6 +398,7 @@ func parseNetworkAdapter(ch chan<- prometheus.Metric, chassisID string, networkA
 		for _, networkPort := range networkPorts {
 			go parseNetworkPort(ch, chassisID, networkPort, networkAdapterName, networkAdapterID, wg6)
 		}
+		wg6.Wait()
 	}
 	return nil
 }
