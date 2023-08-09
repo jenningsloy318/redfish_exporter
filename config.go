@@ -9,8 +9,9 @@ import (
 )
 
 type Config struct {
-	Hosts  map[string]HostConfig `yaml:"hosts"`
-	Groups map[string]HostConfig `yaml:"groups"`
+	Hosts    map[string]HostConfig `yaml:"hosts"`
+	Groups   map[string]HostConfig `yaml:"groups"`
+	Loglevel string                `yaml:"loglevel"`
 }
 
 type SafeConfig struct {
@@ -68,4 +69,14 @@ func (sc *SafeConfig) HostConfigForGroup(group string) (*HostConfig, error) {
 		return &hostConfig, nil
 	}
 	return &HostConfig{}, fmt.Errorf("no credentials found for group %s", group)
+}
+
+func (sc *SafeConfig) AppLogLevel() (string) {
+	sc.Lock()
+	defer sc.Unlock()
+	logLevel := sc.C.Loglevel
+	if logLevel != "" {
+		return logLevel
+	}
+	return "info"
 }
