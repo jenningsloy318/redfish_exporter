@@ -73,9 +73,7 @@ func reloadHandler(configLoggerCtx *alog.Entry) http.HandlerFunc {
 }
 
 func SetLogLevel() {
-	logLevelString := sc.AppLogLevel()
-
-	logLevel, err := alog.ParseLevel(logLevelString)
+	logLevel, err := alog.ParseLevel(sc.AppLogLevel())
 	if err != nil {
 		logLevel = alog.InfoLevel
 	}
