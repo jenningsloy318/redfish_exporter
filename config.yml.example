@@ -9,3 +9,5 @@ groups:
   group1:
     username: group1_user
     password: group1_pass
+# loglevel can be one of "debug", "info", "warn", "error", or "fatal"
+# loglevel: info

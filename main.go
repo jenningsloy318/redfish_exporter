@@ -72,6 +72,15 @@ func reloadHandler(configLoggerCtx *alog.Entry) http.HandlerFunc {
 	}
 }
 
+func SetLogLevel() {
+	logLevel, err := alog.ParseLevel(sc.AppLogLevel())
+	if err != nil {
+		logLevel = alog.InfoLevel
+	}
+
+	alog.SetLevel(logLevel)
+}
+
 // define new http handleer
 func metricsHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -137,6 +146,8 @@ func main() {
 	}
 
 	configLoggerCtx.WithField("operation", "sc.ReloadConfig").Info("config file loaded")
+
+	SetLogLevel()
 
 	// load config in background to watch for config changes
 	hup := make(chan os.Signal, 1)
