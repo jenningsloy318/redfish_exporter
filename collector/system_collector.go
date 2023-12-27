@@ -177,7 +177,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			if systemTotalMemoryHealthStateValue, ok := parseCommonStatusHealth(systemTotalMemoryHealthState); ok {
 				ch <- prometheus.MustNewConstMetric(s.metrics["system_total_memory_health_state"].desc, prometheus.GaugeValue, systemTotalMemoryHealthStateValue, systemLabelValues...)
 			}
-			
+
 			// get system OdataID
 			//systemOdataID := system.ODataID
 
@@ -296,8 +296,16 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			} else if pcieDevices == nil {
 				systemLogContext.WithField("operation", "system.PCIeDevices()").Info("no PCI-E device data found")
 			} else {
+				processed := make(map[string]bool)
 				wg5.Add(len(pcieDevices))
 				for _, pcieDevice := range pcieDevices {
+					_, exists := processed[pcieDevice.ODataID]
+					if exists {
+						systemLogContext.WithField("operation", "system.PCIeDevices()").Info(fmt.Sprintf("Ignoring duplicate pci device: %s", pcieDevice.ODataID))
+						wg5.Done()
+						continue
+					}
+					processed[pcieDevice.ODataID] = true
 					go parsePcieDevice(ch, systemHostName, pcieDevice, wg5)
 				}
 			}
