@@ -298,6 +298,7 @@ func (s *SystemCollector) Collect(ch chan<- prometheus.Metric) {
 			} else {
 				processed := make(map[string]bool)
 				wg5.Add(len(pcieDevices))
+				//Some devices are returning duplicated PCIeDevices. This is workaround for this. Example of such data can be found in sampleOut/system_duplicated_devices.json
 				for _, pcieDevice := range pcieDevices {
 					_, exists := processed[pcieDevice.ODataID]
 					if exists {
